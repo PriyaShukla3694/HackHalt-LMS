@@ -1,0 +1,153 @@
+.video-layout{
+  display:grid;
+  grid-template-columns:2fr 1fr;
+  gap:25px;
+}
+
+.video-main{
+  display:flex;
+  flex-direction:column;
+  gap:20px;
+}
+
+.video-player{
+  height:500px;
+
+  overflow:hidden;
+
+  border-radius:24px;
+
+  border:1px solid rgba(255,255,255,.08);
+
+  background:#12121A;
+}
+
+.video-player iframe{
+  border:none;
+}
+
+.video-info{
+  background:#12121A;
+
+  border:1px solid rgba(255,255,255,.08);
+
+  border-radius:20px;
+
+  padding:25px;
+}
+
+.lesson-tag{
+  background:rgba(196,138,82,.15);
+
+  color:#C48A52;
+
+  padding:8px 14px;
+
+  border-radius:40px;
+
+  font-size:13px;
+}
+
+.video-info h1{
+  margin-top:20px;
+  margin-bottom:15px;
+}
+
+.video-info p{
+  color:#A1A1AA;
+  line-height:1.8;
+}
+
+.progress-top{
+  display:flex;
+  justify-content:space-between;
+
+  margin-top:25px;
+  margin-bottom:10px;
+}
+
+.progress-bar{
+  height:10px;
+  background:#23232F;
+  border-radius:50px;
+}
+
+.progress-fill{
+  height:100%;
+
+  border-radius:50px;
+
+  background:linear-gradient(
+    90deg,
+    #C48A52,
+    #E0C3A3
+  );
+}
+
+.playlist-panel{
+  background:#12121A;
+
+  border:1px solid rgba(255,255,255,.08);
+
+  border-radius:24px;
+
+  padding:25px;
+
+  height:fit-content;
+}
+
+.playlist-panel h2{
+  margin-bottom:20px;
+}
+
+.lesson{
+  padding:15px;
+
+  border-radius:12px;
+
+  margin-bottom:12px;
+
+  background:#181821;
+
+  cursor:pointer;
+
+  transition:.3s;
+}
+
+.lesson:hover{
+  border:1px solid #C48A52;
+}
+
+.lesson.active{
+  background:rgba(196,138,82,.15);
+
+  border:1px solid #C48A52;
+}
+
+.resources-section{
+  margin-top:40px;
+}
+
+.resource-grid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:20px;
+}
+
+.resource-card{
+  background:#12121A;
+
+  border:1px solid rgba(255,255,255,.08);
+
+  padding:20px;
+
+  border-radius:16px;
+
+  cursor:pointer;
+
+  transition:.3s;
+}
+
+.resource-card:hover{
+  border-color:#C48A52;
+}
