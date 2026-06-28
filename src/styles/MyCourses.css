@@ -1,265 +1,545 @@
+/* ===========================================
+   MY COURSES PAGE
+=========================================== */
 
 .student-dashboard{
-  display:flex;
-  min-height:100vh;
-  background:#08090f;
-  background-image:
-  radial-gradient(rgba(196,138,82,.12) 1px, transparent 1px);
-  background-size:20px 20px;
-  color:white;
+    display:flex;
+    min-height:100vh;
+    background:#FFFAF5;
+    color:#2F2F2F;
+    font-family:'Poppins',sans-serif;
 }
 
 .main-content{
-  flex:1;
-  padding:30px;
+    flex:1;
+    margin-left:270px;
+    padding:35px;
 }
 
-/* HEADER */
+/* ===========================================
+   HEADER
+=========================================== */
 
 .courses-header{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
 
-  margin-bottom:35px;
-  padding:40px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
 
-  border-radius:28px;
+    padding:45px;
 
-  background:
-  linear-gradient(
-    135deg,
-    rgba(196,138,82,.12),
-    rgba(196,138,82,.03)
-  );
+    border-radius:28px;
 
-  border:1px solid rgba(255,255,255,.06);
+    background:linear-gradient(135deg,#FFE5CC,#FFD3AE);
+
+    border:1px solid #FFCFA7;
+
+    box-shadow:0 15px 35px rgba(249,115,22,.12);
+
+    margin-bottom:30px;
 }
 
 .courses-tag{
-  color:#C48A52;
-  letter-spacing:3px;
-  font-size:12px;
-  font-weight:600;
+
+    display:inline-block;
+
+    padding:8px 18px;
+
+    background:#FFF5EC;
+
+    color:#F97316;
+
+    border-radius:30px;
+
+    font-size:13px;
+
+    font-weight:700;
+
+    letter-spacing:2px;
 }
 
 .page-title{
-  font-size:56px;
-  margin:10px 0;
+
+    margin-top:18px;
+
+    margin-bottom:15px;
+
+    font-size:52px;
+
+    color:#EA580C;
+
+    font-weight:700;
 }
 
 .courses-header p{
-  color:#A1A1AA;
+
+    color:#6B7280;
+
+    line-height:1.8;
 }
 
 .course-count{
-  text-align:center;
+
+    width:170px;
+    height:170px;
+
+    border-radius:50%;
+
+    background:#FFFFFF;
+
+    border:2px solid #FFD6B6;
+
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
+
+    box-shadow:0 12px 25px rgba(249,115,22,.10);
 }
 
 .course-count h2{
-  font-size:64px;
-  color:#C48A52;
+
+    font-size:46px;
+
+    color:#F97316;
 }
 
 .course-count span{
-  color:#A1A1AA;
+
+    color:#777;
 }
 
-/* GRID */
+/* ===========================================
+   SEARCH BAR
+=========================================== */
+
+.course-search{
+
+    width:100%;
+
+    padding:18px 22px;
+
+    border-radius:16px;
+
+    background:#FFFFFF;
+
+    border:2px solid #FFD8B8;
+
+    color:#444;
+
+    font-size:15px;
+
+    margin-bottom:30px;
+
+    transition:.3s;
+}
+
+.course-search:focus{
+
+    outline:none;
+
+    border-color:#F97316;
+
+    box-shadow:0 0 0 5px rgba(249,115,22,.12);
+}
+
+/* ===========================================
+   STATS
+=========================================== */
+
+.learning-stats{
+
+    display:grid;
+
+    grid-template-columns:repeat(3,1fr);
+
+    gap:22px;
+
+    margin-bottom:40px;
+}
+
+.learning-card{
+
+    background:#FFFFFF;
+
+    border:1px solid #FFE3C8;
+
+    border-radius:22px;
+
+    padding:30px;
+
+    text-align:center;
+
+    box-shadow:0 10px 22px rgba(249,115,22,.08);
+
+    transition:.3s;
+}
+
+.learning-card:hover{
+
+    transform:translateY(-6px);
+
+    box-shadow:0 18px 35px rgba(249,115,22,.15);
+}
+
+.learning-card h2{
+
+    font-size:42px;
+
+    color:#F97316;
+
+    margin-bottom:10px;
+}
+
+.learning-card p{
+
+    color:#777;
+}
+
+/* ===========================================
+   COURSE GRID
+=========================================== */
 
 .course-grid{
-  display:grid;
-  grid-template-columns:repeat(3,1fr);
-  gap:30px;
+
+    display:grid;
+
+    grid-template-columns:repeat(3,1fr);
+
+    gap:28px;
 }
 
-/* CARD */
+/* ===========================================
+   COURSE CARD
+=========================================== */
 
 .course-card{
-  background:linear-gradient(
-    180deg,
-    #13131d,
-    #0d0d16
-  );
 
-  border-radius:28px;
-  overflow:hidden;
+    background:#FFFFFF;
 
-  border:1px solid rgba(255,255,255,.06);
+    border:1px solid #FFD9B8;
 
-  cursor:pointer;
-  transition:.35s;
+    border-radius:24px;
+
+    overflow:hidden;
+
+    cursor:pointer;
+
+    transition:.35s;
+
+    box-shadow:0 10px 22px rgba(249,115,22,.08);
 }
 
 .course-card:hover{
-  transform:translateY(-10px);
-  border-color:#C48A52;
 
-  box-shadow:
-  0 15px 40px rgba(196,138,82,.15);
+    transform:translateY(-8px);
+
+    border-color:#F97316;
+
+    box-shadow:0 20px 40px rgba(249,115,22,.18);
 }
 
-/* IMAGE */
+/* ===========================================
+   IMAGE
+=========================================== */
 
 .course-image{
-  position:relative;
-  height:220px;
-  overflow:hidden;
+
+    position:relative;
+
+    height:220px;
+
+    overflow:hidden;
 }
 
 .course-image img{
-  width:100%;
-  height:100%;
-  object-fit:cover;
-  display:block;
-  transition:.4s;
+
+    width:100%;
+
+    height:100%;
+
+    object-fit:cover;
+
+    transition:.45s;
 }
 
 .course-card:hover .course-image img{
-  transform:scale(1.05);
-}
 
-.course-image::after{
-  content:"";
-  position:absolute;
-  inset:0;
-
-  background:
-  linear-gradient(
-    to top,
-    rgba(8,9,15,.8),
-    transparent
-  );
+    transform:scale(1.06);
 }
 
 .course-badge{
-  position:absolute;
-  top:15px;
-  right:15px;
 
-  background:#C48A52;
-  color:white;
+    position:absolute;
 
-  padding:8px 14px;
-  border-radius:30px;
+    top:16px;
+    right:16px;
 
-  font-size:12px;
-  font-weight:600;
+    background:#F97316;
 
-  z-index:10;
+    color:white;
+
+    padding:8px 16px;
+
+    border-radius:30px;
+
+    font-size:12px;
+
+    font-weight:600;
 }
 
-/* CONTENT */
+/* ===========================================
+   CONTENT
+=========================================== */
 
 .course-content{
-  padding:25px;
+
+    padding:24px;
 }
 
 .course-content h3{
-  font-size:20px;
-  margin-bottom:12px;
+
+    font-size:22px;
+
+    color:#2F2F2F;
+
+    margin-bottom:10px;
 }
 
 .course-content p{
-  color:#A1A1AA;
-  line-height:1.7;
-  min-height:72px;
+
+    color:#6B7280;
+
+    line-height:1.7;
+
+    margin-bottom:16px;
 }
 
-/* META */
+/* ===========================================
+   META
+=========================================== */
 
 .course-meta{
-  display:flex;
-  gap:12px;
 
-  margin:18px 0;
+    display:flex;
+
+    gap:10px;
+
+    flex-wrap:wrap;
+
+    margin-bottom:18px;
 }
 
 .course-meta span{
-  background:#181823;
-  color:#C48A52;
 
-  padding:8px 12px;
-  border-radius:10px;
+    background:#FFF3E8;
 
-  font-size:13px;
+    color:#EA580C;
+
+    border:1px solid #FFD6B6;
+
+    padding:8px 14px;
+
+    border-radius:10px;
+
+    font-size:13px;
+
+    font-weight:600;
 }
 
-/* PROGRESS */
+/* ===========================================
+   STATUS
+=========================================== */
 
-.progress-top{
-  display:flex;
-  justify-content:space-between;
+.course-status{
 
-  margin-bottom:10px;
+    display:inline-block;
+
+    margin-bottom:18px;
+
+    padding:8px 14px;
+
+    background:#FFE8D5;
+
+    color:#EA580C;
+
+    border:1px solid #FFD2B0;
+
+    border-radius:30px;
+
+    font-size:12px;
+
+    font-weight:700;
 }
 
-.progress-top span:last-child{
-  color:#C48A52;
-  font-weight:700;
-}
-
-.progress-bar{
-  height:10px;
-  background:#252535;
-
-  border-radius:50px;
-  overflow:hidden;
-}
-
-.progress-fill{
-  height:100%;
-
-  background:
-  linear-gradient(
-    90deg,
-    #C48A52,
-    #E7CBA8
-  );
-}
-
-/* BUTTON */
+/* ===========================================
+   BUTTON
+=========================================== */
 
 .course-content button{
-  width:100%;
-  margin-top:22px;
 
-  border:none;
+    width:100%;
 
-  padding:15px;
+    padding:15px;
 
-  border-radius:14px;
+    border:none;
 
-  background:#C48A52;
-  color:white;
+    border-radius:14px;
 
-  font-weight:600;
-  cursor:pointer;
+    background:#F97316;
 
-  transition:.3s;
+    color:white;
+
+    font-size:15px;
+
+    font-weight:600;
+
+    cursor:pointer;
+
+    transition:.3s;
 }
 
 .course-content button:hover{
-  transform:translateY(-2px);
-  opacity:.95;
+
+    background:#EA580C;
+
+    transform:translateY(-3px);
+
+    box-shadow:0 12px 25px rgba(249,115,22,.22);
 }
 
-/* RESPONSIVE */
+/* ===========================================
+   RESPONSIVE
+=========================================== */
 
 @media(max-width:1200px){
 
-  .course-grid{
-    grid-template-columns:1fr;
-  }
+    .course-grid{
 
-  .courses-header{
-    flex-direction:column;
-    align-items:flex-start;
-    gap:20px;
-  }
+        grid-template-columns:repeat(2,1fr);
+    }
 
-  .page-title{
-    font-size:42px;
-  }
+    .learning-stats{
+
+        grid-template-columns:1fr;
+    }
+
+    .courses-header{
+
+        flex-direction:column;
+
+        align-items:flex-start;
+
+        gap:30px;
+    }
+
+    .course-count{
+
+        width:140px;
+
+        height:140px;
+    }
+
 }
 
+@media(max-width:768px){
+
+    .main-content{
+
+        margin-left:0;
+
+        padding:20px;
+    }
+
+    .course-grid{
+
+        grid-template-columns:1fr;
+    }
+
+    .learning-stats{
+
+        grid-template-columns:1fr;
+    }
+
+    .page-title{
+
+        font-size:38px;
+    }
+
+    .course-count{
+
+        width:120px;
+
+        height:120px;
+    }
+
+}
+
+@media(max-width:500px){
+
+    .page-title{
+
+        font-size:30px;
+    }
+
+    .course-content h3{
+
+        font-size:20px;
+    }
+
+}
+
+/* ===========================================
+   SCROLLBAR
+=========================================== */
+
+::-webkit-scrollbar{
+
+    width:8px;
+}
+
+::-webkit-scrollbar-track{
+
+    background:#FFFAF5;
+}
+
+::-webkit-scrollbar-thumb{
+
+    background:#F6A56A;
+
+    border-radius:20px;
+}
+
+::-webkit-scrollbar-thumb:hover{
+
+    background:#F97316;
+}
+
+/* ===========================================
+   ANIMATION
+=========================================== */
+
+.courses-header,
+.learning-card,
+.course-card{
+
+    animation:fadeUp .6s ease;
+}
+
+@keyframes fadeUp{
+
+    from{
+
+        opacity:0;
+
+        transform:translateY(25px);
+    }
+
+    to{
+
+        opacity:1;
+
+        transform:translateY(0);
+    }
+
+}

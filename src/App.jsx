@@ -3,10 +3,10 @@ import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import WelcomePage from "./pages/WelcomePage";
 import LoginPage from "./pages/LoginPage";
 import RegisterPage from "./pages/RegisterPage";
+import ForgotPasswordPage from "./pages/ForgotPasswordPage";
 
+/* STUDENT */
 import StudentDashboard from "./pages/StudentDashboard";
-import InstructorDashboard from "./pages/InstructorDashboard";
-
 import MyCourses from "./pages/MyCourses";
 import CourseDetails from "./pages/CourseDetails";
 import VideoLearning from "./pages/VideoLearning";
@@ -14,132 +14,229 @@ import ProgressAnalytics from "./pages/ProgressAnalytics";
 import Certificates from "./pages/Certificates";
 import Settings from "./pages/Settings";
 
+/* INSTRUCTOR */
+import InstructorDashboard from "./pages/InstructorDashboard";
+import ManageCourses from "./pages/ManageCourses";
+import ManageStudents from "./pages/ManageStudents";
+import InstructorAnalytics from "./pages/InstructorAnalytics";
+import InstructorSettings from "./pages/InstructorSettings";
+
+/* ADMIN */
+import AdminDashboard from "./pages/AdminDashboard";
+import UserManagement from "./pages/UserManagement";
+import CourseApproval from "./pages/CourseApproval";
+import PlatformAnalytics from "./pages/PlatformAnalytics";
+import AdminSettings from "./pages/AdminSettings";
+
+/* AUTH */
 import ProtectedRoute from "./routes/ProtectedRoute";
 
 function App() {
-return ( <BrowserRouter>
+  return (
+    <BrowserRouter>
+      <Routes>
 
-```
-  <Routes>
+        {/* ========================= */}
+        {/* PUBLIC ROUTES */}
+        {/* ========================= */}
 
-    {/* PUBLIC ROUTES */}
+        <Route
+          path="/"
+          element={<WelcomePage />}
+        />
 
-    <Route
-      path="/"
-      element={<WelcomePage />}
-    />
+        <Route
+          path="/login"
+          element={<LoginPage />}
+        />
 
-    <Route
-      path="/login"
-      element={<LoginPage />}
-    />
+        <Route
+          path="/register"
+          element={<RegisterPage />}
+        />
 
-    <Route
-      path="/register"
-      element={<RegisterPage />}
-    />
+        <Route
+          path="/forgot-password"
+          element={<ForgotPasswordPage />}
+        />
 
-    {/* STUDENT DASHBOARD */}
+        {/* ========================= */}
+        {/* STUDENT ROUTES */}
+        {/* ========================= */}
 
-    <Route
-      path="/student-dashboard"
-      element={
-        <ProtectedRoute role="student">
-          <StudentDashboard />
-        </ProtectedRoute>
-      }
-    />
+        <Route
+          path="/student-dashboard"
+          element={
+            <ProtectedRoute role="student">
+              <StudentDashboard />
+            </ProtectedRoute>
+          }
+        />
 
-    {/* MY COURSES */}
+        <Route
+          path="/my-courses"
+          element={
+            <ProtectedRoute role="student">
+              <MyCourses />
+            </ProtectedRoute>
+          }
+        />
 
-    <Route
-      path="/my-courses"
-      element={
-        <ProtectedRoute role="student">
-          <MyCourses />
-        </ProtectedRoute>
-      }
-    />
+        <Route
+          path="/course/:id"
+          element={
+            <ProtectedRoute role="student">
+              <CourseDetails />
+            </ProtectedRoute>
+          }
+        />
 
-    {/* COURSE DETAILS */}
+        <Route
+          path="/course/:id/learning"
+          element={
+            <ProtectedRoute role="student">
+              <VideoLearning />
+            </ProtectedRoute>
+          }
+        />
 
-    <Route
-      path="/course-details"
-      element={
-        <ProtectedRoute role="student">
-          <CourseDetails />
-        </ProtectedRoute>
-      }
-    />
+        <Route
+          path="/progress"
+          element={
+            <ProtectedRoute role="student">
+              <ProgressAnalytics />
+            </ProtectedRoute>
+          }
+        />
 
-    {/* VIDEO LEARNING */}
+        <Route
+          path="/certificates"
+          element={
+            <ProtectedRoute role="student">
+              <Certificates />
+            </ProtectedRoute>
+          }
+        />
 
-    <Route
-      path="/video-learning"
-      element={
-        <ProtectedRoute role="student">
-          <VideoLearning />
-        </ProtectedRoute>
-      }
-    />
+        <Route
+          path="/settings"
+          element={
+            <ProtectedRoute role="student">
+              <Settings />
+            </ProtectedRoute>
+          }
+        />
 
-    {/* PROGRESS */}
+        {/* ========================= */}
+        {/* INSTRUCTOR ROUTES */}
+        {/* ========================= */}
 
-    <Route
-      path="/progress"
-      element={
-        <ProtectedRoute role="student">
-          <ProgressAnalytics />
-        </ProtectedRoute>
-      }
-    />
+        <Route
+          path="/instructor-dashboard"
+          element={
+            <ProtectedRoute role="instructor">
+              <InstructorDashboard />
+            </ProtectedRoute>
+          }
+        />
 
-    {/* CERTIFICATES */}
+        <Route
+          path="/manage-courses"
+          element={
+            <ProtectedRoute role="instructor">
+              <ManageCourses />
+            </ProtectedRoute>
+          }
+        />
 
-    <Route
-      path="/certificates"
-      element={
-        <ProtectedRoute role="student">
-          <Certificates />
-        </ProtectedRoute>
-      }
-    />
+        <Route
+          path="/manage-students"
+          element={
+            <ProtectedRoute role="instructor">
+              <ManageStudents />
+            </ProtectedRoute>
+          }
+        />
 
-    {/* SETTINGS */}
+        <Route
+          path="/instructor-analytics"
+          element={
+            <ProtectedRoute role="instructor">
+              <InstructorAnalytics />
+            </ProtectedRoute>
+          }
+        />
 
-    <Route
-      path="/settings"
-      element={
-        <ProtectedRoute role="student">
-          <Settings />
-        </ProtectedRoute>
-      }
-    />
+        <Route
+          path="/instructor-settings"
+          element={
+            <ProtectedRoute role="instructor">
+              <InstructorSettings />
+            </ProtectedRoute>
+          }
+        />
 
-    {/* INSTRUCTOR */}
+        {/* ========================= */}
+        {/* ADMIN ROUTES */}
+        {/* ========================= */}
 
-    <Route
-      path="/instructor-dashboard"
-      element={
-        <ProtectedRoute role="instructor">
-          <InstructorDashboard />
-        </ProtectedRoute>
-      }
-    />
+        <Route
+          path="/admin-dashboard"
+          element={
+            <ProtectedRoute role="admin">
+              <AdminDashboard />
+            </ProtectedRoute>
+          }
+        />
 
-    {/* INVALID ROUTE */}
+        <Route
+          path="/user-management"
+          element={
+            <ProtectedRoute role="admin">
+              <UserManagement />
+            </ProtectedRoute>
+          }
+        />
 
-    <Route
-      path="*"
-      element={<Navigate to="/" replace />}
-    />
+        <Route
+          path="/course-approval"
+          element={
+            <ProtectedRoute role="admin">
+              <CourseApproval />
+            </ProtectedRoute>
+          }
+        />
 
-  </Routes>
+        <Route
+          path="/platform-analytics"
+          element={
+            <ProtectedRoute role="admin">
+              <PlatformAnalytics />
+            </ProtectedRoute>
+          }
+        />
 
-</BrowserRouter>
+        <Route
+          path="/admin-settings"
+          element={
+            <ProtectedRoute role="admin">
+              <AdminSettings />
+            </ProtectedRoute>
+          }
+        />
 
+        {/* ========================= */}
+        {/* FALLBACK */}
+        {/* ========================= */}
 
-);
+        <Route
+          path="*"
+          element={<Navigate to="/" replace />}
+        />
+
+      </Routes>
+    </BrowserRouter>
+  );
 }
 
 export default App;

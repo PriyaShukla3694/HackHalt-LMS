@@ -1,0 +1,263 @@
+.settings-page{
+  display:flex;
+  min-height:100vh;
+
+  background:#FFF8F3;
+
+  color:#111111;
+  overflow-x:hidden;
+  position:relative;
+}
+
+.settings-page::before{
+  content:"";
+  position:fixed;
+  inset:0;
+
+  background-image:
+    linear-gradient(rgba(249,115,22,.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(249,115,22,.05) 1px, transparent 1px);
+
+  background-size:40px 40px;
+  pointer-events:none;
+}
+
+/* MAIN */
+
+.settings-content{
+  flex:1;
+  padding:35px;
+
+  margin-left:270px;
+
+  position:relative;
+  z-index:2;
+}
+
+/* HEADER */
+
+.settings-header{
+  padding:40px;
+  border-radius:30px;
+
+  background:#FFFFFF;
+
+  border:1px solid #FFD8BE;
+
+  margin-bottom:30px;
+
+  position:relative;
+  overflow:hidden;
+
+  box-shadow:0 12px 30px rgba(249,115,22,.08);
+}
+
+.settings-header::before{
+  content:"";
+
+  position:absolute;
+
+  width:350px;
+  height:350px;
+
+  right:-120px;
+  top:-120px;
+
+  border-radius:50%;
+
+  background:
+    radial-gradient(
+      rgba(249,115,22,.12),
+      transparent
+    );
+}
+
+.settings-header span{
+  color:#F97316;
+  letter-spacing:3px;
+  font-size:12px;
+  font-weight:700;
+}
+
+.settings-header h1{
+  font-size:54px;
+  margin-top:10px;
+
+  color:#111111;
+}
+
+.settings-header p{
+  margin-top:10px;
+  color:#6B7280;
+}
+
+/* CARD */
+
+.settings-card{
+  padding:35px;
+
+  border-radius:28px;
+
+  background:#FFFFFF;
+
+  border:1px solid #FFD8BE;
+
+  display:flex;
+  flex-direction:column;
+  gap:20px;
+
+  box-shadow:0 10px 25px rgba(249,115,22,.08);
+}
+
+/* SECTION TITLE */
+
+.settings-card h2{
+  margin-top:15px;
+  margin-bottom:5px;
+
+  font-size:24px;
+
+  color:#F97316;
+
+  border-bottom:1px solid #FFD8BE;
+
+  padding-bottom:10px;
+}
+
+/* FORM */
+
+.form-group{
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+}
+
+.form-group label{
+  color:#444444;
+  font-weight:600;
+}
+
+.form-group input{
+  padding:15px 18px;
+
+  border-radius:14px;
+
+  border:1px solid #FFD8BE;
+
+  background:#FFFDFB;
+
+  color:#111111;
+
+  outline:none;
+
+  transition:.3s;
+}
+
+.form-group input::placeholder{
+  color:#999999;
+}
+
+.form-group input:focus{
+  border-color:#F97316;
+
+  box-shadow:0 0 15px rgba(249,115,22,.15);
+}
+
+/* ==========================
+CHECKBOX
+========================== */
+
+.checkbox-group{
+  display:flex;
+  flex-direction:column;
+  gap:14px;
+
+  margin-top:10px;
+}
+
+.checkbox-group label{
+  display:flex;
+  align-items:center;
+  gap:12px;
+
+  color:#444444;
+  cursor:pointer;
+}
+
+.checkbox-group input{
+  width:18px;
+  height:18px;
+
+  accent-color:#F97316;
+}
+
+/* ==========================
+SAVE BUTTON
+========================== */
+
+.save-btn{
+  margin-top:20px;
+
+  align-self:flex-end;
+
+  padding:14px 32px;
+
+  border:none;
+  border-radius:14px;
+
+  cursor:pointer;
+
+  font-weight:700;
+  color:#FFFFFF;
+
+  background:linear-gradient(
+    135deg,
+    #FB923C,
+    #F97316
+  );
+
+  box-shadow:0 10px 25px rgba(249,115,22,.18);
+
+  transition:.3s;
+}
+
+.save-btn:hover{
+  transform:translateY(-3px);
+
+  background:linear-gradient(
+    135deg,
+    #EA580C,
+    #C2410C
+  );
+
+  box-shadow:0 15px 35px rgba(249,115,22,.28);
+}
+
+/* ==========================
+RESPONSIVE
+========================== */
+
+@media(max-width:768px){
+
+  .settings-content{
+    margin-left:0;
+    padding:20px;
+  }
+
+  .settings-header{
+    padding:30px;
+  }
+
+  .settings-header h1{
+    font-size:42px;
+  }
+
+  .settings-card{
+    padding:25px;
+  }
+
+  .save-btn{
+    width:100%;
+    align-self:stretch;
+  }
+}

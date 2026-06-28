@@ -1,120 +1,573 @@
+/* ===========================================
+   COURSE DETAILS PAGE
+=========================================== */
+
 .course-details-page{
-display:flex;
-min-height:100vh;
-background:#0A0A0F;
-color:white;
+    display:flex;
+    min-height:100vh;
+    background:#FFF8F2;
+    color:#2F2F2F;
+    font-family:'Poppins',sans-serif;
 }
 
 .course-details-content{
-flex:1;
-padding:35px;
+    flex:1;
+    margin-left:270px;
+    padding:35px;
 }
 
+/* ===========================================
+   HERO SECTION
+=========================================== */
+
 .course-hero{
-display:flex;
-justify-content:space-between;
-align-items:center;
 
-padding:45px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
 
-border-radius:30px;
+    gap:40px;
 
-background:
-linear-gradient(
-135deg,
-rgba(196,138,82,.15),
-rgba(196,138,82,.03)
-);
+    padding:45px;
 
-border:1px solid rgba(255,255,255,.06);
+    border-radius:28px;
 
-margin-bottom:35px;
+    background:linear-gradient(
+        135deg,
+        #FFF1E5,
+        #FFE4CC
+    );
+
+    box-shadow:0 12px 30px rgba(249,115,22,.12);
+
+    margin-bottom:35px;
 }
 
 .course-left{
-max-width:650px;
+
+    max-width:650px;
 }
 
 .course-tag{
-color:#C48A52;
-letter-spacing:2px;
-font-size:12px;
+
+    display:inline-block;
+
+    padding:8px 18px;
+
+    background:#FFF5EE;
+
+    color:#F97316;
+
+    border-radius:30px;
+
+    font-size:13px;
+
+    font-weight:700;
+
+    letter-spacing:2px;
 }
 
 .course-left h1{
-font-size:60px;
-margin-top:15px;
+
+    font-size:54px;
+
+    margin:20px 0 15px;
+
+    color:#2F2F2F;
 }
 
 .course-left p{
-margin-top:15px;
-color:#A1A1AA;
-line-height:1.8;
+
+    color:#6B7280;
+
+    line-height:1.8;
 }
 
 .course-right img{
-width:250px;
+
+    width:320px;
+
+    border-radius:22px;
+
+    box-shadow:0 15px 30px rgba(249,115,22,.15);
 }
 
+/* ===========================================
+   STATS
+=========================================== */
+
 .course-stats{
-display:flex;
-gap:40px;
-margin-top:25px;
+
+    display:flex;
+
+    gap:20px;
+
+    margin-top:30px;
+}
+
+.course-stats div{
+
+    background:white;
+
+    padding:18px 22px;
+
+    border-radius:16px;
+
+    box-shadow:0 8px 18px rgba(0,0,0,.06);
+
+    flex:1;
 }
 
 .course-stats h3{
-color:#C48A52;
+
+    color:#F97316;
+
+    font-size:28px;
 }
 
 .course-stats span{
-color:#A1A1AA;
+
+    color:#6B7280;
 }
 
+/* ===========================================
+   BUTTON
+=========================================== */
+
 .start-learning-btn{
-margin-top:30px;
 
-background:#C48A52;
-color:white;
+    margin-top:30px;
 
-border:none;
+    padding:15px 30px;
 
-padding:15px 28px;
+    border:none;
 
-border-radius:14px;
+    border-radius:14px;
 
-cursor:pointer;
+    background:linear-gradient(
+        135deg,
+        #FF9A3D,
+        #F97316
+    );
+
+    color:white;
+
+    font-size:15px;
+
+    font-weight:600;
+
+    cursor:pointer;
+
+    transition:.3s;
+}
+
+.start-learning-btn:hover{
+
+    transform:translateY(-3px);
+
+    background:linear-gradient(
+        135deg,
+        #EA580C,
+        #C2410C
+    );
+
+    box-shadow:0 12px 25px rgba(249,115,22,.25);
+}
+
+/* ===========================================
+   PROGRESS
+=========================================== */
+
+.progress-section{
+
+    margin-bottom:35px;
+}
+
+.progress-card{
+
+    background:#FFFFFF;
+
+    border-radius:24px;
+
+    padding:30px;
+
+    border:1px solid #FFE0C7;
+
+    box-shadow:0 10px 25px rgba(0,0,0,.06);
+}
+
+.progress-card h2{
+
+    margin-bottom:20px;
+
+    color:#2F2F2F;
+}
+
+.progress-top{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    margin-bottom:12px;
+
+    color:#555;
+}
+
+.progress-bar{
+
+    height:12px;
+
+    border-radius:50px;
+
+    background:#FFE8D2;
+
+    overflow:hidden;
+}
+
+.progress-fill{
+
+    height:100%;
+
+    background:linear-gradient(
+        90deg,
+        #F97316,
+        #FFB347
+    );
+
+    border-radius:50px;
+}
+
+/* ===========================================
+   MODULES
+=========================================== */
+
+.module-section{
+
+    margin-bottom:35px;
 }
 
 .module-section h2{
-margin-bottom:20px;
+
+    margin-bottom:20px;
 }
 
 .module-grid{
-display:grid;
-grid-template-columns:repeat(2,1fr);
-gap:20px;
+
+    display:grid;
+
+    grid-template-columns:repeat(2,1fr);
+
+    gap:22px;
 }
 
 .module-card{
-background:#12121A;
 
-padding:25px;
+    background:#FFF2E8;
 
-border-radius:20px;
+    padding:24px;
 
-border:1px solid rgba(255,255,255,.05);
+    border-radius:20px;
 
-transition:.3s;
+    border:1px solid #FFD8B8;
+
+    transition:.35s;
 }
 
 .module-card:hover{
-transform:translateY(-5px);
-border-color:#C48A52;
+
+    transform:translateY(-6px);
+
+    border-color:#F97316;
+
+    box-shadow:0 15px 25px rgba(249,115,22,.12);
 }
 
 .module-card span{
-display:block;
-color:#C48A52;
-margin-bottom:10px;
-font-weight:700;
+
+    display:block;
+
+    color:#F97316;
+
+    font-weight:700;
+
+    margin-bottom:12px;
+}
+
+/* ===========================================
+   SKILLS
+=========================================== */
+
+.skills-section{
+
+    margin-bottom:35px;
+}
+
+.skills-section h2{
+
+    margin-bottom:20px;
+}
+
+.skills-grid{
+
+    display:grid;
+
+    grid-template-columns:repeat(3,1fr);
+
+    gap:20px;
+}
+
+/* ===========================================
+   SKILL CARD
+=========================================== */
+
+.skill-card{
+
+    background:#FFFFFF;
+
+    padding:22px;
+
+    text-align:center;
+
+    border-radius:18px;
+
+    border:1px solid #FFE0C7;
+
+    box-shadow:0 8px 20px rgba(0,0,0,.05);
+
+    transition:.35s;
+}
+
+.skill-card:hover{
+
+    transform:translateY(-6px);
+
+    background:#F97316;
+
+    color:#fff;
+
+    box-shadow:0 15px 30px rgba(249,115,22,.18);
+}
+
+.skill-card h3{
+
+    margin-bottom:10px;
+
+    font-size:20px;
+
+    color:inherit;
+}
+
+.skill-card p{
+
+    color:#6B7280;
+
+    line-height:1.6;
+
+    transition:.3s;
+}
+
+.skill-card:hover p{
+
+    color:#fff;
+}
+
+/* ===========================================
+   INSTRUCTOR
+=========================================== */
+
+.instructor-card{
+
+    margin-top:35px;
+
+    background:#FFF2E8;
+
+    padding:32px;
+
+    border-radius:24px;
+
+    border:1px solid #FFD8B8;
+
+    box-shadow:0 10px 25px rgba(0,0,0,.06);
+
+    transition:.35s;
+}
+
+.instructor-card:hover{
+
+    transform:translateY(-5px);
+
+    box-shadow:0 18px 35px rgba(249,115,22,.15);
+}
+
+.instructor-card h2{
+
+    color:#2F2F2F;
+
+    margin-bottom:18px;
+}
+
+.instructor-card h3{
+
+    color:#F97316;
+
+    margin-bottom:10px;
+}
+
+.instructor-card p{
+
+    color:#6B7280;
+
+    line-height:1.8;
+}
+
+/* ===========================================
+   COMMON HOVER
+=========================================== */
+
+.module-card,
+.skill-card,
+.instructor-card,
+.progress-card{
+
+    transition:.35s;
+}
+
+.progress-card:hover{
+
+    transform:translateY(-5px);
+
+    box-shadow:0 15px 30px rgba(249,115,22,.12);
+}
+
+/* ===========================================
+   SCROLLBAR
+=========================================== */
+
+::-webkit-scrollbar{
+
+    width:8px;
+}
+
+::-webkit-scrollbar-track{
+
+    background:#FFF8F2;
+}
+
+::-webkit-scrollbar-thumb{
+
+    background:#F5B27A;
+
+    border-radius:20px;
+}
+
+::-webkit-scrollbar-thumb:hover{
+
+    background:#F97316;
+}
+
+/* ===========================================
+   RESPONSIVE
+=========================================== */
+
+@media(max-width:1200px){
+
+    .course-hero{
+
+        flex-direction:column;
+
+        text-align:center;
+    }
+
+    .course-left{
+
+        max-width:100%;
+    }
+
+    .module-grid{
+
+        grid-template-columns:1fr;
+    }
+
+    .skills-grid{
+
+        grid-template-columns:repeat(2,1fr);
+    }
+
+}
+
+@media(max-width:768px){
+
+    .course-details-content{
+
+        margin-left:0;
+
+        padding:20px;
+    }
+
+    .course-left h1{
+
+        font-size:38px;
+    }
+
+    .course-right img{
+
+        width:220px;
+    }
+
+    .course-stats{
+
+        flex-direction:column;
+    }
+
+    .skills-grid{
+
+        grid-template-columns:1fr;
+    }
+
+}
+
+@media(max-width:500px){
+
+    .course-left h1{
+
+        font-size:30px;
+    }
+
+    .start-learning-btn{
+
+        width:100%;
+    }
+
+}
+
+/* ===========================================
+   ANIMATION
+=========================================== */
+
+.course-hero,
+.progress-card,
+.module-card,
+.skill-card,
+.instructor-card{
+
+    animation:fadeUp .6s ease;
+}
+
+@keyframes fadeUp{
+
+    from{
+
+        opacity:0;
+
+        transform:translateY(25px);
+    }
+
+    to{
+
+        opacity:1;
+
+        transform:translateY(0);
+    }
+
 }

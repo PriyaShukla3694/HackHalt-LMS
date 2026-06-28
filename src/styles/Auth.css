@@ -1,264 +1,348 @@
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600&display=swap');
+
 .auth-container{
   min-height:100vh;
-
   display:flex;
   justify-content:center;
   align-items:center;
+  overflow:hidden;
+  position:relative;
 
   background:
-  radial-gradient(
-    circle at top left,
-    rgba(196,138,82,.15),
-    transparent 25%
-  ),
+    radial-gradient(circle at top left,
+    rgba(255,140,0,.18),
+    transparent 35%),
 
-  radial-gradient(
-    circle at bottom right,
-    rgba(196,138,82,.10),
-    transparent 30%
-  ),
+    radial-gradient(circle at bottom right,
+    rgba(255,193,7,.12),
+    transparent 35%),
 
-  #09090D;
-
-  position:relative;
-  overflow:hidden;
+    #FFF8F2;
 }
 
-/* PREMIUM GOLDEN DOTS */
+/* Animated Background */
 
 .auth-container::before{
   content:"";
-
   position:absolute;
-  inset:0;
-
-  background-image:
-    radial-gradient(
-      rgba(196,138,82,.35) 2px,
-      transparent 2px
-    ),
-
-    radial-gradient(
-      rgba(196,138,82,.15) 1px,
-      transparent 1px
-    );
-
-  background-size:
-    26px 26px,
-    13px 13px;
-
-  background-position:
-    0 0,
-    13px 13px;
-
-  pointer-events:none;
-}
-
-/* GLASS CARD */
-
-.auth-box{
-  width:430px;
-  max-width:90%;
-
-  padding:40px;
-
-  border-radius:30px;
-
-  position:relative;
-  z-index:2;
-
-  background:
-  linear-gradient(
-    135deg,
-    rgba(255,255,255,.08),
-    rgba(255,255,255,.03)
-  );
-
-  backdrop-filter:blur(25px);
-
-  border:1px solid rgba(255,255,255,.08);
-
-  box-shadow:
-  0 20px 60px rgba(0,0,0,.45);
-
-  overflow:hidden;
-}
-
-/* GLOW EFFECT */
-
-.auth-box::before{
-  content:"";
-
-  position:absolute;
-
-  width:250px;
-  height:250px;
-
-  top:-120px;
-  right:-120px;
-
+  width:500px;
+  height:500px;
   border-radius:50%;
 
   background:
-  radial-gradient(
-    rgba(196,138,82,.20),
-    transparent
-  );
+    radial-gradient(
+      rgba(255,140,0,.20),
+      transparent);
 
-  pointer-events:none;
+  top:-180px;
+  left:-150px;
+
+  animation:floatGlow 8s ease-in-out infinite;
 }
 
-.auth-box h2{
-  font-size:42px;
-  font-weight:700;
+.auth-container::after{
+  content:"";
+  position:absolute;
+  width:450px;
+  height:450px;
+  border-radius:50%;
 
-  color:white;
+  background:
+    radial-gradient(
+      rgba(255,193,7,.18),
+      transparent);
+
+  bottom:-180px;
+  right:-120px;
+
+  animation:floatGlow 10s ease-in-out infinite;
+}
+
+@keyframes floatGlow{
+
+  0%{
+    transform:translateY(0);
+  }
+
+  50%{
+    transform:translateY(30px);
+  }
+
+  100%{
+    transform:translateY(0);
+  }
+
+}
+
+/* Card */
+
+.auth-box{
+
+  width:430px;
+  max-width:90%;
+
+  padding:42px;
+
+  border-radius:28px;
+
+  position:relative;
+  z-index:2;
+
+  background:#ffffff;
+
+  border:2px solid #FFD2A6;
+
+  box-shadow:
+    0 20px 40px rgba(255,140,0,.12);
+
+  transition:.4s;
+
+}
+
+.auth-box:hover{
+
+  transform:translateY(-5px);
+
+  box-shadow:
+    0 20px 45px rgba(255,140,0,.20);
+
+}
+
+/* Heading */
+
+.auth-box h2{
+
+  font-family:'Orbitron',sans-serif;
+
+  font-size:2.2rem;
+
+  text-align:center;
 
   margin-bottom:10px;
 
-  position:relative;
-  z-index:2;
+  color:#FF8C00;
+
 }
 
 .auth-box p{
-  color:#A1A1AA;
+
+  text-align:center;
+
+  color:#666;
 
   margin-bottom:25px;
 
-  position:relative;
-  z-index:2;
 }
 
-/* FORM */
+/* ===========================
+   FORM
+=========================== */
 
 .auth-box form{
   display:flex;
   flex-direction:column;
   gap:15px;
-
-  position:relative;
-  z-index:2;
 }
 
-/* INPUTS */
+/* ===========================
+   INPUTS
+=========================== */
 
 .auth-box input,
 .auth-box select{
-  background:
-  rgba(255,255,255,.04);
 
-  border:1px solid rgba(255,255,255,.08);
-
-  color:white;
+  width:100%;
 
   padding:15px 16px;
 
   border-radius:14px;
 
+  border:2px solid #FFD2A6;
+
+  background:#fff;
+
+  color:#222;
+
   outline:none;
 
   transition:.3s;
+
+  font-size:15px;
+
 }
 
 .auth-box input::placeholder{
-  color:#7A7A85;
+  color:#888;
 }
 
 .auth-box input:focus,
 .auth-box select:focus{
-  border-color:#C48A52;
+
+  border-color:#FF8C00;
 
   box-shadow:
-  0 0 0 3px rgba(196,138,82,.15);
-}
+    0 0 12px rgba(255,140,0,.20);
 
-/* SELECT */
-
-.auth-box select{
-  cursor:pointer;
 }
 
 .auth-box option{
-  background:#111118;
-  color:white;
+
+  background:#fff;
+
+  color:#222;
+
 }
 
-/* BUTTON */
+/* ===========================
+   BUTTON
+=========================== */
 
 .auth-box button{
-  margin-top:10px;
 
-  background:
-  linear-gradient(
-    135deg,
-    #C48A52,
-    #D9A673
-  );
-
-  color:white;
-
-  border:none;
+  margin-top:12px;
 
   padding:15px;
 
+  border:none;
+
   border-radius:14px;
+
+  cursor:pointer;
+
+  color:#fff;
+
+  font-size:16px;
+
+  font-weight:700;
+
+  background:#FF8C00;
+
+  transition:.3s;
+
+}
+
+.auth-box button:hover{
+
+  background:#E67E00;
+
+  transform:translateY(-3px);
+
+  box-shadow:
+    0 12px 25px rgba(255,140,0,.25);
+
+}
+
+/* ===========================
+   FORGOT PASSWORD
+=========================== */
+
+.forgot-password{
+
+  text-align:center;
+
+  margin-top:18px;
+  margin-bottom:22px;
+
+  color:#FF8C00;
+
+  font-size:15px;
+
+  font-weight:600;
+
+  cursor:pointer;
+
+  transition:.3s;
+
+}
+
+.forgot-password:hover{
+
+  color:#222;
+
+}
+
+/* ===========================
+   SWITCH TEXT
+=========================== */
+
+.switch-text{
+
+  text-align:center;
+
+  color:#666;
+
+  font-size:15px;
+
+  margin-top:0;
+
+}
+
+.switch-text span{
+
+  color:#FF8C00;
 
   font-weight:700;
 
   cursor:pointer;
 
   transition:.3s;
-}
 
-.auth-box button:hover{
-  transform:translateY(-3px);
-
-  box-shadow:
-  0 12px 25px rgba(196,138,82,.25);
-}
-
-/* SWITCH TEXT */
-
-.switch-text{
-  margin-top:22px;
-
-  text-align:center;
-
-  color:#A1A1AA;
-}
-
-.switch-text span{
-  color:#C48A52;
-
-  font-weight:600;
-
-  cursor:pointer;
 }
 
 .switch-text span:hover{
+
+  color:#222;
+
   text-decoration:underline;
+
 }
 
-/* ERROR */
+/* ===========================
+   ERROR
+=========================== */
 
 .error-message{
-  color:#ff6b6b;
 
-  font-size:14px;
+  color:#E53935;
 
-  margin-top:-5px;
+  text-align:center;
+
+  font-size:.9rem;
+
+  font-weight:600;
+
 }
 
-/* RESPONSIVE */
+/* ===========================
+   DROPDOWN
+=========================== */
+
+.auth-box select{
+
+  appearance:none;
+
+  cursor:pointer;
+
+}
+
+/* ===========================
+   MOBILE
+=========================== */
 
 @media(max-width:768px){
 
   .auth-box{
+
     width:90%;
+
     padding:30px;
+
   }
 
   .auth-box h2{
-    font-size:34px;
+
+    font-size:1.8rem;
+
   }
+
 }

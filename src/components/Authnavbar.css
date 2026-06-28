@@ -1,0 +1,174 @@
+/* ── Full-width band so bg/border spans edge-to-edge ── */
+.auth-navbar-band {
+  width: 100%;
+  background: #f5f3f0;          /* matches page bg so it blends */
+  border-bottom: 1px solid var(--line, #e8e5e1);
+  position: relative;
+  z-index: 20;
+}
+
+/* ── Inner nav: logo · links · actions spread across 1180px ── */
+.auth-navbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 18px 40px;
+  gap: 24px;
+}
+
+/* ── Logo ── */
+.auth-navbar-logo {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-family: "Lora", Georgia, serif;
+  font-weight: 700;
+  font-size: 1.3rem;
+  letter-spacing: 0.01em;
+  color: var(--orange, #f2600c);
+  flex-shrink: 0;
+  padding: 0;
+  line-height: 1;
+}
+
+/* ── Centre links ── */
+.auth-navbar-links {
+  display: flex;
+  align-items: center;
+  gap: 36px;
+  flex: 1;
+  justify-content: center;
+}
+
+.auth-navbar-links > a {
+  font-family: "Inter", sans-serif;
+  font-size: 0.93rem;
+  font-weight: 500;
+  color: var(--ink-soft, #46434c);
+  white-space: nowrap;
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+.auth-navbar-links > a:hover {
+  color: var(--ink, #18171c);
+}
+
+/* ── Right actions ── */
+.auth-navbar-actions {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  flex-shrink: 0;
+}
+
+/* Mobile actions (hidden on desktop) */
+.auth-navbar-mobile-actions {
+  display: none;
+}
+
+/* ── Log In text-link ── */
+.auth-navbar-textlink {
+  background: none;
+  border: none;
+  font-family: "Inter", sans-serif;
+  font-weight: 600;
+  font-size: 0.93rem;
+  color: var(--ink, #18171c);
+  cursor: pointer;
+  padding: 0 0 3px;
+  border-bottom: 2px solid transparent;
+  transition: border-color 0.2s ease, color 0.2s ease;
+  white-space: nowrap;
+}
+.auth-navbar-textlink:hover {
+  color: var(--ink, #18171c);
+}
+.auth-navbar-textlink.is-active {
+  border-bottom-color: var(--ink, #18171c);
+}
+
+/* ── Get Started CTA ── */
+.auth-navbar-cta {
+  background: var(--orange, #f2600c);
+  color: #fff;
+  border: none;
+  font-family: "Inter", sans-serif;
+  font-weight: 600;
+  font-size: 0.9rem;
+  padding: 10px 22px;
+  border-radius: 8px;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background 0.2s ease, transform 0.15s ease;
+}
+.auth-navbar-cta:hover {
+  background: var(--orange-dark, #d9530a);
+  transform: translateY(-1px);
+}
+.auth-navbar-cta.is-active {
+  box-shadow: 0 0 0 3px var(--orange-tint, #fdece0);
+}
+
+/* ── Hamburger toggle (hidden on desktop) ── */
+.auth-navbar-toggle {
+  display: none;
+  background: none;
+  border: none;
+  font-size: 1.4rem;
+  color: var(--ink, #18171c);
+  cursor: pointer;
+  padding: 4px;
+}
+
+/* ════════════════════════════════════
+   Mobile  ≤ 760 px
+   ════════════════════════════════════ */
+@media (max-width: 760px) {
+  .auth-navbar {
+    padding: 16px 24px;
+  }
+
+  /* Hide centre links & desktop actions */
+  .auth-navbar-links {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background: #fff;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+    gap: 18px;
+    padding: 22px 28px 26px;
+    border-bottom: 1px solid var(--line, #e8e5e1);
+    box-shadow: 0 14px 24px -16px rgba(0, 0, 0, 0.12);
+    z-index: 30;
+  }
+  .auth-navbar-links.open {
+    display: flex;
+  }
+
+  .auth-navbar-actions {
+    display: none;
+  }
+
+  /* Show buttons inside dropdown on mobile */
+  .auth-navbar-mobile-actions {
+    display: flex;
+    gap: 14px;
+    margin-top: 4px;
+  }
+
+  .auth-navbar-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .auth-navbar * { transition: none !important; }
+}

@@ -1,92 +1,259 @@
-.topbar {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+/* ==========================
+   TOPBAR
+========================== */
 
-  margin-bottom: 30px;
+.topbar{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:35px;
+    gap:25px;
 }
 
-.search-box {
-  width: 450px;
-
-  display: flex;
-  align-items: center;
-  gap: 12px;
-
-  background: #14141B;
-
-  border: 1px solid rgba(255,255,255,0.08);
-
-  border-radius: 14px;
-
-  padding: 14px 18px;
+.topbar-left{
+    flex:1;
 }
 
-.search-box svg {
-  color: #A1A1AA;
+/* SEARCH */
+
+.search-box{
+
+    width:460px;
+    height:60px;
+
+    display:flex;
+    align-items:center;
+    gap:14px;
+
+    padding:0 22px;
+
+    background:#FFFFFF;
+
+    border:1px solid #F1DDCB;
+
+    border-radius:18px;
+
+    box-shadow:0 8px 20px rgba(0,0,0,.06);
+
+    transition:.3s;
 }
 
-.search-box input {
-  width: 100%;
+.search-box:hover{
 
-  background: transparent;
-  border: none;
-  outline: none;
-
-  color: white;
-
-  font-size: 15px;
+    border-color:#F97316;
 }
 
-.topbar-right {
-  display: flex;
-  align-items: center;
-  gap: 20px;
+.search-box svg{
+
+    color:#F97316;
+
+    font-size:18px;
 }
 
-.notification-btn {
-  width: 50px;
-  height: 50px;
+.search-box input{
 
-  border: none;
+    width:100%;
 
-  border-radius: 14px;
+    border:none;
 
-  background: #14141B;
+    outline:none;
 
-  border: 1px solid rgba(255,255,255,0.08);
+    background:none;
 
-  color: white;
+    color:#3B2F2F;
 
-  cursor: pointer;
+    font-size:15px;
 }
 
-.notification-btn:hover {
-  border-color: #C48A52;
+.search-box input::placeholder{
+
+    color:#9B8A7A;
 }
 
-.user-profile {
-  display: flex;
-  align-items: center;
-  gap: 12px;
+/* RIGHT */
+
+.topbar-right{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:18px;
 }
 
-.avatar {
-  width: 50px;
-  height: 50px;
+/* WELCOME */
 
-  border-radius: 50%;
+.welcome-btn{
 
-  background: linear-gradient(
-    135deg,
-    #C48A52,
-    #E0C3A3
-  );
+    padding:14px 22px;
 
-  display: flex;
-  align-items: center;
-  justify-content: center;
+    border:none;
 
-  font-weight: bold;
-  color: white;
+    border-radius:14px;
+
+    background:#F97316;
+
+    color:white;
+
+    font-weight:600;
+
+    cursor:pointer;
+
+    transition:.3s;
+}
+
+.welcome-btn:hover{
+
+    background:#EA580C;
+
+    transform:translateY(-2px);
+
+    box-shadow:0 12px 25px rgba(249,115,22,.25);
+}
+
+/* DATE */
+
+.date-box{
+
+    background:#FFF1E7;
+
+    color:#8B5E3C;
+
+    padding:14px 20px;
+
+    border-radius:14px;
+
+    font-weight:600;
+
+    border:1px solid #F3D8C2;
+}
+
+/* USER CARD */
+
+.user-profile{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:15px;
+
+    background:#FFFFFF;
+
+    border:1px solid #F1DDCB;
+
+    padding:12px 18px;
+
+    border-radius:18px;
+
+    box-shadow:0 8px 20px rgba(0,0,0,.06);
+
+    min-width:240px;
+}
+
+.avatar{
+
+    width:55px;
+
+    height:55px;
+
+    border-radius:50%;
+
+    background:#F97316;
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    color:white;
+
+    font-weight:700;
+
+    font-size:20px;
+
+    overflow:hidden;
+}
+
+.avatar img{
+
+    width:100%;
+
+    height:100%;
+
+    object-fit:cover;
+}
+
+.user-info h4{
+
+    margin:0;
+
+    font-size:16px;
+
+    color:#3B2F2F;
+}
+
+.user-info p{
+
+    margin-top:4px;
+
+    color:#8B6D5C;
+
+    font-size:13px;
+
+    text-transform:capitalize;
+}
+
+/* RESPONSIVE */
+
+@media(max-width:1000px){
+
+    .topbar{
+
+        flex-direction:column;
+
+        align-items:stretch;
+    }
+
+    .search-box{
+
+        width:100%;
+    }
+
+    .topbar-right{
+
+        width:100%;
+
+        justify-content:space-between;
+
+        flex-wrap:wrap;
+    }
+
+}
+
+@media(max-width:600px){
+
+    .topbar-right{
+
+        flex-direction:column;
+
+        align-items:stretch;
+    }
+
+    .user-profile{
+
+        min-width:100%;
+    }
+
+    .welcome-btn{
+
+        width:100%;
+    }
+
+    .date-box{
+
+        text-align:center;
+    }
+
 }

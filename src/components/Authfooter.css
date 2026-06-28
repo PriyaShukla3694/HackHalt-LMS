@@ -1,0 +1,53 @@
+.auth-footer-band {
+  background: #f3f1ee;
+  border-top: 1px solid var(--line);
+}
+
+.auth-footer {
+  max-width: 1180px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 18px;
+  padding: 30px 32px;
+}
+
+.auth-footer-logo {
+  display: inline-block;
+  font-family: "Lora", Georgia, serif;
+  font-weight: 700;
+  font-size: 1.05rem !important;
+  color: var(--ink);
+  cursor: pointer;
+}
+
+.auth-footer-brand p {
+  font-size: 0.78rem !important;
+  color: var(--muted);
+  margin-top: 4px;
+}
+
+.auth-footer-links {
+  display: flex;
+  gap: 28px;
+  flex-wrap: wrap;
+}
+
+.auth-footer-links a {
+  font-size: 0.82rem;
+  color: var(--muted);
+  transition: color 0.2s ease;
+}
+
+.auth-footer-links a:hover {
+  color: var(--ink);
+}
+
+@media (max-width: 540px) {
+  .auth-footer {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}

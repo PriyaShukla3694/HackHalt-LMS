@@ -1,0 +1,392 @@
+.manage-page{
+    display:flex;
+    min-height:100vh;
+    background:#FFF8F2;
+    color:#2F2F2F;
+    position:relative;
+    overflow-x:hidden;
+}
+
+/* MAIN CONTENT */
+
+.manage-content{
+    flex:1;
+    padding:35px;
+    margin-left:270px;
+    width:calc(100% - 270px);
+    min-width:0;
+}
+
+/* HEADER */
+
+.manage-header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+
+    padding:40px;
+
+    border-radius:30px;
+
+    background:linear-gradient(
+        135deg,
+        #FFF1E5,
+        #FFE3C8
+    );
+
+    box-shadow:0 12px 30px rgba(249,115,22,.12);
+
+    margin-bottom:30px;
+
+    position:relative;
+    overflow:hidden;
+}
+
+.manage-header::before{
+    content:"";
+    position:absolute;
+
+    width:400px;
+    height:400px;
+
+    right:-150px;
+    top:-150px;
+
+    border-radius:50%;
+
+    background:radial-gradient(
+        rgba(249,115,22,.18),
+        transparent
+    );
+}
+
+.manage-header span{
+    display:inline-block;
+
+    padding:8px 18px;
+
+    background:#FFF5EE;
+
+    border-radius:30px;
+
+    color:#F97316;
+
+    font-size:12px;
+    letter-spacing:2px;
+    font-weight:700;
+}
+
+.manage-header h1{
+    margin-top:12px;
+    font-size:54px;
+    color:#F97316;
+    font-weight:700;
+}
+
+.manage-header p{
+    margin-top:12px;
+    color:#6B7280;
+}
+
+/* ADD COURSE BUTTON */
+
+.add-course-btn{
+    position:relative;
+    z-index:5;
+
+    border:none;
+
+    padding:16px 28px;
+
+    border-radius:16px;
+
+    cursor:pointer;
+
+    font-weight:700;
+    color:white;
+
+    background:linear-gradient(
+        135deg,
+        #FF9A3D,
+        #F97316
+    );
+
+    box-shadow:0 10px 25px rgba(249,115,22,.25);
+
+    transition:.3s;
+}
+
+.add-course-btn:hover{
+    transform:translateY(-3px);
+
+    background:linear-gradient(
+        135deg,
+        #EA580C,
+        #C2410C
+    );
+}
+
+/* SEARCH */
+
+.course-search{
+    width:100%;
+
+    padding:16px 20px;
+
+    margin-bottom:25px;
+
+    background:white;
+
+    border:2px solid #FFDCC2;
+
+    border-radius:16px;
+
+    outline:none;
+
+    color:#2F2F2F;
+
+    font-size:15px;
+
+    transition:.3s;
+}
+
+.course-search::placeholder{
+    color:#9CA3AF;
+}
+
+.course-search:focus{
+    border-color:#F97316;
+
+    box-shadow:0 0 0 5px rgba(249,115,22,.12);
+}
+
+/* COURSE LIST */
+
+.course-list{
+    display:flex;
+    flex-direction:column;
+    gap:20px;
+}
+
+.course-row{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+
+    padding:28px;
+
+    border-radius:24px;
+
+    background:white;
+
+    border:1px solid #FFDCC2;
+
+    box-shadow:0 10px 25px rgba(0,0,0,.06);
+
+    transition:.35s;
+}
+
+.course-row:hover{
+    transform:translateY(-6px);
+
+    border-color:#F97316;
+
+    box-shadow:0 18px 35px rgba(249,115,22,.15);
+}
+
+.course-row h3{
+    font-size:24px;
+    margin-bottom:8px;
+    color:#2F2F2F;
+}
+
+.course-row p{
+    color:#6B7280;
+}
+
+/* ACTION BUTTONS */
+
+.course-actions{
+    display:flex;
+    gap:12px;
+}
+
+.course-actions button{
+    border:none;
+    padding:12px 20px;
+    border-radius:12px;
+    cursor:pointer;
+    color:white;
+    background:#2F2F2F;
+    transition:.3s;
+}
+
+.course-actions button:hover{
+    transform:translateY(-2px);
+}
+
+.course-actions button:first-child:hover{
+    background:linear-gradient(
+        135deg,
+        #FF9A3D,
+        #F97316
+    );
+}
+
+.course-actions button:last-child:hover{
+    background:linear-gradient(
+        135deg,
+        #EA580C,
+        #C2410C
+    );
+}
+
+/* EMPTY STATE */
+
+.empty-state{
+    padding:50px;
+    text-align:center;
+    border-radius:24px;
+    background:#FFFFFF;
+    border:1px solid #FFDCC2;
+    color:#6B7280;
+    font-size:18px;
+    box-shadow:0 10px 25px rgba(0,0,0,.06);
+}
+
+/* MODAL */
+
+.modal-overlay{
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,.55);
+    backdrop-filter:blur(6px);
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    z-index:99999;
+}
+
+.course-modal{
+    width:500px;
+    padding:35px;
+    border-radius:28px;
+    background:#FFFFFF;
+    border:1px solid #FFDCC2;
+    display:flex;
+    flex-direction:column;
+    gap:16px;
+    box-shadow:0 20px 50px rgba(0,0,0,.18);
+}
+
+.course-modal h2{
+    margin-bottom:10px;
+    font-size:28px;
+    color:#2F2F2F;
+}
+
+.course-modal input{
+    padding:15px 18px;
+    border-radius:14px;
+    border:2px solid #FFDCC2;
+    background:#FFFDFB;
+    color:#2F2F2F;
+    outline:none;
+    transition:.3s;
+}
+
+.course-modal input::placeholder{
+    color:#9CA3AF;
+}
+
+.course-modal input:focus{
+    border-color:#F97316;
+    box-shadow:0 0 0 5px rgba(249,115,22,.12);
+}
+
+.modal-actions{
+    display:flex;
+    gap:12px;
+    margin-top:10px;
+}
+
+.modal-actions button{
+    flex:1;
+    padding:14px;
+    border:none;
+    border-radius:14px;
+    cursor:pointer;
+    font-weight:600;
+    transition:.3s;
+}
+
+.modal-actions button:first-child{
+    background:linear-gradient(
+        135deg,
+        #FF9A3D,
+        #F97316
+    );
+    color:white;
+}
+
+.modal-actions button:first-child:hover{
+    transform:translateY(-2px);
+    background:linear-gradient(
+        135deg,
+        #EA580C,
+        #C2410C
+    );
+}
+
+.modal-actions button:last-child{
+    background:#2F2F2F;
+    color:white;
+}
+
+.modal-actions button:last-child:hover{
+    background:#111111;
+}
+
+/* RESPONSIVE */
+
+@media(max-width:1200px){
+
+    .course-row{
+        flex-direction:column;
+        align-items:flex-start;
+        gap:20px;
+    }
+
+}
+
+@media(max-width:768px){
+
+    .manage-content{
+        margin-left:0;
+        width:100%;
+        padding:20px;
+    }
+
+    .manage-header{
+        flex-direction:column;
+        align-items:flex-start;
+        gap:20px;
+    }
+
+    .manage-header h1{
+        font-size:42px;
+    }
+
+    .course-modal{
+        width:95%;
+    }
+
+    .course-actions{
+        width:100%;
+    }
+
+    .course-actions button{
+        flex:1;
+    }
+
+}
