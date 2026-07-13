@@ -6,6 +6,7 @@ import Topbar from "../components/Topbar";
 import Footer from "../components/Footer";
 import { useCourse } from "../hooks/useCourses";
 import { authFetch } from "../utils/api";
+import Skeleton from "../components/Skeleton";
 
 function VideoLearning() {
   const { id } = useParams();
@@ -42,9 +43,27 @@ function VideoLearning() {
         <Sidebar />
         <div className="main-content">
           <Topbar />
-          <div style={{ padding: "80px", textAlign: "center", color: "var(--text-primary)" }}>
-            <h2>Loading video lectures...</h2>
+          
+          <div className="learning-grid" style={{ display: "flex", gap: "24px", padding: "20px" }}>
+            <div className="video-section" style={{ flex: 2 }}>
+              <Skeleton variant="card" width="100%" height="450px" style={{ marginBottom: "20px" }} />
+              <Skeleton variant="text" width="60%" height="32px" style={{ marginBottom: "12px" }} />
+              <Skeleton variant="text" width="40%" height="16px" style={{ marginBottom: "24px" }} />
+              <Skeleton variant="text" width="100%" height="80px" />
+            </div>
+            
+            <div className="playlist-panel" style={{ flex: 1 }}>
+              <Skeleton variant="text" width="120px" height="24px" style={{ marginBottom: "20px" }} />
+              <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
+                <Skeleton variant="text" width="100%" height="40px" />
+                <Skeleton variant="text" width="100%" height="40px" />
+                <Skeleton variant="text" width="100%" height="40px" />
+                <Skeleton variant="text" width="100%" height="40px" />
+                <Skeleton variant="text" width="100%" height="40px" />
+              </div>
+            </div>
           </div>
+
           <Footer />
         </div>
       </div>

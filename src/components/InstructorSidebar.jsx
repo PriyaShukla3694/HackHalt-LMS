@@ -1,126 +1,144 @@
-import { useState, useEffect } from "react";
-import "./Sidebar.css";
 import { NavLink, useNavigate } from "react-router-dom";
-import { useAuth } from "../context/AuthContext";
-
 import {
-  FaHome,
-  FaBookOpen,
-  FaUsers,
-  FaChartBar,
-  FaCog,
-  FaSignOutAlt,
-  FaBars,
-} from "react-icons/fa";
+  FiGrid,
+  FiBookOpen,
+  FiUsers,
+  FiBarChart2,
+  FiSettings,
+  FiLogOut,
+  FiPlusCircle,
+} from "react-icons/fi";
 
-function InstructorSidebar() {
+import { useAuth } from "../context/AuthContext";
+import "./InstructorSidebar.css";
+
+function InstructorSidebar({ isOpen, onClose }) {
+
   const navigate = useNavigate();
   const { logout } = useAuth();
-  const [collapsed, setCollapsed] = useState(() => {
-    return localStorage.getItem("sidebar_collapsed") === "true";
-  });
-
-  useEffect(() => {
-    localStorage.setItem("sidebar_collapsed", collapsed);
-    if (collapsed) {
-      document.body.classList.add("sidebar-collapsed");
-    } else {
-      document.body.classList.remove("sidebar-collapsed");
-    }
-  }, [collapsed]);
 
   const handleLogout = () => {
     logout();
     navigate("/login");
   };
 
+  const navItems = [
+    {
+      title: "Dashboard",
+      path: "/instructor-dashboard",
+      icon: <FiGrid />,
+    },
+    {
+      title: "Manage Courses",
+      path: "/manage-courses",
+      icon: <FiBookOpen />,
+    },
+    {
+      title: "Students",
+      path: "/manage-students",
+      icon: <FiUsers />,
+    },
+    {
+      title: "Analytics",
+      path: "/instructor-analytics",
+      icon: <FiBarChart2 />,
+    },
+    {
+      title: "Settings",
+      path: "/instructor-settings",
+      icon: <FiSettings />,
+    },
+  ];
+
   return (
-    <aside className="sidebar">
+    <>
 
-      <div>
-
-        <div className="sidebar-header" style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
-          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", width: "100%" }}>
-            <div className="sidebar-brand-wrapper">
-              <h1>INTEXIA</h1>
-              <p style={{ fontSize: "12px", color: "#8b94a7" }}>Cyber Learning Hub</p>
-            </div>
-            <FaBars
-              onClick={() => setCollapsed(!collapsed)}
-              className="sidebar-toggle-icon"
-            />
-          </div>
-        </div>
-
-        <nav className="sidebar-nav">
-
-          <NavLink
-            to="/instructor-dashboard"
-            className="nav-link"
-          >
-            <div className="nav-item">
-              <FaHome />
-              <span>Dashboard</span>
-            </div>
-          </NavLink>
-
-          <NavLink
-            to="/manage-courses"
-            className="nav-link"
-          >
-            <div className="nav-item">
-              <FaBookOpen />
-              <span>Manage Courses</span>
-            </div>
-          </NavLink>
-
-          <NavLink
-            to="/manage-students"
-            className="nav-link"
-          >
-            <div className="nav-item">
-              <FaUsers />
-              <span>Students</span>
-            </div>
-          </NavLink>
-
-          <NavLink
-            to="/instructor-analytics"
-            className="nav-link"
-          >
-            <div className="nav-item">
-              <FaChartBar />
-              <span>Analytics</span>
-            </div>
-          </NavLink>
-
-          <NavLink
-            to="/instructor-settings"
-            className="nav-link"
-          >
-            <div className="nav-item">
-              <FaCog />
-              <span>Settings</span>
-            </div>
-          </NavLink>
-
-        </nav>
-
-      </div>
-
-      <div className="sidebar-footer">
-
+      {isOpen && (
         <div
-          className="logout-btn"
-          onClick={handleLogout}
-        >
-          <FaSignOutAlt />
-          <span>Logout</span>
+          className="sidebar-overlay"
+          onClick={onClose}
+        />
+      )}
+
+      <aside
+        className={`sidebar ${isOpen ? "open" : ""}`}
+      >
+
+        <div>
+
+          <div className="sidebar-logo">
+
+            <div className="logo-circle">
+              I
+            </div>
+
+            <div>
+
+              <h2>INTEXIA</h2>
+
+              <p>Instructor Panel</p>
+
+            </div>
+
+          </div>
+
+          <nav className="sidebar-nav">
+
+            {navItems.map((item) => (
+
+              <NavLink
+                key={item.title}
+                to={item.path}
+                className={({ isActive }) =>
+                  isActive ? "nav-link active" : "nav-link"
+                }
+                onClick={onClose}
+              >
+
+                {item.icon}
+
+                <span>{item.title}</span>
+
+              </NavLink>
+
+            ))}
+
+          </nav>
+
         </div>
 
-      </div>
+        <div className="sidebar-bottom">
 
-    </aside>
+          <button
+            className="action-btn"
+            onClick={() => {
+              navigate("/manage-courses");
+              onClose?.();
+            }}
+          >
+
+            <FiPlusCircle />
+
+            Add Course
+
+          </button>
+
+          <button
+            className="logout-btn"
+            onClick={handleLogout}
+          >
+
+            <FiLogOut />
+
+            Logout
+
+          </button>
+
+        </div>
+
+      </aside>
+
+    </>
   );
 }
 

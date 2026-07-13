@@ -1,64 +1,106 @@
 import { createContext, useContext, useState, useEffect } from "react";
 
 const AuthContext = createContext();
+
 const AUTH_KEY = "lms_token";
+const REFRESH_KEY = "lms_refresh_token";
+const USER_KEY = "user";
 
 export const AuthProvider = ({ children }) => {
-  const [user, setUser] = useState(null);
-
-  useEffect(() => {
+  const [user, setUser] = useState(() => {
     const token = localStorage.getItem(AUTH_KEY);
-    const stored = localStorage.getItem("user");
+    const storedUser = localStorage.getItem(USER_KEY);
 
-    if (token && stored) {
-      setUser(JSON.parse(stored));
+    if (token && storedUser) {
+      try {
+        return JSON.parse(storedUser);
+      } catch (err) {
+        console.error("Error parsing stored user:", err);
+        return null;
+      }
     }
-  }, []);
+    return null;
+  });
 
+  // Login
   const login = (token, refreshToken, userData) => {
     const safeUser = {
       id: userData.id,
       name: userData.name || "",
-      email: userData.email,
-      role: userData.role ? userData.role.toLowerCase() : "",
+      email: userData.email || "",
+      role: (userData.role || "").toLowerCase(),
       mobile: userData.mobile || "",
     };
 
     localStorage.setItem(AUTH_KEY, token);
+
     if (refreshToken) {
-      localStorage.setItem("lms_refresh_token", refreshToken);
+      localStorage.setItem(REFRESH_KEY, refreshToken);
     }
-    localStorage.setItem("user", JSON.stringify(safeUser));
+
+    localStorage.setItem(USER_KEY, JSON.stringify(safeUser));
+
     setUser(safeUser);
   };
 
-  const logout = () => {
-    const refreshToken = localStorage.getItem("lms_refresh_token");
+  // Logout
+  const logout = async () => {
+    const refreshToken = localStorage.getItem(REFRESH_KEY);
+
     if (refreshToken) {
-      const rawBase = import.meta.env.VITE_API_URL || "http://localhost:5000/api";
-      const BASE = rawBase.endsWith("/api") ? rawBase : `${rawBase}/api`;
-      fetch(`${BASE}/auth/logout`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ refreshToken }),
-      }).catch((err) => console.error("Error during server logout:", err));
+      try {
+        const rawBase =
+          import.meta.env.VITE_API_URL || "http://localhost:5000/api";
+
+        const BASE = rawBase.endsWith("/api")
+          ? rawBase
+          : `${rawBase}/api`;
+
+        await fetch(`${BASE}/auth/logout`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ refreshToken }),
+        });
+      } catch (err) {
+        console.error("Logout Error:", err);
+      }
     }
+
     localStorage.removeItem(AUTH_KEY);
-    localStorage.removeItem("lms_refresh_token");
-    localStorage.removeItem("user");
+    localStorage.removeItem(REFRESH_KEY);
+    localStorage.removeItem(USER_KEY);
+
     setUser(null);
   };
 
+  // Update User
   const updateUser = (updatedFields) => {
-    setUser((prev) => {
-      const updated = { ...prev, ...updatedFields };
-      localStorage.setItem("user", JSON.stringify(updated));
-      return updated;
+    setUser((prevUser) => {
+      const updatedUser = {
+        ...prevUser,
+        ...updatedFields,
+      };
+
+      localStorage.setItem(
+        USER_KEY,
+        JSON.stringify(updatedUser)
+      );
+
+      return updatedUser;
     });
   };
 
   return (
-    <AuthContext.Provider value={{ user, login, logout, updateUser }}>
+    <AuthContext.Provider
+      value={{
+        user,
+        login,
+        logout,
+        updateUser,
+      }}
+    >
       {children}
     </AuthContext.Provider>
   );

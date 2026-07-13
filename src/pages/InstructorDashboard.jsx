@@ -1,219 +1,331 @@
-import { useState, useEffect } from "react";
-import "../styles/InstructorDashboard.css";
+import { useNavigate } from "react-router-dom";
+import { useState } from "react";
+import StatCard from "../components/StatCard";
+import Button from "../components/Button";
+
+import {
+  FiBookOpen,
+  FiUsers,
+  FiBarChart2,
+  FiDollarSign,
+  FiArrowRight,
+  FiStar,
+  FiCalendar,
+} from "react-icons/fi";
+
 import InstructorSidebar from "../components/InstructorSidebar";
 import Topbar from "../components/Topbar";
-import RecentActivities from "../components/RecentActivities";
-import Footer from "../components/Footer";
-import { useNavigate } from "react-router-dom";
-import { authFetch } from "../utils/api";
-import { useAuth } from "../context/AuthContext";
+
+import cyberSecurity from "../assets/Cyber_Security.jpeg";
+import ethicalHacking from "../assets/Ethical_Hacking.jpeg";
+import pythonProgramming from "../assets/Python.jpeg";
+
+import "../styles/InstructorDashboard.css";
 
 function InstructorDashboard() {
+
   const navigate = useNavigate();
-  const { user } = useAuth();
-  
-  const [courses, setCourses] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState("");
-  const [roster, setRoster] = useState([]);
-  const [certificatesCount, setCertificatesCount] = useState(0);
 
-  useEffect(() => {
-    authFetch("/instructor/courses")
-      .then((res) => {
-        if (!res.ok) throw new Error("Failed to fetch courses");
-        return res.json();
-      })
-      .then(async (data) => {
-        setCourses(data);
-        
-        // Fetch students lists for all courses to populate student roster and certificates completed
-        const studentLists = await Promise.all(
-          data.map((c) =>
-            authFetch(`/instructor/courses/${c.id}/students`)
-              .then((res) => (res.ok ? res.json() : []))
-              .then((students) => students.map((s) => ({ ...s, courseTitle: c.title, totalLessons: c.totalLessons })))
-              .catch(() => [])
-          )
-        );
+  const [sidebarOpen, setSidebarOpen] = useState(false);
 
-        // Flatten student lists
-        const flatStudents = studentLists.flat();
-        setRoster(flatStudents);
-
-        // Count certificates (students who completed all lessons)
-        const completedCount = flatStudents.filter(
-          (s) => s.totalLessons > 0 && s.completedLessons === s.totalLessons
-        ).length;
-        setCertificatesCount(completedCount);
-      })
-      .catch((err) => {
-        console.error(err);
-        setError("Error loading instructor statistics.");
-      })
-      .finally(() => {
-        setLoading(false);
-      });
-  }, []);
-
-  const totalStudents = courses.reduce((sum, c) => sum + (c.students || 0), 0);
+  const courses = [
+    {
+      id: 1,
+      title: "Cyber Security",
+      students: 125,
+      image: cyberSecurity,
+      rating: "4.9",
+    },
+    {
+      id: 2,
+      title: "Ethical Hacking",
+      students: 92,
+      image: ethicalHacking,
+      rating: "4.8",
+    },
+    {
+      id: 3,
+      title: "Python Programming",
+      students: 160,
+      image: pythonProgramming,
+      rating: "4.7",
+    },
+  ];
 
   return (
     <div className="instructor-dashboard">
-      <InstructorSidebar />
 
-      <div className="instructor-content">
-        <Topbar />
+      <InstructorSidebar
+        isOpen={sidebarOpen}
+        onClose={() => setSidebarOpen(false)}
+      />
 
-        {/* HERO */}
-        <div className="instructor-hero">
-          <div>
-            <span className="hero-tag">INSTRUCTOR COMMAND CENTER</span>
-            <h1>Welcome Back, {user?.name || "Instructor"}</h1>
-            <p>Manage courses, monitor student progress and track learning performance in real time.</p>
-          </div>
+      <div className="instructor-main">
 
-          <div className="hero-circle">
-            <h2>{totalStudents}</h2>
-            <span>Students</span>
-          </div>
-        </div>
+        <Topbar
+          title="Instructor Dashboard"
+          subtitle="Welcome Back!"
+          onMenuClick={() => setSidebarOpen(true)}
+        />
 
-        {/* STATS */}
-        <div className="instructor-stats">
-          <div
-            className="stat-card"
-            onClick={() => navigate("/manage-courses")}
-            style={{ cursor: "pointer" }}
-          >
-            <h2>{courses.length.toString().padStart(2, "0")}</h2>
-            <p>Total Courses</p>
-          </div>
+        <div className="instructor-content">
 
-          <div
-            className="stat-card"
-            onClick={() => navigate("/manage-students")}
-            style={{ cursor: "pointer" }}
-          >
-            <h2>{totalStudents.toString().padStart(2, "0")}</h2>
-            <p>Students Enrolled</p>
-          </div>
+          {/* HERO */}
 
-          <div className="stat-card">
-            <h2>{courses.reduce((sum, c) => sum + (c.modules || 0), 0).toString().padStart(2, "0")}</h2>
-            <p>Total Lessons</p>
-          </div>
+          <div className="instructor-hero">
 
-          <div className="stat-card">
-            <h2>{certificatesCount.toString().padStart(2, "0")}</h2>
-            <p>Certificates Generated</p>
-          </div>
-        </div>
+            <div>
 
-        {/* COURSE MANAGEMENT */}
-        <div className="dashboard-section">
-          <h2>Course Overview</h2>
+              <h1>Welcome Back, Instructor 👨‍🏫</h1>
 
-          {loading ? (
-            <p style={{ color: "var(--text-secondary)" }}>Loading courses data...</p>
-          ) : error ? (
-            <p style={{ color: "#f87171" }}>{error}</p>
-          ) : courses.length === 0 ? (
-            <p style={{ color: "var(--text-secondary)" }}>No courses created yet.</p>
-          ) : (
-            <div className="course-manage-grid">
-              {courses.slice(0, 3).map((course) => (
-                <div className="manage-card" key={course.id}>
-                  <h3>{course.title}</h3>
-                  <p>{course.students} Students</p>
-                  <span>{course.modules} Modules</span>
-                  <button onClick={() => navigate("/manage-courses")}>Edit Course</button>
-                </div>
-              ))}
+              <p>
+                Manage your courses, monitor students and track your
+                teaching performance from one place.
+              </p>
+
+              <Button
+                className="hero-action-btn"
+                onClick={() => navigate("/manage-courses")}
+              >
+                Manage Courses
+                <FiArrowRight style={{ marginLeft: "6px" }} />
+              </Button>
+
             </div>
-          )}
-        </div>
 
-        {/* QUICK ACTIONS */}
-        <div className="quick-actions">
-          <div className="quick-card">
-            <h3>Create New Course</h3>
-            <p>Add a new learning program.</p>
-            <button onClick={() => navigate("/manage-courses")}>Create</button>
+            <div className="hero-summary">
+
+              <h2>377</h2>
+
+              <span>Total Students</span>
+
+            </div>
+
           </div>
 
-          <div className="quick-card">
-            <h3>Upload Content</h3>
-            <p>Add videos, notes and assignments.</p>
-            <button onClick={() => navigate("/manage-courses")}>Upload</button>
+          {/* STATS */}
+
+          <div className="instructor-stats">
+
+            <StatCard
+              icon={<FiBookOpen />}
+              value="03"
+              title="Total Courses"
+              className="instructor-stat-card"
+            />
+
+            <StatCard
+              icon={<FiUsers />}
+              value="377"
+              title="Students"
+              className="instructor-stat-card"
+            />
+
+            <StatCard
+              icon={<FiStar />}
+              value="4.8"
+              title="Average Rating"
+              className="instructor-stat-card"
+            />
+
+            <StatCard
+              icon={<FiDollarSign />}
+              value="₹18K"
+              title="Monthly Revenue"
+              className="instructor-stat-card"
+            />
+
           </div>
 
-          <div className="quick-card">
-            <h3>View Reports</h3>
-            <p>Check student performance analytics.</p>
-            <button onClick={() => navigate("/instructor-analytics")}>View</button>
-          </div>
-        </div>
+          {/* COURSES */}
 
-        {/* RECENT ACTIVITIES */}
-        <RecentActivities />
+          <div className="section-header">
 
-        {/* TABLE + NOTIFICATIONS */}
-        <div className="bottom-section">
-          <div className="student-table">
-            <h2>Student Performance</h2>
-            {roster.length === 0 ? (
-              <p style={{ color: "var(--text-secondary)", padding: "20px" }}>No enrolled student activity.</p>
-            ) : (
-              <table>
-                <thead>
-                  <tr>
-                    <th>Student</th>
-                    <th>Course</th>
-                    <th>Progress</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {roster.slice(0, 5).map((student, idx) => {
-                    const pct =
-                      student.totalLessons > 0
-                        ? ((student.completedLessons / student.totalLessons) * 100).toFixed(0)
-                        : "0";
-                    return (
-                      <tr key={idx}>
-                        <td>{student.name}</td>
-                        <td>{student.courseTitle}</td>
-                        <td>{pct}%</td>
-                      </tr>
-                    );
-                  })}
-                </tbody>
-              </table>
-            )}
+            <h2>My Courses</h2>
+
+            <button
+              onClick={() => navigate("/manage-courses")}
+            >
+              View All
+            </button>
+
           </div>
 
-          <div className="notification-box">
-            <h2>🔔 Alerts</h2>
-            {roster.length === 0 ? (
-              <p style={{ color: "var(--text-secondary)", padding: "10px" }}>No active alerts.</p>
-            ) : (
-              roster.slice(0, 3).map((student, idx) => (
-                <div className="notification" key={idx}>
-                  <h4>New Activity</h4>
-                  <p>
-                    {student.name} completed {student.completedLessons} modules in {student.courseTitle}
-                  </p>
-                  <span>Recently</span>
+          <div className="instructor-course-grid">
+
+            {courses.map((course) => (
+
+              <div
+                className="instructor-course-card"
+                key={course.id}
+              >
+
+                <img
+                  src={course.image}
+                  alt={course.title}
+                />
+
+                <div className="course-info">
+
+                  <h3>{course.title}</h3>
+
+                  <p>{course.students} Students Enrolled</p>
+
+                  <div className="course-rating">
+
+                    <FiStar />
+
+                    <span>{course.rating}</span>
+
+                  </div>
+
+                  <button
+                    className="manage-btn"
+                    onClick={() => navigate("/manage-courses")}
+                  >
+                    Manage Course
+                  </button>
+
                 </div>
-              ))
-            )}
+
+              </div>
+
+            ))}
+
+                    </div>
+
+          {/* QUICK ACTIONS */}
+
+          <div className="section-header">
+
+            <h2>Quick Actions</h2>
+
           </div>
+
+          <div className="quick-actions-grid">
+
+            <div
+              className="quick-action-card"
+              onClick={() => navigate("/manage-courses")}
+            >
+
+              <FiBookOpen />
+
+              <h3>Manage Courses</h3>
+
+              <p>
+                Create, update or remove your courses.
+              </p>
+
+            </div>
+
+            <div
+              className="quick-action-card"
+              onClick={() => navigate("/manage-students")}
+            >
+
+              <FiUsers />
+
+              <h3>Students</h3>
+
+              <p>
+                View enrolled students and monitor progress.
+              </p>
+
+            </div>
+
+            <div
+              className="quick-action-card"
+              onClick={() => navigate("/instructor-analytics")}
+            >
+
+              <FiBarChart2 />
+
+              <h3>Analytics</h3>
+
+              <p>
+                Track performance and engagement.
+              </p>
+
+            </div>
+
+            <div
+              className="quick-action-card"
+              onClick={() => navigate("/instructor-settings")}
+            >
+
+              <FiCalendar />
+
+              <h3>Settings</h3>
+
+              <p>
+                Manage profile and instructor preferences.
+              </p>
+
+            </div>
+
+          </div>
+
+          {/* UPCOMING SCHEDULE */}
+
+          <div className="section-header">
+
+            <h2>Upcoming Schedule</h2>
+
+          </div>
+
+          <div className="schedule-card">
+
+            <div className="schedule-item">
+
+              <div>
+
+                <h3>Cyber Security Live Session</h3>
+
+                <p>Today • 4:00 PM</p>
+
+              </div>
+
+              <button
+                onClick={() =>
+                  alert("Live class feature coming soon!")
+                }
+              >
+                Join
+              </button>
+
+            </div>
+
+            <div className="schedule-item">
+
+              <div>
+
+                <h3>Ethical Hacking Workshop</h3>
+
+                <p>Tomorrow • 11:00 AM</p>
+
+              </div>
+
+              <button
+                onClick={() =>
+                  alert("Workshop feature coming soon!")
+                }
+              >
+                View
+              </button>
+
+            </div>
+
+          </div>
+
         </div>
 
-        <Footer />
       </div>
+
     </div>
+
   );
+
 }
 
-export default InstructorDashboard;
+export default InstructorDashboard;  

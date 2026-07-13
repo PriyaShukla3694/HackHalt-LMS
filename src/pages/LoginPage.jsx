@@ -2,23 +2,42 @@ import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { useState } from "react";
 import { useAuth } from "../context/AuthContext";
+import { useToast } from "../context/ToastContext";
+import Button from "../components/Button";
 import {
+  FiMail,
+  FiLock,
   FiEye,
   FiEyeOff,
-  FiArrowRight,
-  FiCheckCircle,
   FiChevronDown,
+  FiShield,
 } from "react-icons/fi";
 import { FcGoogle } from "react-icons/fc";
-import { FaGithub } from "react-icons/fa";
+import { MOCK_MODE, buildMockUser, buildMockTokens } from "../utils/mockMode";
 import "../styles/LoginPage.css";
+import AuthNavbar from "../components/AuthNavbar";
+
 
 const rawBase = import.meta.env.VITE_API_URL || "http://localhost:5000/api";
 const BASE = rawBase.endsWith("/api") ? rawBase : `${rawBase}/api`;
 
+function redirectForRole(navigate, role) {
+  switch (role) {
+    case "admin":
+      navigate("/admin-dashboard");
+      break;
+    case "instructor":
+      navigate("/instructor-dashboard");
+      break;
+    default:
+      navigate("/student-dashboard");
+  }
+}
+
 function LoginPage() {
   const navigate = useNavigate();
   const { login } = useAuth();
+  const { showToast } = useToast();
 
   const [formData, setFormData] = useState({
     email: "",
@@ -26,41 +45,78 @@ function LoginPage() {
     role: "",
   });
   const [showPassword, setShowPassword] = useState(false);
-  const [error, setError] = useState("");
+  const [errors, setErrors] = useState({});
   const [notice, setNotice] = useState("");
   const [loading, setLoading] = useState(false);
+  const [googleLoading, setGoogleLoading] = useState(false);
+
+  const validateField = (name, value) => {
+    let error = "";
+    if (name === "email") {
+      if (!value.trim()) {
+        error = "Email address is required";
+      } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) {
+        error = "Enter a valid email address";
+      }
+    } else if (name === "password") {
+      if (!value) {
+        error = "Password is required";
+      }
+    } else if (name === "role") {
+      if (!value) {
+        error = "Please select a role to continue";
+      }
+    }
+    return error;
+  };
 
   const handleChange = (e) => {
-    setError("");
+    const { name, value } = e.target;
     setFormData((prev) => ({
       ...prev,
-      [e.target.name]: e.target.value,
+      [name]: value,
+    }));
+    const error = validateField(name, value);
+    setErrors((prev) => ({
+      ...prev,
+      [name]: error,
     }));
   };
 
   const handleLogin = async (e) => {
     e.preventDefault();
-    setError("");
     setNotice("");
 
-    const { email, password, role } = formData;
+    const newErrors = {};
+    Object.keys(formData).forEach((key) => {
+      const error = validateField(key, formData[key]);
+      if (error) newErrors[key] = error;
+    });
 
-    if (!/^\S+@\S+\.\S+$/.test(email)) {
-      setError("Enter a valid email address.");
-      return;
-    }
-
-    if (!password) {
-      setError("Please enter your password.");
-      return;
-    }
-
-    if (!role) {
-      setError("Please select a role.");
+    if (Object.keys(newErrors).length > 0) {
+      setErrors(newErrors);
+      showToast("Please fix the validation errors", "error");
       return;
     }
 
     setLoading(true);
+    const { email, password, role } = formData;
+
+    if (MOCK_MODE) {
+      setTimeout(() => {
+        const niceName = email
+          .split("@")[0]
+          .replace(/[._]/g, " ")
+          .replace(/\b\w/g, (c) => c.toUpperCase());
+
+        const mockUser = buildMockUser({ name: niceName, email, role });
+        const { token, refreshToken } = buildMockTokens();
+        login(token, refreshToken, mockUser);
+        showToast("Logged in successfully (Demo)!", "success");
+        redirectForRole(navigate, role);
+      }, 500);
+      return;
+    }
 
     try {
       const res = await fetch(`${BASE}/auth/login`, {
@@ -76,222 +132,193 @@ function LoginPage() {
       }
 
       login(data.token, data.refreshToken, data.user);
-
-      // (Renamed to userRole — the original code redeclared `role` here,
-      // which collides with the `role` already destructured above and
-      // throws a SyntaxError at build time.)
-      const userRole = data.user.role.toLowerCase();
-
-      switch (userRole) {
-        case "admin":
-          navigate("/admin-dashboard");
-          break;
-        case "instructor":
-          navigate("/instructor-dashboard");
-          break;
-        case "student":
-          navigate("/student-dashboard");
-          break;
-        default:
-          navigate("/");
-      }
+      showToast("Logged in successfully!", "success");
+      redirectForRole(navigate, data.user.role.toLowerCase());
     } catch (err) {
-      setError(err.message);
+      showToast(err.message, "error");
       setLoading(false);
     }
   };
 
-  
-
-const [selectedRole, setSelectedRole] = useState("");
-
-  const handleOAuth = (provider) => {
+  const handleGoogleLogin = () => {
     setError("");
-    setNotice(`${provider} sign-in isn't connected yet — coming soon.`);
+    setNotice("");
+
+    if (!formData.role) {
+      setError("Please select a role before continuing with Google.");
+      return;
+    }
+
+    if (!MOCK_MODE) {
+      setNotice("Google sign-in isn't connected to a real backend yet.");
+      return;
+    }
+
+    setGoogleLoading(true);
+    setTimeout(() => {
+      const mockUser = buildMockUser({
+        name: "Google User",
+        email: "google.user@gmail.com",
+        role: formData.role,
+      });
+      const { token, refreshToken } = buildMockTokens();
+      login(token, refreshToken, mockUser);
+      redirectForRole(navigate, formData.role);
+    }, 600);
   };
+
+  const goHash = (id) => navigate(`/#${id}`);
 
   return (
     <div className="login-page">
-      {/* NAVBAR */}
-      <nav className="log-navbar">
-        <span className="log-logo" onClick={() => navigate("/")}>
-          INTEXIA
-        </span>
-        <div className="log-nav-links">
-          <a
-            href="/#pricing"
-            onClick={(e) => {
-              e.preventDefault();
-              navigate("/#pricing");
-            }}
-          >
-            Pricing
-          </a>
-          <a
-            href="/#features"
-            onClick={(e) => {
-              e.preventDefault();
-              navigate("/#features");
-            }}
-          >
-            Resources
-          </a>
-          <span className="log-nav-active">Log In</span>
-        </div>
-      </nav>
 
-      {/* HERO */}
+      
+       
+      <AuthNavbar />
+       
+
+      {/* HERO + CARD */}
       <section className="log-hero">
-        <div className="log-hero-inner">
-          <motion.div
-            className="log-copy"
-            initial={{ opacity: 0, y: 16 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, ease: "easeOut" }}
-          >
-            <h1>
-              Welcome back,
-              <br />
-              <span>keep learning.</span>
-            </h1>
+        <div className="log-blob log-blob-a" />
+        <div className="log-blob log-blob-b" />
 
-            <p>
-              Pick up right where you left off — your courses, progress and
-              certificates are waiting for you.
+        <motion.div
+          className="log-heading"
+          initial={{ opacity: 0, y: 16 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, ease: "easeOut" }}
+        >
+          <h1>Welcome Back</h1>
+          <p>Accelerate your professional growth today.</p>
+        </motion.div>
+
+        <motion.div
+          className="log-card"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, ease: "easeOut", delay: 0.1 }}
+        >
+          {MOCK_MODE && (
+            <p className="demo-mode-badge">
+              Demo Mode — any email/password works, no backend needed
             </p>
+          )}
 
-            <ul className="log-perks">
-              <li>
-                <FiCheckCircle /> Personalized dashboard
-              </li>
-              <li>
-                <FiCheckCircle /> Track your progress
-              </li>
-              <li>
-                <FiCheckCircle /> Resume any course instantly
-              </li>
-            </ul>
-          </motion.div>
-
-          <motion.div
-            className="log-card"
-            initial={{ opacity: 0, y: 16 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, ease: "easeOut", delay: 0.1 }}
-          >
-            <h2>Log In</h2>
-            <p className="log-card-subtext">Access your INTEXIA account.</p>
-
-            <form onSubmit={handleLogin}>
-              <label htmlFor="email">Email Address</label>
+          <form onSubmit={handleLogin}>
+            <label htmlFor="email">Email Address</label>
+            <div className="input-shell">
+              <FiMail />
               <input
                 id="email"
                 name="email"
                 type="email"
-                placeholder="name@example.com"
+                placeholder="name@company.com"
                 value={formData.email}
                 onChange={handleChange}
                 required
               />
+            </div>
+            {errors.email && (
+              <span className="error-message" style={{ color: "var(--danger)", fontSize: "0.8rem", marginTop: "4px", display: "block" }}>
+                {errors.email}
+              </span>
+            )}
 
+            <div className="label-row">
               <label htmlFor="password">Password</label>
-              <div className="password-shell">
-                <input
-                  id="password"
-                  name="password"
-                  type={showPassword ? "text" : "password"}
-                  placeholder="Enter your password"
-                  value={formData.password}
-                  onChange={handleChange}
-                  required
-                />
-                <button
-                  type="button"
-                  className="eye-toggle"
-                  onClick={() => setShowPassword((v) => !v)}
-                  aria-label={showPassword ? "Hide password" : "Show password"}
-                >
-                  {showPassword ? <FiEyeOff /> : <FiEye />}
-                </button>
-              </div>
-
-              <div className="demo-login">
-
-  <h3>Explore Dashboard</h3>
-
-  <select
-    value={selectedRole}
-    onChange={(e) => {
-      const role = e.target.value;
-      setSelectedRole(role);
-
-      if (role === "student") navigate("/student-dashboard");
-      if (role === "teacher") navigate("/teacher-dashboard");
-      if (role === "admin") navigate("/admin-dashboard");
-    }}
-  >
-    <option value="">Choose Dashboard</option>
-    <option value="student">🎓 Student Dashboard</option>
-    <option value="teacher">👨‍🏫 Teacher Dashboard</option>
-    <option value="admin">🛡️ Admin Dashboard</option>
-  </select>
-
-</div>
-
-              <label htmlFor="role">Login As</label>
-              <div className="select-shell">
-                <select
-                  id="role"
-                  name="role"
-                  value={formData.role}
-                  onChange={handleChange}
-                  required
-                >
-                  <option value="">Select Role</option>
-                  <option value="student">Student</option>
-                  <option value="instructor">Instructor</option>
-                  <option value="admin">Admin</option>
-                </select>
-                <FiChevronDown className="select-chevron" />
-              </div>
-
-              <p
+              <span
                 className="forgot-link"
                 onClick={() => navigate("/forgot-password")}
               >
-                Forgot password?
-              </p>
-
-              {error && <p className="form-banner error">{error}</p>}
-              {notice && !error && (
-                <p className="form-banner notice">{notice}</p>
-              )}
-
-              <button type="submit" className="submit-btn" disabled={loading}>
-                {loading ? "Logging In..." : "Log In"}
-                {!loading && <FiArrowRight />}
-              </button>
-            </form>
-
-            <div className="divider">
-              <span>OR SIGN IN WITH</span>
+                Forgot Password?
+              </span>
             </div>
-
-            <div className="oauth-row">
-              <button type="button" onClick={() => handleOAuth("Google")}>
-                <FcGoogle /> Google
-              </button>
-              <button type="button" onClick={() => handleOAuth("GitHub")}>
-                <FaGithub /> GitHub
+            <div className="input-shell">
+              <FiLock />
+              <input
+                id="password"
+                name="password"
+                type={showPassword ? "text" : "password"}
+                placeholder="Enter your password"
+                value={formData.password}
+                onChange={handleChange}
+                required
+              />
+              <button
+                type="button"
+                className="eye-toggle"
+                onClick={() => setShowPassword((v) => !v)}
+                aria-label={showPassword ? "Hide password" : "Show password"}
+              >
+                {showPassword ? <FiEyeOff /> : <FiEye />}
               </button>
             </div>
+            {errors.password && (
+              <span className="error-message" style={{ color: "var(--danger)", fontSize: "0.8rem", marginTop: "4px", display: "block" }}>
+                {errors.password}
+              </span>
+            )}
 
-            <p className="switch-text">
-              New here?{" "}
-              <span onClick={() => navigate("/register")}>Create Account</span>
-            </p>
-          </motion.div>
-        </div>
+            <label htmlFor="role">Login As</label>
+            <div className="select-shell">
+              <select
+                id="role"
+                name="role"
+                value={formData.role}
+                onChange={handleChange}
+                required
+              >
+                <option value="">Select Role</option>
+                <option value="student">Student</option>
+                <option value="instructor">Instructor</option>
+                <option value="admin">Admin</option>
+              </select>
+              <FiChevronDown className="select-chevron" />
+            </div>
+            {errors.role && (
+              <span className="error-message" style={{ color: "var(--danger)", fontSize: "0.8rem", marginTop: "4px", display: "block" }}>
+                {errors.role}
+              </span>
+            )}
+
+            {notice && (
+              <p className="form-banner notice">{notice}</p>
+            )}
+
+            <Button
+              type="submit"
+              className="submit-btn"
+              loading={loading}
+              disabled={loading || Object.values(errors).some((e) => !!e)}
+              style={{ width: "100%", marginTop: "20px" }}
+            >
+              Log In
+            </Button>
+          </form>
+
+          <div className="divider">
+            <span>OR</span>
+          </div>
+
+          <button
+            type="button"
+            className="google-btn"
+            onClick={handleGoogleLogin}
+            disabled={googleLoading}
+          >
+            <FcGoogle />
+            {googleLoading ? "Signing in..." : "Continue with Google"}
+          </button>
+
+          <p className="switch-text">
+            New to INTEXIA?{" "}
+            <span onClick={() => navigate("/register")}>Sign up</span>
+          </p>
+        </motion.div>
+
+        <p className="ssl-note">
+          <FiShield /> Secure 256-bit SSL Encrypted Connection
+        </p>
       </section>
 
       {/* FOOTER */}

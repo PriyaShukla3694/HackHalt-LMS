@@ -1,19 +1,8 @@
 @import url('https://fonts.googleapis.com/css2?family=Lora:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap');
 
 .welcome-page {
-  --orange: #f2600c;
-  --orange-dark: #d9530a;
-  --orange-tint: #fdece0;
-  --cream: #faf6f1;
-  --ink: #18171c;
-  --ink-soft: #46434c;
-  --muted: #6f6c75;
-  --line: #e8e5e1;
-  --card: #ffffff;
-  --soft-bg: #f7f5f3;
-
   font-family: "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
-  background: #ffffff;
+  background: var(--card);
   color: var(--ink);
   min-height: 100vh;
   overflow-x: hidden;
@@ -26,98 +15,6 @@
   font-weight: 600;
   letter-spacing: -0.01em;
   color: var(--ink);
-}
-
-/* ===================== NAVBAR ===================== */
-
-.navbar {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  max-width: 1180px;
-  margin: 0 auto;
-  padding: 22px 32px;
-  position: relative;
-  border-bottom: 1px solid var(--line);
-}
-
-.logo {
-  font-family: "Lora", serif;
-  font-weight: 700;
-  font-size: 1.3rem;
-  letter-spacing: 0.02em;
-  color: var(--ink);
-}
-
-.nav-links {
-  display: flex;
-  align-items: center;
-  gap: 34px;
-}
-
-.nav-links a {
-  font-size: 0.93rem;
-  font-weight: 500;
-  color: var(--ink-soft);
-  padding-bottom: 6px;
-  border-bottom: 2px solid transparent;
-  transition: color 0.2s ease, border-color 0.2s ease;
-}
-
-.nav-links a:hover {
-  color: var(--ink);
-}
-
-.nav-links a.active {
-  color: var(--orange);
-  border-bottom-color: var(--orange);
-}
-
-.top-actions {
-  display: flex;
-  align-items: center;
-  gap: 18px;
-}
-
-.signin-link {
-  background: none;
-  border: none;
-  font-family: inherit;
-  font-size: 0.93rem;
-  font-weight: 600;
-  color: var(--ink);
-  cursor: pointer;
-}
-
-.get-started-btn {
-  background: var(--orange);
-  color: #fff;
-  border: none;
-  font-family: inherit;
-  font-weight: 600;
-  font-size: 0.9rem;
-  padding: 10px 20px;
-  border-radius: 8px;
-  cursor: pointer;
-  transition: background 0.2s ease, transform 0.15s ease;
-}
-
-.get-started-btn:hover {
-  background: var(--orange-dark);
-  transform: translateY(-1px);
-}
-
-.menu-toggle {
-  display: none;
-  background: none;
-  border: none;
-  font-size: 1.5rem;
-  color: var(--ink);
-  cursor: pointer;
-}
-
-.mobile-auth {
-  display: none;
 }
 
 /* ===================== HERO ===================== */
@@ -400,6 +297,7 @@
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 24px;
+  align-items: stretch;
 }
 
 .feature-card {
@@ -407,6 +305,9 @@
   border: 1px solid var(--line);
   border-radius: 14px;
   padding: 30px 26px;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
 }
 
 .feature-icon {
@@ -432,6 +333,7 @@
   font-size: 0.92rem;
   line-height: 1.65;
   margin-bottom: 18px;
+  flex: 1;
 }
 
 .feature-link {
@@ -442,11 +344,400 @@
   font-weight: 600;
   font-size: 0.88rem;
   transition: gap 0.2s ease;
+  margin-top: auto;
 }
 
 .feature-link:hover {
   gap: 10px;
   color: var(--orange-dark);
+}
+
+/* ===================== SHARED SECTION HEADING ===================== */
+
+.section-eyebrow {
+  display: inline-block;
+  background: var(--orange-tint);
+  color: var(--orange-dark);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  padding: 6px 14px;
+  border-radius: 20px;
+  margin-bottom: 16px;
+}
+
+.section-heading{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+}
+
+.section-heading h2 {
+  font-size: 2.1rem;
+  margin-bottom: 14px;
+}
+
+.section-heading p {
+  font-size: 1rem;
+  line-height: 1.65;
+  color: var(--muted);
+}
+
+/* ===================== COURSES ===================== */
+
+.courses-section {
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 100px 32px 40px;
+}
+
+.courses-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 26px;
+  align-items: stretch;
+}
+
+.course-card-public {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+}
+
+.course-card-public:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 18px 40px rgba(24, 23, 28, 0.1);
+  border-color: var(--orange-tint);
+}
+
+.course-card-public-image {
+  position: relative;
+  height: 170px;
+  overflow: hidden;
+}
+
+.course-card-public-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.4s ease;
+}
+
+.course-card-public:hover .course-card-public-image img {
+  transform: scale(1.06);
+}
+
+.course-card-public-badge {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  background: rgba(255, 255, 255, 0.95);
+  color: var(--orange-dark);
+  font-size: 0.7rem;
+  font-weight: 700;
+  padding: 5px 12px;
+  border-radius: 20px;
+  letter-spacing: 0.02em;
+}
+
+.course-card-public-body {
+  padding: 22px 22px 24px;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.course-card-public-body h3 {
+  font-size: 1.08rem;
+  margin-bottom: 8px;
+  line-height: 1.3;
+}
+
+.course-card-public-meta {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.84rem;
+  color: var(--muted);
+  margin-bottom: 18px;
+  flex: 1;
+}
+
+.course-card-public-meta .dot {
+  opacity: 0.5;
+}
+
+.course-card-public-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  width: 100%;
+  background: transparent;
+  color: var(--orange);
+  border: 1.5px solid var(--orange);
+  font-family: inherit;
+  font-weight: 600;
+  font-size: 0.88rem;
+  padding: 11px;
+  border-radius: 9px;
+  cursor: pointer;
+  transition: background 0.2s ease, color 0.2s ease, transform 0.15s ease;
+}
+
+.course-card-public-btn:hover {
+  background: var(--orange);
+  color: #fff;
+  transform: translateY(-1px);
+}
+
+/* ===================== PRICING ===================== */
+
+.pricing-section {
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 100px 32px 40px;
+}
+
+.pricing-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+  align-items: stretch;
+}
+
+.pricing-card {
+  position: relative;
+  background: var(--card);
+  border: 1.5px solid var(--line);
+  border-radius: 20px;
+  padding: 36px 30px;
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+}
+
+.pricing-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 18px 40px rgba(24, 23, 28, 0.08);
+}
+
+.pricing-card.is-highlighted {
+  background: var(--ink);
+  border-color: var(--ink);
+  color: #fff;
+  transform: scale(1.04);
+}
+
+.pricing-card.is-highlighted:hover {
+  transform: scale(1.04) translateY(-6px);
+}
+
+.pricing-card-tag {
+  position: absolute;
+  top: -13px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--orange);
+  color: #fff;
+  font-size: 0.72rem;
+  font-weight: 700;
+  padding: 5px 16px;
+  border-radius: 20px;
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+}
+
+.pricing-card-name {
+  font-size: 1.2rem;
+  margin-bottom: 6px;
+}
+
+.pricing-card.is-highlighted .pricing-card-name {
+  color: #fff;
+}
+
+.pricing-card-tagline {
+  font-size: 0.86rem;
+  color: var(--muted);
+  margin-bottom: 22px;
+  line-height: 1.5;
+}
+
+.pricing-card.is-highlighted .pricing-card-tagline {
+  color: rgba(255, 255, 255, 0.65);
+}
+
+.pricing-card-price {
+  display: flex;
+  align-items: baseline;
+  gap: 4px;
+  margin-bottom: 26px;
+}
+
+.pricing-card-amount {
+  font-family: "Lora", Georgia, serif;
+  font-size: 2.4rem;
+  font-weight: 700;
+  color: var(--ink);
+}
+
+.pricing-card.is-highlighted .pricing-card-amount {
+  color: #fff;
+}
+
+.pricing-card-period {
+  font-size: 0.9rem;
+  color: var(--muted);
+}
+
+.pricing-card.is-highlighted .pricing-card-period {
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.pricing-card-features {
+  list-style: none;
+  margin-bottom: 28px;
+  flex: 1;
+}
+
+.pricing-card-features li {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  font-size: 0.88rem;
+  color: var(--ink-soft);
+  padding: 8px 0;
+  line-height: 1.4;
+}
+
+.pricing-card.is-highlighted .pricing-card-features li {
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.pricing-card-features li svg {
+  color: var(--orange);
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.pricing-card.is-highlighted .pricing-card-features li svg {
+  color: #ff9a3c;
+}
+
+.pricing-card button {
+  width: 100%;
+}
+
+.pricing-card.is-highlighted .btn-primary {
+  background: var(--orange);
+}
+
+/* ===================== ABOUT ===================== */
+
+.about-section {
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 100px 32px;
+}
+
+.about-grid {
+  display: grid;
+  grid-template-columns: 1.1fr 0.9fr;
+  gap: 64px;
+  align-items: center;
+}
+
+.about-content h2 {
+  font-size: 2.1rem;
+  margin-bottom: 18px;
+  line-height: 1.2;
+}
+
+.about-content p {
+  font-size: 0.98rem;
+  line-height: 1.75;
+  color: var(--ink-soft);
+  margin-bottom: 28px;
+}
+
+.about-points {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  margin-bottom: 32px;
+}
+
+.about-point {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 0.92rem;
+  font-weight: 600;
+  color: var(--ink);
+}
+
+.about-point svg {
+  width: 36px;
+  height: 36px;
+  padding: 9px;
+  border-radius: 10px;
+  background: var(--orange-tint);
+  color: var(--orange);
+  flex-shrink: 0;
+  box-sizing: border-box;
+}
+
+.about-stats-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 18px;
+}
+
+.about-stat-card {
+  background: var(--cream);
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  padding: 26px 20px;
+  text-align: center;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.about-stat-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 28px rgba(24, 23, 28, 0.08);
+}
+
+.about-stat-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 42px;
+  height: 42px;
+  border-radius: 12px;
+  background: #fff;
+  color: var(--orange);
+  font-size: 18px;
+  margin-bottom: 14px;
+  box-shadow: 0 4px 10px rgba(24, 23, 28, 0.06);
+}
+
+.about-stat-card h3 {
+  font-size: 1.5rem;
+  margin-bottom: 4px;
+}
+
+.about-stat-card p {
+  font-size: 0.8rem;
+  color: var(--muted);
+  font-weight: 500;
 }
 
 /* ===================== CTA ===================== */
@@ -553,48 +844,40 @@
   .trusted-row {
     gap: 28px;
   }
+
+  .courses-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .pricing-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .pricing-card.is-highlighted {
+    transform: none;
+  }
+  .pricing-card.is-highlighted:hover {
+    transform: translateY(-6px);
+  }
+
+  .about-grid {
+    grid-template-columns: 1fr;
+    gap: 40px;
+  }
+
+  .about-stats-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .section-heading {
+    margin-bottom: 40px;
+  }
 }
 
-@media (max-width: 760px) {
-  .nav-links {
-    display: none;
-    position: absolute;
-    top: 100%;
-    left: 0;
-    right: 0;
-    background: #fff;
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 18px;
-    padding: 24px 28px 28px;
-    border-bottom: 1px solid var(--line);
-    box-shadow: 0 14px 24px -16px rgba(0, 0, 0, 0.15);
-    z-index: 20;
-  }
-
-  .nav-links.open {
-    display: flex;
-  }
-
-  .top-actions {
-    display: none;
-  }
-
-  .mobile-auth {
-    display: flex;
-    gap: 14px;
-    margin-top: 6px;
-  }
-
-  .menu-toggle {
-    display: block;
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    .welcome-page * {
-      transition: none !important;
-      animation: none !important;
-    }
+@media (prefers-reduced-motion: reduce) {
+  .welcome-page * {
+    transition: none !important;
+    animation: none !important;
   }
 }
 
@@ -614,4 +897,17 @@
   .footer-top {
     flex-direction: column;
   }
+
+  .section-heading h2 {
+    font-size: 1.7rem;
+  }
+
+  .about-stats-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .about-content h2 {
+    font-size: 1.7rem;
+  }
 }
+

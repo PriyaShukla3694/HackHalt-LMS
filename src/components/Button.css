@@ -1,0 +1,137 @@
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-family: inherit;
+  font-weight: 600;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: all 0.2s ease, transform 0.15s ease;
+  border: 1.5px solid transparent;
+  outline: none;
+  text-decoration: none;
+}
+
+/* SIZES */
+.btn-sm {
+  padding: 8px 16px;
+  font-size: 0.8rem !important;
+}
+
+.btn-md {
+  padding: 12px 24px;
+  font-size: 0.9rem !important;
+}
+
+.btn-lg {
+  padding: 16px 32px;
+  font-size: 1rem !important;
+}
+
+/* VARIANTS */
+.btn-primary {
+  background: var(--orange);
+  color: #ffffff;
+}
+
+.btn-primary:hover:not(:disabled) {
+  background: var(--orange-dark);
+  transform: translateY(-1px);
+}
+
+.btn-secondary {
+  background: transparent;
+  color: var(--ink);
+  border-color: var(--ink);
+}
+
+.btn-secondary:hover:not(:disabled) {
+  background: var(--ink);
+  color: #ffffff;
+  transform: translateY(-1px);
+}
+
+/* Dark mode dashboard adjustments for secondary button */
+.instructor-dashboard .btn-secondary,
+.admin-dashboard .btn-secondary,
+.student-dashboard .btn-secondary,
+.courses-shell .btn-secondary {
+  color: #ffffff;
+  border-color: rgba(255, 255, 255, 0.4);
+}
+
+.instructor-dashboard .btn-secondary:hover:not(:disabled),
+.admin-dashboard .btn-secondary:hover:not(:disabled),
+.student-dashboard .btn-secondary:hover:not(:disabled),
+.courses-shell .btn-secondary:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.1);
+  color: #ffffff;
+  border-color: #ffffff;
+}
+
+/* Ghost variant */
+.btn-ghost {
+  background: transparent;
+  color: var(--muted);
+}
+
+.btn-ghost:hover:not(:disabled) {
+  background: var(--soft-bg);
+  color: var(--ink);
+}
+
+/* Danger variant */
+.btn-danger {
+  background: var(--danger);
+  color: #ffffff;
+}
+
+.btn-danger:hover:not(:disabled) {
+  background: #c53030;
+  transform: translateY(-1px);
+}
+
+/* DISABLED STATE */
+.btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* LOADING STATE & SPINNER */
+.btn-loading {
+  position: relative;
+  pointer-events: none;
+}
+
+.btn-spinner {
+  width: 16px;
+  height: 16px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+  border-top-color: #ffffff;
+  animation: btn-spin 0.6s linear infinite;
+  display: inline-block;
+  flex-shrink: 0;
+}
+
+/* Dark spinner for secondary/ghost buttons */
+.btn-secondary .btn-spinner,
+.btn-ghost .btn-spinner {
+  border-color: rgba(24, 23, 28, 0.2);
+  border-top-color: var(--ink);
+}
+
+.btn-icon {
+  font-size: 1.1em;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+@keyframes btn-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}

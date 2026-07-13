@@ -1,0 +1,46 @@
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 60px 40px;
+  background: transparent;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.empty-state-icon {
+  font-size: 3.5rem;
+  color: var(--muted);
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.empty-state h2 {
+  font-size: 1.5rem !important;
+  color: var(--ink);
+  margin-bottom: 10px;
+  font-weight: 700;
+}
+
+.empty-state p {
+  color: var(--muted);
+  font-size: 0.95rem !important;
+  max-width: 440px;
+  margin: 0 auto 24px;
+  line-height: 1.6;
+}
+
+/* Adjust for dark dashboard themes */
+.instructor-dashboard .empty-state h2,
+.admin-dashboard .empty-state h2,
+.student-dashboard .empty-state h2,
+.courses-shell .empty-state h2,
+.admin-page .empty-state h2,
+.manage-page .empty-state h2,
+.students-page .empty-state h2 {
+  color: #ffffff;
+}

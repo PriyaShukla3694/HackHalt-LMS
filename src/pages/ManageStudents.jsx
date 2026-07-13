@@ -1,172 +1,651 @@
-import { useState, useEffect } from "react";
-import "../styles/ManageStudents.css";
+import { useState } from "react";
+
+import {
+  FiSearch,
+  FiPlus,
+  FiEye,
+  FiEdit2,
+  FiTrash2,
+  FiX,
+  FiSave,
+  FiUsers,
+} from "react-icons/fi";
+import EmptyState from "../components/EmptyState";
+
 import InstructorSidebar from "../components/InstructorSidebar";
 import Topbar from "../components/Topbar";
-import { authFetch } from "../utils/api";
+
+import "../styles/ManageStudents.css";
 
 function ManageStudents() {
-  const [courses, setCourses] = useState([]);
-  const [selectedCourseId, setSelectedCourseId] = useState("");
-  const [students, setStudents] = useState([]);
-  const [loading, setLoading] = useState(false);
-  const [coursesLoading, setCoursesLoading] = useState(true);
+
+  /* ===========================
+      MOBILE SIDEBAR
+  =========================== */
+
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+
+  /* ===========================
+      SEARCH
+  =========================== */
+
   const [search, setSearch] = useState("");
-  const [error, setError] = useState("");
 
-  // Load instructor's courses first
-  useEffect(() => {
-    authFetch("/instructor/courses")
-      .then((res) => {
-        if (!res.ok) throw new Error("Could not load courses");
-        return res.json();
-      })
-      .then((data) => {
-        setCourses(data);
-        if (data.length > 0) {
-          setSelectedCourseId(data[0].id.toString());
-        }
-      })
-      .catch((err) => {
-        console.error(err);
-        setError("Failed to load courses list.");
-      })
-      .finally(() => {
-        setCoursesLoading(false);
-      });
-  }, []);
+  /* ===========================
+      STUDENTS
+  =========================== */
 
-  // Fetch student roster when selected course changes
-  useEffect(() => {
-    if (!selectedCourseId) return;
+  const [students, setStudents] = useState([
+    {
+      id: 1,
+      name: "Rahul Sharma",
+      email: "rahul@example.com",
+      phone: "+91 9876543210",
+      course: "Cyber Security",
+      progress: "72%",
+      status: "Active",
+    },
+    {
+      id: 2,
+      name: "Priya Verma",
+      email: "priya@example.com",
+      phone: "+91 9123456780",
+      course: "Ethical Hacking",
+      progress: "58%",
+      status: "Active",
+    },
+    {
+      id: 3,
+      name: "Aman Gupta",
+      email: "aman@example.com",
+      phone: "+91 9988776655",
+      course: "Python Programming",
+      progress: "90%",
+      status: "Completed",
+    },
+  ]);
 
-    setLoading(true);
-    authFetch(`/instructor/courses/${selectedCourseId}/students`)
-      .then((res) => {
-        if (!res.ok) throw new Error("Could not fetch student roster");
-        return res.json();
-      })
-      .then((data) => {
-        setStudents(data);
-      })
-      .catch((err) => {
-        console.error(err);
-        setError("Failed to fetch student progress reports.");
-      })
-      .finally(() => {
-        setLoading(false);
-      });
-  }, [selectedCourseId]);
+  /* ===========================
+      FILTER
+  =========================== */
 
-  const activeCourse = courses.find((c) => c.id.toString() === selectedCourseId);
-  const totalLessons = activeCourse ? activeCourse.totalLessons : 0;
-
-  const filteredStudents = students.filter((s) =>
-    s.name.toLowerCase().includes(search.toLowerCase()) ||
-    s.email.toLowerCase().includes(search.toLowerCase())
+  const filteredStudents = students.filter((student) =>
+    student.name.toLowerCase().includes(search.toLowerCase())
   );
 
-  return (
+  /* ===========================
+      POPUPS
+  =========================== */
+
+  const [showDetails, setShowDetails] = useState(false);
+
+  const [selectedStudent, setSelectedStudent] =
+    useState(null);
+
+  const [showAddPopup, setShowAddPopup] =
+    useState(false);
+
+  const [showEditPopup, setShowEditPopup] =
+    useState(false);
+
+  /* ===========================
+      ADD FORM
+  =========================== */
+
+  const [newStudent, setNewStudent] = useState({
+    name: "",
+    email: "",
+    phone: "",
+    course: "",
+    progress: "",
+    status: "",
+  });
+
+  /* ===========================
+      EDIT FORM
+  =========================== */
+
+  const [editStudent, setEditStudent] = useState({
+    id: null,
+    name: "",
+    email: "",
+    phone: "",
+    course: "",
+    progress: "",
+    status: "",
+  });
+
+  /* ===========================
+      DELETE
+  =========================== */
+
+  const handleDelete = (id) => {
+
+    if (window.confirm("Delete this student?")) {
+
+      setStudents(
+        students.filter(
+          (student) => student.id !== id
+        )
+      );
+
+    }
+
+  };
+
+  /* ===========================
+      ADD STUDENT
+  =========================== */
+
+  const handleAddStudent = () => {
+
+    if (
+      newStudent.name.trim() === "" ||
+      newStudent.email.trim() === "" ||
+      newStudent.course.trim() === ""
+    ) {
+      alert("Please fill all required fields.");
+      return;
+    }
+
+    const student = {
+      id: Date.now(),
+      ...newStudent,
+    };
+
+    setStudents([...students, student]);
+
+    setNewStudent({
+      name: "",
+      email: "",
+      phone: "",
+      course: "",
+      progress: "",
+      status: "",
+    });
+
+    setShowAddPopup(false);
+
+  };
+
+  /* ===========================
+      OPEN EDIT
+  =========================== */
+
+  const openEdit = (student) => {
+
+    setEditStudent(student);
+
+    setShowEditPopup(true);
+
+  };
+
+  /* ===========================
+      SAVE EDIT
+  =========================== */
+
+  const handleSaveEdit = () => {
+
+    setStudents(
+
+      students.map((student) =>
+
+        student.id === editStudent.id
+
+          ? editStudent
+
+          : student
+
+      )
+
+    );
+
+    setShowEditPopup(false);
+
+  };
+
+    return (
+
     <div className="students-page">
-      <InstructorSidebar />
 
-      <div className="students-content">
-        <Topbar />
+      <InstructorSidebar
+        isOpen={sidebarOpen}
+        onClose={() => setSidebarOpen(false)}
+      />
 
-        <div className="students-header">
-          <div>
-            <span>STUDENT MANAGEMENT</span>
-            <h1>Manage Students</h1>
-            <p>Monitor enrolled student rosters, progress completion rates, and learning states.</p>
-          </div>
-        </div>
+      <div className="students-main">
 
-        {coursesLoading ? (
-          <div style={{ color: "var(--text-secondary)", padding: "20px" }}>Loading courses checklist...</div>
-        ) : error ? (
-          <div style={{ color: "#f87171", padding: "20px" }}>{error}</div>
-        ) : courses.length === 0 ? (
-          <div style={{ color: "var(--text-secondary)", padding: "20px" }}>
-            No courses created yet. Please create a course under 'Manage Courses' first!
-          </div>
-        ) : (
-          <>
-            <div style={{ marginBottom: "25px", display: "flex", gap: "15px", alignItems: "center" }}>
-              <label style={{ color: "var(--text-secondary)", fontWeight: "600" }}>Select Course:</label>
-              <select
-                value={selectedCourseId}
-                onChange={(e) => setSelectedCourseId(e.target.value)}
-                style={{
-                  padding: "10px 20px",
-                  background: "#12121a",
-                  border: "1px solid rgba(255, 255, 255, 0.08)",
-                  borderRadius: "10px",
-                  color: "#fff",
-                  outline: "none",
-                  cursor: "pointer",
-                }}
-              >
-                {courses.map((course) => (
-                  <option key={course.id} value={course.id}>
-                    {course.title}
-                  </option>
-                ))}
-              </select>
+        <Topbar
+          title="Manage Students"
+          subtitle="View and manage all enrolled students"
+          onMenuClick={() => setSidebarOpen(true)}
+        />
+
+        <div className="students-content">
+
+          {/* HEADER */}
+
+          <div className="students-header">
+
+            <div>
+
+              <h1>Manage Students</h1>
+
+              <p>
+                View, edit and manage enrolled students.
+              </p>
+
             </div>
+
+            <button
+              className="add-btn"
+              onClick={() => setShowAddPopup(true)}
+            >
+
+              <FiPlus />
+
+              Add Student
+
+            </button>
+
+          </div>
+
+          {/* SEARCH */}
+
+          <div className="students-search">
+
+            <FiSearch />
 
             <input
               type="text"
-              placeholder="Search student by name or email..."
-              className="student-search"
+              placeholder="Search student..."
               value={search}
-              onChange={(e) => setSearch(e.target.value)}
+              onChange={(e) =>
+                setSearch(e.target.value)
+              }
             />
 
-            {loading ? (
-              <div style={{ color: "var(--text-secondary)", textAlign: "center", padding: "40px" }}>
-                <h3>Loading student list...</h3>
-              </div>
-            ) : filteredStudents.length === 0 ? (
-              <div className="empty-state" style={{ color: "var(--text-secondary)", padding: "40px", textAlign: "center" }}>
-                No enrolled students found.
-              </div>
-            ) : (
-              <div className="students-table">
-                <div className="table-head">
-                  <span>Name</span>
-                  <span>Email</span>
-                  <span>Progress ({totalLessons} Lessons)</span>
-                  <span>Enrolled On</span>
+          </div>
+
+          {/* STUDENTS */}
+
+          {filteredStudents.length === 0 ? (
+            <EmptyState
+              icon={FiUsers}
+              title="No students found"
+              description="There are no students enrolled under your courses yet, or none matching your search."
+              ctaText="Add Student"
+              onCtaClick={() => setShowAddPopup(true)}
+            />
+          ) : (
+            <div className="student-grid">
+              {filteredStudents.map((student) => (
+                <div
+                  className="student-card"
+                  key={student.id}
+                >
+                  <div className="student-avatar">
+                    {student.name.charAt(0)}
+                  </div>
+                  <h3>{student.name}</h3>
+                  <p>{student.course}</p>
+                  <span>{student.progress}</span>
+                  <div className="student-buttons">
+                    <button
+                      className="view-btn"
+                      onClick={() => {
+                        setSelectedStudent(student);
+                        setShowDetails(true);
+                      }}
+                    >
+                      <FiEye />
+                      View
+                    </button>
+                    <button
+                      className="edit-btn"
+                      onClick={() => openEdit(student)}
+                    >
+                      <FiEdit2 />
+                      Edit
+                    </button>
+                    <button
+                      className="delete-btn"
+                      onClick={() =>
+                        handleDelete(student.id)
+                      }
+                    >
+                      <FiTrash2 />
+                      Delete
+                    </button>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+
+      </div>
+
+            {/* ==========================
+          VIEW STUDENT
+      ========================== */}
+
+      {showDetails && selectedStudent && (
+
+        <div
+          className="popup-overlay"
+          onClick={() => setShowDetails(false)}
+        >
+
+          <div
+            className="details-popup"
+            onClick={(e) => e.stopPropagation()}
+          >
+
+            <button
+              className="close-btn"
+              onClick={() => setShowDetails(false)}
+            >
+              <FiX />
+            </button>
+
+            <div className="details-avatar">
+              {selectedStudent.name.charAt(0)}
+            </div>
+
+            <h2>{selectedStudent.name}</h2>
+
+            <div className="details-scroll">
+
+              <div className="details-list">
+
+                <div className="detail-row">
+                  <strong>Email</strong>
+                  <span>{selectedStudent.email}</span>
                 </div>
 
-                {filteredStudents.map((student) => {
-                  const compLessons = student.completedLessons;
-                  const pct = totalLessons > 0 ? ((compLessons / totalLessons) * 100).toFixed(0) : "0";
-                  const isCompleted = totalLessons > 0 && compLessons === totalLessons;
+                <div className="detail-row">
+                  <strong>Phone</strong>
+                  <span>{selectedStudent.phone}</span>
+                </div>
 
-                  return (
-                    <div className="table-row" key={student.id}>
-                      <span>{student.name}</span>
-                      <span>{student.email}</span>
-                      <span>
-                        {compLessons} / {totalLessons} ({pct}%)
-                      </span>
-                      <span className={isCompleted ? "completed" : "active"}>
-                        {new Date(student.enrolledAt).toLocaleDateString("en-US", {
-                          year: "numeric",
-                          month: "short",
-                          day: "numeric",
-                        })}
-                      </span>
-                    </div>
-                  );
-                })}
+                <div className="detail-row">
+                  <strong>Course</strong>
+                  <span>{selectedStudent.course}</span>
+                </div>
+
+                <div className="detail-row">
+                  <strong>Progress</strong>
+                  <span>{selectedStudent.progress}</span>
+                </div>
+
+                <div className="detail-row">
+                  <strong>Status</strong>
+                  <span>{selectedStudent.status}</span>
+                </div>
+
+                <div className="detail-row">
+                  <strong>Enrollment ID</strong>
+                  <span>STD-{selectedStudent.id}</span>
+                </div>
+
+                <div className="detail-row">
+                  <strong>Attendance</strong>
+                  <span>94%</span>
+                </div>
+
+                <div className="detail-row">
+                  <strong>Assignments</strong>
+                  <span>18 / 20 Submitted</span>
+                </div>
+
+                <div className="detail-row">
+                  <strong>Quiz Score</strong>
+                  <span>89%</span>
+                </div>
+
+                <div className="detail-row">
+                  <strong>Last Login</strong>
+                  <span>Today • 10:35 AM</span>
+                </div>
+
               </div>
-            )}
-          </>
-        )}
-      </div>
+
+            </div>
+
+            <button
+              className="save-btn"
+              onClick={() => setShowDetails(false)}
+            >
+              Close
+            </button>
+
+          </div>
+
+        </div>
+
+      )}
+
+      {/* ==========================
+          ADD STUDENT
+      ========================== */}
+
+      {showAddPopup && (
+
+        <div
+          className="popup-overlay"
+          onClick={() => setShowAddPopup(false)}
+        >
+
+          <div
+            className="student-popup"
+            onClick={(e) => e.stopPropagation()}
+          >
+
+            <button
+              className="close-btn"
+              onClick={() => setShowAddPopup(false)}
+            >
+              <FiX />
+            </button>
+
+            <h2>Add Student</h2>
+
+            <input
+              type="text"
+              placeholder="Student Name"
+              value={newStudent.name}
+              onChange={(e)=>
+                setNewStudent({
+                  ...newStudent,
+                  name:e.target.value,
+                })
+              }
+            />
+
+            <input
+              type="email"
+              placeholder="Email"
+              value={newStudent.email}
+              onChange={(e)=>
+                setNewStudent({
+                  ...newStudent,
+                  email:e.target.value,
+                })
+              }
+            />
+
+            <input
+              type="text"
+              placeholder="Phone"
+              value={newStudent.phone}
+              onChange={(e)=>
+                setNewStudent({
+                  ...newStudent,
+                  phone:e.target.value,
+                })
+              }
+            />
+
+            <input
+              type="text"
+              placeholder="Course"
+              value={newStudent.course}
+              onChange={(e)=>
+                setNewStudent({
+                  ...newStudent,
+                  course:e.target.value,
+                })
+              }
+            />
+
+            <input
+              type="text"
+              placeholder="Progress"
+              value={newStudent.progress}
+              onChange={(e)=>
+                setNewStudent({
+                  ...newStudent,
+                  progress:e.target.value,
+                })
+              }
+            />
+
+            <input
+              type="text"
+              placeholder="Status"
+              value={newStudent.status}
+              onChange={(e)=>
+                setNewStudent({
+                  ...newStudent,
+                  status:e.target.value,
+                })
+              }
+            />
+
+            <button
+              className="save-btn"
+              onClick={handleAddStudent}
+            >
+              <FiPlus />
+              Add Student
+            </button>
+
+          </div>
+
+        </div>
+
+      )}
+
+            {/* ==========================
+          EDIT STUDENT
+      ========================== */}
+
+      {showEditPopup && (
+
+        <div
+          className="popup-overlay"
+          onClick={() => setShowEditPopup(false)}
+        >
+
+          <div
+            className="student-popup"
+            onClick={(e) => e.stopPropagation()}
+          >
+
+            <button
+              className="close-btn"
+              onClick={() => setShowEditPopup(false)}
+            >
+              <FiX />
+            </button>
+
+            <h2>Edit Student</h2>
+
+            <input
+              type="text"
+              value={editStudent.name}
+              onChange={(e) =>
+                setEditStudent({
+                  ...editStudent,
+                  name: e.target.value,
+                })
+              }
+            />
+
+            <input
+              type="email"
+              value={editStudent.email}
+              onChange={(e) =>
+                setEditStudent({
+                  ...editStudent,
+                  email: e.target.value,
+                })
+              }
+            />
+
+            <input
+              type="text"
+              value={editStudent.phone}
+              onChange={(e) =>
+                setEditStudent({
+                  ...editStudent,
+                  phone: e.target.value,
+                })
+              }
+            />
+
+            <input
+              type="text"
+              value={editStudent.course}
+              onChange={(e) =>
+                setEditStudent({
+                  ...editStudent,
+                  course: e.target.value,
+                })
+              }
+            />
+
+            <input
+              type="text"
+              value={editStudent.progress}
+              onChange={(e) =>
+                setEditStudent({
+                  ...editStudent,
+                  progress: e.target.value,
+                })
+              }
+            />
+
+            <input
+              type="text"
+              value={editStudent.status}
+              onChange={(e) =>
+                setEditStudent({
+                  ...editStudent,
+                  status: e.target.value,
+                })
+              }
+            />
+
+            <button
+              className="save-btn"
+              onClick={handleSaveEdit}
+            >
+              <FiSave />
+              Save Changes
+            </button>
+
+          </div>
+
+        </div>
+
+      )}
+
     </div>
+
   );
+
 }
 
 export default ManageStudents;

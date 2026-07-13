@@ -1,10 +1,7 @@
-import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 
 import {
-  FiMenu,
-  FiX,
   FiSearch,
   FiTrendingUp,
   FiCode,
@@ -14,17 +11,21 @@ import {
   FiZap,
   FiShield,
   FiShare2,
+  FiCheck,
+  FiUsers,
+  FiTarget,
+  FiHeart,
+  FiClock,
+  FiAward,
 } from "react-icons/fi";
 import { FaLeaf } from "react-icons/fa";
 
+import AuthNavbar from "../components/AuthNavbar";
 import "../styles/WelcomePage.css";
 
-const NAV_LINKS = [
-  { label: "Courses", target: "home" },
-  { label: "Features", target: "features" },
-  { label: "Pricing", target: "pricing" },
-  { label: "About", target: "footer" },
-];
+import cyberSecurity from "../assets/Cyber_Security.jpeg";
+import ethicalHacking from "../assets/Ethical_Hacking.jpeg";
+import pythonAI from "../assets/Python.jpeg";
 
 const TRUSTED_LOGOS = [
   { name: "SkyNet", icon: FiCloud },
@@ -58,14 +59,91 @@ const FEATURES = [
   },
 ];
 
+const COURSES = [
+  {
+    id: 1,
+    title: "Cyber Security Fundamentals",
+    level: "Beginner",
+    lessons: 24,
+    duration: "6 weeks",
+    image: cyberSecurity,
+  },
+  {
+    id: 2,
+    title: "Ethical Hacking Masterclass",
+    level: "Intermediate",
+    lessons: 32,
+    duration: "8 weeks",
+    image: ethicalHacking,
+  },
+  {
+    id: 3,
+    title: "Python for AI & Automation",
+    level: "Beginner",
+    lessons: 28,
+    duration: "7 weeks",
+    image: pythonAI,
+  },
+];
+
+const PRICING_PLANS = [
+  {
+    name: "Starter",
+    price: "Free",
+    period: "",
+    tagline: "For curious learners getting started",
+    features: [
+      "Access to 5 starter courses",
+      "Community forum access",
+      "Basic progress tracking",
+      "Mobile app access",
+    ],
+    cta: "Start Free Trial",
+    highlighted: false,
+  },
+  {
+    name: "Pro",
+    price: "₹999",
+    period: "/month",
+    tagline: "For serious learners and professionals",
+    features: [
+      "Unlimited course access",
+      "Verified certificates",
+      "1-on-1 mentor sessions",
+      "Priority support",
+      "Downloadable resources",
+    ],
+    cta: "Get Started",
+    highlighted: true,
+  },
+  {
+    name: "Institution",
+    price: "Custom",
+    period: "",
+    tagline: "For schools, colleges and organizations",
+    features: [
+      "Bulk student licensing",
+      "Dedicated account manager",
+      "Custom analytics dashboard",
+      "API & LMS integrations",
+      "On-demand onboarding",
+    ],
+    cta: "Contact Sales",
+    highlighted: false,
+  },
+];
+
+const ABOUT_STATS = [
+  { icon: FiUsers, value: "12,000+", label: "Active Learners" },
+  { icon: FiAward, value: "150+", label: "Expert-led Courses" },
+  { icon: FiClock, value: "500K+", label: "Learning Hours Logged" },
+  { icon: FiTarget, value: "94%", label: "Course Completion Rate" },
+];
+
 function WelcomePage() {
   const navigate = useNavigate();
-  const [activeLink, setActiveLink] = useState("Courses");
-  const [menuOpen, setMenuOpen] = useState(false);
 
-  const scrollToSection = (id, label) => {
-    setActiveLink(label);
-    setMenuOpen(false);
+  const scrollToSection = (id) => {
     const el = document.getElementById(id);
     if (el) {
       el.scrollIntoView({ behavior: "smooth", block: "start" });
@@ -77,53 +155,7 @@ function WelcomePage() {
   return (
     <div className="welcome-page">
       {/* NAVBAR */}
-      <nav className="navbar">
-        <div className="logo-section">
-          <span className="logo">Shourya</span>
-        </div>
-
-        <div className={`nav-links ${menuOpen ? "open" : ""}`}>
-          {NAV_LINKS.map((link) => (
-            <a
-              key={link.label}
-              href={`#${link.target}`}
-              className={activeLink === link.label ? "active" : ""}
-              onClick={(e) => {
-                e.preventDefault();
-                scrollToSection(link.target, link.label);
-              }}
-            >
-              {link.label}
-            </a>
-          ))}
-
-          <div className="mobile-auth">
-            <button className="signin-link" onClick={() => navigate("/login")}>
-              Sign In
-            </button>
-            <button className="get-started-btn" onClick={() => navigate("/register")}>
-              Get Started
-            </button>
-          </div>
-        </div>
-
-        <div className="top-actions">
-          <button className="signin-link" onClick={() => navigate("/login")}>
-            Sign In
-          </button>
-          <button className="get-started-btn" onClick={() => navigate("/register")}>
-            Get Started
-          </button>
-        </div>
-
-        <button
-          className="menu-toggle"
-          aria-label="Toggle menu"
-          onClick={() => setMenuOpen((v) => !v)}
-        >
-          {menuOpen ? <FiX /> : <FiMenu />}
-        </button>
-      </nav>
+      <AuthNavbar />
 
       {/* HERO */}
       <section className="hero-section" id="home">
@@ -138,7 +170,7 @@ function WelcomePage() {
           <h1>
             Master Your Future
             <br />
-            with Shourya
+            with Intexia
           </h1>
 
           <p className="hero-description">
@@ -153,9 +185,9 @@ function WelcomePage() {
             </button>
             <button
               className="btn-outline"
-              onClick={() => scrollToSection("features", "Features")}
+              onClick={() => scrollToSection("courses")}
             >
-              View Demo
+              View Courses
             </button>
           </div>
         </motion.div>
@@ -170,7 +202,7 @@ function WelcomePage() {
             <div className="mockup-card">
               <div className="mockup-topbar">
                 <span className="mockup-dot" />
-                <span className="mockup-title">INTEXIA Dashboard</span>
+                <span className="mockup-title">Intexia Dashboard</span>
                 <FiSearch className="mockup-search" />
               </div>
 
@@ -220,15 +252,66 @@ function WelcomePage() {
         </div>
       </section>
 
-      {/* FEATURES */}
-      <section className="features-section" id="features">
+      {/* ═══════════════ COURSES ═══════════════ */}
+      <section className="courses-section" id="courses">
         <motion.div
-          className="features-heading"
+          className="section-heading"
           initial={{ opacity: 0, y: 16 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, amount: 0.3 }}
           transition={{ duration: 0.5 }}
         >
+          <span className="section-eyebrow">OUR COURSES</span>
+          <h2>Learn skills that matter</h2>
+          <p>
+            Hand-crafted courses in cyber security, ethical hacking and AI,
+            taught by industry practitioners.
+          </p>
+        </motion.div>
+
+        <div className="courses-grid">
+          {COURSES.map((course, i) => (
+            <motion.div
+              className="course-card-public"
+              key={course.id}
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, amount: 0.3 }}
+              transition={{ duration: 0.5, delay: i * 0.1 }}
+            >
+              <div className="course-card-public-image">
+                <img src={course.image} alt={course.title} />
+                <span className="course-card-public-badge">{course.level}</span>
+              </div>
+              <div className="course-card-public-body">
+                <h3>{course.title}</h3>
+                <div className="course-card-public-meta">
+                  <span>{course.lessons} Lessons</span>
+                  <span className="dot">•</span>
+                  <span>{course.duration}</span>
+                </div>
+                <button
+                  className="course-card-public-btn"
+                  onClick={() => navigate("/register")}
+                >
+                  Explore Course <FiArrowRight />
+                </button>
+              </div>
+            </motion.div>
+          ))}
+        </div>
+      </section>
+
+      {/* ═══════════════ FEATURES ═══════════════ */}
+      <section className="features-section" id="features">
+        <motion.div
+          className="section-heading"
+          initial={{ opacity: 0, y: 16 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.3 }}
+          transition={{ duration: 0.5 }}
+        >
+          <span className="section-eyebrow">FEATURES</span>
           <h2>Everything you need to grow</h2>
           <p>
             Powering the next generation of online education with tools that
@@ -263,8 +346,122 @@ function WelcomePage() {
         </div>
       </section>
 
+      {/* ═══════════════ PRICING ═══════════════ */}
+      <section className="pricing-section" id="pricing">
+        <motion.div
+          className="section-heading"
+          initial={{ opacity: 0, y: 16 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.3 }}
+          transition={{ duration: 0.5 }}
+        >
+          <span className="section-eyebrow">PRICING</span>
+          <h2>Plans for every kind of learner</h2>
+          <p>
+            Start free, upgrade when you're ready, or bring your whole
+            institution on board.
+          </p>
+        </motion.div>
+
+        <div className="pricing-grid">
+          {PRICING_PLANS.map((plan, i) => (
+            <motion.div
+              className={`pricing-card ${plan.highlighted ? "is-highlighted" : ""}`}
+              key={plan.name}
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, amount: 0.3 }}
+              transition={{ duration: 0.5, delay: i * 0.1 }}
+            >
+              {plan.highlighted && (
+                <span className="pricing-card-tag">Most Popular</span>
+              )}
+              <h3 className="pricing-card-name">{plan.name}</h3>
+              <p className="pricing-card-tagline">{plan.tagline}</p>
+              <div className="pricing-card-price">
+                <span className="pricing-card-amount">{plan.price}</span>
+                {plan.period && (
+                  <span className="pricing-card-period">{plan.period}</span>
+                )}
+              </div>
+              <ul className="pricing-card-features">
+                {plan.features.map((f) => (
+                  <li key={f}>
+                    <FiCheck /> {f}
+                  </li>
+                ))}
+              </ul>
+              <button
+                className={plan.highlighted ? "btn-primary" : "btn-outline"}
+                onClick={() => navigate("/register")}
+              >
+                {plan.cta}
+              </button>
+            </motion.div>
+          ))}
+        </div>
+      </section>
+
+      {/* ═══════════════ ABOUT ═══════════════ */}
+      <section className="about-section" id="about">
+        <div className="about-grid">
+          <motion.div
+            className="about-content"
+            initial={{ opacity: 0, x: -20 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true, amount: 0.3 }}
+            transition={{ duration: 0.6 }}
+          >
+            <span className="section-eyebrow">ABOUT INTEXIA</span>
+            <h2>Education built around real outcomes</h2>
+            <p>
+              Intexia was founded to close the gap between traditional
+              education and the skills employers actually need. We bring
+              together expert instructors, hands-on projects and
+              data-driven feedback so every learner makes measurable
+              progress — not just collects video views.
+            </p>
+            <div className="about-points">
+              <div className="about-point">
+                <FiHeart />
+                <span>Learner-first course design</span>
+              </div>
+              <div className="about-point">
+                <FiTarget />
+                <span>Outcome-driven curriculum</span>
+              </div>
+              <div className="about-point">
+                <FiUsers />
+                <span>Active mentor community</span>
+              </div>
+            </div>
+            <button className="btn-primary" onClick={() => navigate("/register")}>
+              Join Intexia
+            </button>
+          </motion.div>
+
+          <motion.div
+            className="about-stats-grid"
+            initial={{ opacity: 0, x: 20 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true, amount: 0.3 }}
+            transition={{ duration: 0.6, delay: 0.1 }}
+          >
+            {ABOUT_STATS.map(({ icon: Icon, value, label }) => (
+              <div className="about-stat-card" key={label}>
+                <div className="about-stat-icon">
+                  <Icon />
+                </div>
+                <h3>{value}</h3>
+                <p>{label}</p>
+              </div>
+            ))}
+          </motion.div>
+        </div>
+      </section>
+
       {/* CTA */}
-      <section className="cta-wrapper" id="pricing">
+      <section className="cta-wrapper">
         <motion.div
           className="cta-section"
           initial={{ opacity: 0, y: 20 }}
@@ -275,7 +472,7 @@ function WelcomePage() {
           <h2>Ready to transform your education?</h2>
           <p>
             Join thousands of educators and organizations delivering
-            world-class learning experiences with INTEXIA.
+            world-class learning experiences with Intexia.
           </p>
           <button className="btn-primary" onClick={() => navigate("/register")}>
             Get Started
@@ -287,8 +484,8 @@ function WelcomePage() {
       <footer className="footer" id="footer">
         <div className="footer-top">
           <div className="footer-brand">
-            <span className="footer-logo">INTEXIA</span>
-            <p>© 2026 Shourya. Empowering modern education.</p>
+            <span className="footer-logo">Intexia</span>
+            <p>© 2026 Intexia. Empowering modern education.</p>
           </div>
 
           <div className="footer-links">

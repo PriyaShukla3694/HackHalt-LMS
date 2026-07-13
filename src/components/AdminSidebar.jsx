@@ -1,127 +1,130 @@
-import { useState, useEffect } from "react";
-import "./Sidebar.css";
+import "./AdminSidebar.css";
 import { NavLink, useNavigate } from "react-router-dom";
-import { useAuth } from "../context/AuthContext";
 
 import {
-  FaHome,
+  FaTachometerAlt,
   FaUsers,
   FaBook,
-  FaChartBar,
+  FaChartLine,
   FaCog,
   FaSignOutAlt,
-  FaBars,
+  FaShieldAlt,
 } from "react-icons/fa";
 
-function AdminSidebar() {
-  const navigate = useNavigate();
-  const { logout } = useAuth();
-  const [collapsed, setCollapsed] = useState(() => {
-    return localStorage.getItem("sidebar_collapsed") === "true";
-  });
+function AdminSidebar({ isOpen, onClose }) {
 
-  useEffect(() => {
-    localStorage.setItem("sidebar_collapsed", collapsed);
-    if (collapsed) {
-      document.body.classList.add("sidebar-collapsed");
-    } else {
-      document.body.classList.remove("sidebar-collapsed");
-    }
-  }, [collapsed]);
+  const navigate = useNavigate();
 
   const handleLogout = () => {
-    logout();
-    navigate("/login");
+    localStorage.removeItem("user");
+    navigate("/");
+    onClose?.();
   };
 
   return (
-    <aside className="sidebar">
+    <>
 
-      <div>
+      {/* Overlay */}
 
-        <div className="sidebar-header" style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
-          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", width: "100%" }}>
-            <div className="sidebar-brand-wrapper">
-              <h1>INTEXIA</h1>
-              <p style={{ fontSize: "12px", color: "#8b94a7" }}>Cyber Learning Hub</p>
+      {isOpen && (
+        <div
+          className="admin-sidebar-overlay"
+          onClick={onClose}
+        />
+      )}
+
+      <aside
+        className={`admin-sidebar ${isOpen ? "open" : ""}`}
+      >
+
+        <div>
+
+          {/* LOGO */}
+
+          <div className="admin-logo">
+
+            <div className="admin-logo-icon">
+              <FaShieldAlt />
             </div>
-            <FaBars
-              onClick={() => setCollapsed(!collapsed)}
-              className="sidebar-toggle-icon"
-            />
+
+            <div>
+
+              <h2>INTEXIA</h2>
+
+              <p>Admin Panel</p>
+
+            </div>
+
           </div>
-        </div>
 
-        <nav className="sidebar-nav">
+          {/* NAVIGATION */}
 
-          <NavLink
-            to="/admin-dashboard"
-            className="nav-link"
-          >
-            <div className="nav-item">
-              <FaHome />
+          <nav className="admin-nav">
+
+            <NavLink
+              to="/admin-dashboard"
+              className="admin-link"
+              onClick={onClose}
+            >
+              <FaTachometerAlt />
               <span>Dashboard</span>
-            </div>
-          </NavLink>
+            </NavLink>
 
-          <NavLink
-            to="/user-management"
-            className="nav-link"
-          >
-            <div className="nav-item">
+            <NavLink
+              to="/user-management"
+              className="admin-link"
+              onClick={onClose}
+            >
               <FaUsers />
-              <span>Users</span>
-            </div>
-          </NavLink>
+              <span>User Management</span>
+            </NavLink>
 
-          <NavLink
-            to="/course-approval"
-            className="nav-link"
-          >
-            <div className="nav-item">
+            <NavLink
+              to="/course-approval"
+              className="admin-link"
+              onClick={onClose}
+            >
               <FaBook />
               <span>Course Approval</span>
-            </div>
-          </NavLink>
+            </NavLink>
 
-          <NavLink
-            to="/platform-analytics"
-            className="nav-link"
-          >
-            <div className="nav-item">
-              <FaChartBar />
-              <span>Analytics</span>
-            </div>
-          </NavLink>
+            <NavLink
+              to="/platform-analytics"
+              className="admin-link"
+              onClick={onClose}
+            >
+              <FaChartLine />
+              <span>Platform Analytics</span>
+            </NavLink>
 
-          <NavLink
-            to="/admin-settings"
-            className="nav-link"
-          >
-            <div className="nav-item">
+            <NavLink
+              to="/admin-settings"
+              className="admin-link"
+              onClick={onClose}
+            >
               <FaCog />
               <span>Settings</span>
-            </div>
-          </NavLink>
+            </NavLink>
 
-        </nav>
+          </nav>
 
-      </div>
+        </div>
 
-      <div className="sidebar-footer">
+        {/* LOGOUT */}
 
-        <div
-          className="logout-btn"
+        <button
+          className="admin-logout"
           onClick={handleLogout}
         >
           <FaSignOutAlt />
-          <span>Logout</span>
-        </div>
+          Logout
+        </button>
 
-      </div>
+      </aside>
 
-    </aside>
+    </>
   );
+
 }
 
 export default AdminSidebar;

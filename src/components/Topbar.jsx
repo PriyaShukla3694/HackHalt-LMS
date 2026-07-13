@@ -1,71 +1,192 @@
 import "./Topbar.css";
-import { FaSearch } from "react-icons/fa";
-import { useAuth } from "../context/AuthContext";
+
+import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 
-function Topbar() {
-  const { user } = useAuth();
+import {
+  FaSearch,
+  FaHome,
+  FaBars,
+} from "react-icons/fa";
+
+import { useAuth } from "../context/AuthContext";
+
+function Topbar({
+
+  title = "Dashboard",
+
+  subtitle = "Welcome Back!",
+
+  onMenuClick,
+
+}) {
+
   const navigate = useNavigate();
 
-const today = new Date().toLocaleDateString("en-IN", {
-day: "numeric",
-month: "long",
-year: "numeric",
-});
+  const { user, logout } = useAuth();
 
-return ( <div className="topbar">
+  const [showProfile, setShowProfile] = useState(false);
 
+  const profileRef = useRef(null);
 
-  <div className="topbar-left">
+  const today = new Date().toLocaleDateString("en-IN", {
 
-    <div className="search-box">
-      <FaSearch />
+    day: "numeric",
 
-      <input
-        type="text"
-        placeholder="Search courses..."
-      />
-    </div>
+    month: "long",
 
-  </div>
+    year: "numeric",
 
-  <div className="topbar-right">
+  });
 
-    <button className="welcome-btn" onClick={() => navigate("/")}>
-      Welcome
+  useEffect(() => {
+
+    const handleClickOutside = (event) => {
+
+      if (
+        profileRef.current &&
+        !profileRef.current.contains(event.target)
+      ) {
+        setShowProfile(false);
+      }
+
+    };
+
+    document.addEventListener(
+      "mousedown",
+      handleClickOutside
+    );
+
+    return () =>
+      document.removeEventListener(
+        "mousedown",
+        handleClickOutside
+      );
+
+  }, []);
+
+  const handleLogout = () => {
+
+    logout();
+
+    navigate("/login");
+
+  };
+
+  return (
+
+    <header className="topbar">
+
+      {/* LEFT */}
+
+      <div className="topbar-left">
+
+  {onMenuClick && (
+    <button
+      className="mobile-menu-btn"
+      onClick={onMenuClick}
+    >
+      <FaBars />
     </button>
+  )}
 
-    <div className="date-box">
-      {today}
-    </div>
+  {/* Mobile Logo */}
+  <h2 className="mobile-logo">
+    INTEXIA
+  </h2>
 
-    <div className="user-profile">
+  {/* Desktop Title */}
+  <div className="title-section">
 
-      <div className="avatar">
-        {user?.avatar ? (
-          <img 
-            src={user.avatar.startsWith("http") ? user.avatar : `${(import.meta.env.VITE_API_URL || "http://localhost:5000/api").replace("/api", "")}${user.avatar}`} 
-            alt="Avatar" 
-            style={{ width: "100%", height: "100%", borderRadius: "50%", objectFit: "cover" }} 
-          />
-        ) : (
-          (user?.name?.charAt(0) || "S").toUpperCase()
-        )}
-      </div>
+    <h1>{title}</h1>
 
-      <div className="user-info">
-        <h4>{user?.name || "Student"}</h4>
-        <p>{user?.role || "Student"}</p>
-      </div>
-
-    </div>
+    <p>{subtitle}</p>
 
   </div>
 
 </div>
+          
 
+      {/* RIGHT */}
 
-);
+      <div className="topbar-right">
+
+        <div className="search-box">
+
+          <FaSearch className="search-icon" />
+
+          <input
+            type="text"
+            placeholder="Search..."
+          />
+
+        </div>
+        <button
+          className="portal-btn"
+          onClick={() => navigate("/")}
+        >
+          <FaHome />
+          <span className="portal-text">Portal</span>
+        </button>
+
+        <div
+          className="user-info"
+          ref={profileRef}
+        >
+
+          <div
+            className="user-box"
+            onClick={() => setShowProfile((prev) => !prev)}
+          >
+
+<img
+  src={`https://ui-avatars.com/api/?name=${encodeURIComponent(
+    user?.name || "User"
+  )}&background=ff8c00&color=fff`}
+  alt={user?.name || "User"}
+/>
+
+            <div className="user-details">
+
+              <h4>
+                {user?.name || "User"}
+              </h4>
+
+              <p>{today}</p>
+
+            </div>
+
+          </div>
+
+          {showProfile && (
+
+            <div className="profile-dropdown">
+
+              <div className="profile-name">
+
+                <strong>{user?.name || "User"}</strong>
+
+              </div>
+
+              <button
+                className="logout-item"
+                onClick={handleLogout}
+              >
+                Logout
+              </button>
+
+            </div>
+
+          )}
+
+        </div>
+
+      </div>
+
+    </header>
+
+  );
+
 }
 
 export default Topbar;

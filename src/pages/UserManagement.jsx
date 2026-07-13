@@ -1,269 +1,586 @@
-import { useState, useEffect } from "react";
-import "../styles/AdminPages.css";
+import { useState } from "react";
+
+import {
+  FiPlus,
+  FiSearch,
+  FiEdit,
+  FiTrash2,
+  FiEye,
+  FiX,
+  FiUsers,
+} from "react-icons/fi";
+import EmptyState from "../components/EmptyState";
+
 import AdminSidebar from "../components/AdminSidebar";
 import Topbar from "../components/Topbar";
-import { authFetch } from "../utils/api";
-import { useAuth } from "../context/AuthContext";
+
+import "../styles/AdminPages.css";
 
 function UserManagement() {
-  const { user: currentUser } = useAuth();
-  const [users, setUsers] = useState([]);
-  const [filter, setFilter] = useState("All");
+
+  /* ===========================
+      SIDEBAR
+  =========================== */
+
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+
+  /* ===========================
+      SEARCH
+  =========================== */
+
   const [search, setSearch] = useState("");
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState("");
 
-  const fetchUsers = (selectedFilter = filter, searchQuery = search) => {
-    setLoading(true);
-    let roleParam = "";
-    if (selectedFilter === "Student") roleParam = "STUDENT";
-    if (selectedFilter === "Instructor") roleParam = "INSTRUCTOR";
-    if (selectedFilter === "Admin") roleParam = "ADMIN";
+  /* ===========================
+      POPUPS
+  =========================== */
 
-    let url = `/admin/users?page=1&limit=100`;
-    if (roleParam) url += `&role=${roleParam}`;
-    if (searchQuery) url += `&search=${encodeURIComponent(searchQuery)}`;
+  const [showPopup, setShowPopup] = useState(false);
 
-    authFetch(url)
-      .then((res) => {
-        if (!res.ok) throw new Error("Failed to load users list");
-        return res.json();
-      })
-      .then((data) => {
-        setUsers(data.users || data);
-      })
-      .catch((err) => {
-        console.error(err);
-        setError("Error loading system user accounts.");
-      })
-      .finally(() => {
-        setLoading(false);
-      });
+  const [showDetails, setShowDetails] = useState(false);
+
+  const [selectedUser, setSelectedUser] = useState(null);
+
+  const [editIndex, setEditIndex] = useState(null);
+
+  /* ===========================
+      USERS DATA
+  =========================== */
+
+  const [users, setUsers] = useState([
+
+    {
+      name: "Rahul Sharma",
+      email: "rahul@gmail.com",
+      phone: "+91 9876543210",
+      role: "Student",
+      status: "Active",
+      joined: "12 Jan 2026",
+    },
+
+    {
+      name: "Priya Verma",
+      email: "priya@gmail.com",
+      phone: "+91 9123456780",
+      role: "Instructor",
+      status: "Active",
+      joined: "08 Feb 2026",
+    },
+
+    {
+      name: "Amit Kumar",
+      email: "amit@gmail.com",
+      phone: "+91 9988776655",
+      role: "Student",
+      status: "Inactive",
+      joined: "20 Mar 2026",
+    },
+
+    {
+      name: "Neha Singh",
+      email: "neha@gmail.com",
+      phone: "+91 9871203456",
+      role: "Instructor",
+      status: "Active",
+      joined: "14 Apr 2026",
+    },
+
+  ]);
+
+  /* ===========================
+      FORM
+  =========================== */
+
+  const [form, setForm] = useState({
+
+    name: "",
+
+    email: "",
+
+    phone: "",
+
+    role: "Student",
+
+    status: "Active",
+
+  });
+
+  /* ===========================
+      INPUT CHANGE
+  =========================== */
+
+  const handleChange = (e) => {
+
+    setForm({
+
+      ...form,
+
+      [e.target.name]: e.target.value,
+
+    });
+
   };
 
-  useEffect(() => {
-    fetchUsers(filter, search);
-  }, [filter, search]);
+    /* ===========================
+      SAVE USER
+  =========================== */
 
-  const handleRoleChange = async (userId, newRole) => {
-    try {
-      const res = await authFetch(`/admin/users/${userId}/role`, {
-        method: "PATCH",
-        body: JSON.stringify({ role: newRole }),
-      });
+  const handleSave = () => {
 
-      if (res.ok) {
-        fetchUsers(filter, search);
-      } else {
-        alert("Failed to update user role.");
-      }
-    } catch (err) {
-      console.error(err);
-      alert("Error changing user role.");
-    }
-  };
+    if (
+      !form.name ||
+      !form.email ||
+      !form.phone
+    ) {
 
-  const handleToggleStatus = async (userId, currentStatus) => {
-    try {
-      const res = await authFetch(`/admin/users/${userId}/status`, {
-        method: "PATCH",
-        body: JSON.stringify({ isActive: !currentStatus }),
-      });
+      alert("Please fill all required fields.");
 
-      if (res.ok) {
-        setUsers((prev) =>
-          prev.map((u) => (u.id === userId ? { ...u, isActive: !currentStatus } : u))
-        );
-      } else {
-        alert("Failed to update user status.");
-      }
-    } catch (err) {
-      console.error(err);
-      alert("Error toggling user status.");
-    }
-  };
-
-  const handleDelete = async (id) => {
-    if (id === currentUser?.id) {
-      alert("You cannot delete your own admin account.");
       return;
+
     }
+
+    if (editIndex !== null) {
+
+      const updatedUsers = [...users];
+
+      updatedUsers[editIndex] = {
+
+        ...updatedUsers[editIndex],
+
+        ...form,
+
+      };
+
+      setUsers(updatedUsers);
+
+    } else {
+
+      setUsers([
+
+        ...users,
+
+        {
+
+          ...form,
+
+          joined: new Date().toLocaleDateString("en-IN", {
+
+            day: "2-digit",
+
+            month: "short",
+
+            year: "numeric",
+
+          }),
+
+        },
+
+      ]);
+
+    }
+
+    setForm({
+
+      name: "",
+
+      email: "",
+
+      phone: "",
+
+      role: "Student",
+
+      status: "Active",
+
+    });
+
+    setEditIndex(null);
+
+    setShowPopup(false);
+
+  };
+
+  /* ===========================
+      EDIT USER
+  =========================== */
+
+  const handleEdit = (index) => {
+
+    setForm(users[index]);
+
+    setEditIndex(index);
+
+    setShowPopup(true);
+
+  };
+
+  /* ===========================
+      DELETE USER
+  =========================== */
+
+  const handleDelete = (index) => {
 
     const confirmDelete = window.confirm(
-      "Are you sure you want to delete this user? This will remove all their enrollments, progress stats, and certificates from the database."
+      "Are you sure you want to delete this user?"
     );
 
     if (confirmDelete) {
-      try {
-        const res = await authFetch(`/admin/users/${id}`, {
-          method: "DELETE",
-        });
 
-        if (res.ok) {
-          fetchUsers(filter, search);
-        } else {
-          alert("Failed to delete user.");
-        }
-      } catch (err) {
-        console.error(err);
-        alert("Error deleting user account.");
-      }
+      setUsers(users.filter((_, i) => i !== index));
+
     }
+
   };
 
-  const filteredUsers = users;
+  /* ===========================
+      SEARCH FILTER
+  =========================== */
+
+  const filteredUsers = users.filter((user) =>
+
+    user.name
+      .toLowerCase()
+      .includes(search.toLowerCase()) ||
+
+    user.email
+      .toLowerCase()
+      .includes(search.toLowerCase()) ||
+
+    user.role
+      .toLowerCase()
+      .includes(search.toLowerCase())
+
+  );
 
   return (
+
     <div className="admin-page">
-      <AdminSidebar />
+
+      <AdminSidebar
+        isOpen={sidebarOpen}
+        onClose={() => setSidebarOpen(false)}
+      />
 
       <div className="admin-main">
-        <Topbar />
 
-        <h1 className="page-title">User Management</h1>
+        <Topbar
+          title="User Management"
+          subtitle="Manage students, instructors and administrators"
+          onMenuClick={() => setSidebarOpen(true)}
+        />
 
-        <div className="user-filter" style={{ display: "flex", gap: "10px", alignItems: "center", flexWrap: "wrap", marginBottom: "20px" }}>
-          <button
-            className={filter === "All" ? "active-filter" : ""}
-            onClick={() => setFilter("All")}
-          >
-            All
-          </button>
+        <div className="admin-content">
 
-          <button
-            className={filter === "Student" ? "active-filter" : ""}
-            onClick={() => setFilter("Student")}
-          >
-            Students
-          </button>
+          <div className="page-header">
 
-          <button
-            className={filter === "Instructor" ? "active-filter" : ""}
-            onClick={() => setFilter("Instructor")}
-          >
-            Instructors
-          </button>
+            <div>
 
-          <input
-            type="text"
-            placeholder="Search users by name or email..."
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            style={{
-              padding: "10px 16px",
-              background: "#181821",
-              border: "1px solid rgba(255,255,255,0.08)",
-              borderRadius: "8px",
-              color: "#fff",
-              outline: "none",
-              minWidth: "250px",
-              marginLeft: "auto"
-            }}
-          />
+              <h1>User Management</h1>
+
+              <p>
+                Manage students, instructors and administrators.
+              </p>
+
+            </div>
+
+            <button
+              className="primary-btn"
+              onClick={() => {
+
+                setEditIndex(null);
+
+                setForm({
+
+                  name: "",
+
+                  email: "",
+
+                  phone: "",
+
+                  role: "Student",
+
+                  status: "Active",
+
+                });
+
+                setShowPopup(true);
+
+              }}
+            >
+
+              <FiPlus />
+
+              Add User
+
+            </button>
+
+          </div>
+
+          {/* SEARCH */}
+
+          <div className="search-box">
+
+            <FiSearch />
+
+            <input
+              type="text"
+              placeholder="Search users..."
+              value={search}
+              onChange={(e) =>
+                setSearch(e.target.value)
+              }
+            />
+
+          </div>
+
+          {/* TABLE */}
+
+          {filteredUsers.length === 0 ? (
+            <EmptyState
+              icon={FiUsers}
+              title="No users found"
+              description="There are no users registered on the platform matching your search criteria."
+              ctaText="Add User"
+              onCtaClick={() => {
+                setEditIndex(null);
+                setForm({
+                  name: "",
+                  email: "",
+                  phone: "",
+                  role: "Student",
+                  status: "Active",
+                });
+                setShowPopup(true);
+              }}
+            />
+          ) : (
+            <div className="table-card">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Role</th>
+                    <th>Status</th>
+                    <th>Joined</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {filteredUsers.map((user, index) => (
+                    <tr key={index}>
+                      <td>{user.name}</td>
+                      <td>{user.email}</td>
+                      <td>{user.role}</td>
+                      <td>
+                        <span
+                          className={
+                            user.status === "Active"
+                              ? "status-active"
+                              : "status-inactive"
+                          }
+                        >
+                          {user.status}
+                        </span>
+                      </td>
+                      <td>{user.joined}</td>
+                      <td>
+                        <div className="table-actions">
+                          <button
+                            className="view-btn"
+                            onClick={() => {
+                              setSelectedUser(user);
+                              setShowDetails(true);
+                            }}
+                          >
+                            <FiEye />
+                          </button>
+                          <button
+                            className="edit-btn"
+                            onClick={() => handleEdit(index)}
+                          >
+                            <FiEdit />
+                          </button>
+                          <button
+                            className="delete-btn"
+                            onClick={() => handleDelete(index)}
+                          >
+                            <FiTrash2 />
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          )}
+
+          {/* ===========================
+              ADD / EDIT USER POPUP
+          =========================== */}
+
+          {showPopup && (
+
+            <div
+              className="popup-overlay"
+              onClick={() => setShowPopup(false)}
+            >
+
+              <div
+                className="popup-card"
+                onClick={(e) => e.stopPropagation()}
+              >
+
+                <h2>
+
+                  {editIndex !== null
+                    ? "Edit User"
+                    : "Add User"}
+
+                </h2>
+
+                <input
+                  type="text"
+                  name="name"
+                  placeholder="Full Name"
+                  value={form.name}
+                  onChange={handleChange}
+                />
+
+                <input
+                  type="email"
+                  name="email"
+                  placeholder="Email Address"
+                  value={form.email}
+                  onChange={handleChange}
+                />
+
+                <input
+                  type="text"
+                  name="phone"
+                  placeholder="Phone Number"
+                  value={form.phone}
+                  onChange={handleChange}
+                />
+
+                <select
+                  name="role"
+                  value={form.role}
+                  onChange={handleChange}
+                >
+
+                  <option>Student</option>
+
+                  <option>Instructor</option>
+
+                  <option>Admin</option>
+
+                </select>
+
+                <select
+                  name="status"
+                  value={form.status}
+                  onChange={handleChange}
+                >
+
+                  <option>Active</option>
+
+                  <option>Inactive</option>
+
+                </select>
+
+                <div className="popup-buttons">
+
+                  <button
+                    className="save-btn"
+                    onClick={handleSave}
+                  >
+                    Save
+                  </button>
+
+                  <button
+                    className="cancel-btn"
+                    onClick={() => setShowPopup(false)}
+                  >
+                    Cancel
+                  </button>
+
+                </div>
+
+              </div>
+
+            </div>
+
+          )}
+
+                    {/* ===========================
+              USER DETAILS POPUP
+          =========================== */}
+
+          {showDetails && selectedUser && (
+
+            <div
+              className="popup-overlay"
+              onClick={() => setShowDetails(false)}
+            >
+
+              <div
+                className="details-card"
+                onClick={(e) => e.stopPropagation()}
+              >
+
+                <button
+                  className="close-btn"
+                  onClick={() => setShowDetails(false)}
+                >
+                  <FiX />
+                </button>
+
+                <h2>User Details</h2>
+
+                <div className="detail-row">
+                  <strong>Full Name</strong>
+                  <span>{selectedUser.name}</span>
+                </div>
+
+                <div className="detail-row">
+                  <strong>Email</strong>
+                  <span>{selectedUser.email}</span>
+                </div>
+
+                <div className="detail-row">
+                  <strong>Phone</strong>
+                  <span>{selectedUser.phone}</span>
+                </div>
+
+                <div className="detail-row">
+                  <strong>Role</strong>
+                  <span>{selectedUser.role}</span>
+                </div>
+
+                <div className="detail-row">
+                  <strong>Status</strong>
+                  <span>{selectedUser.status}</span>
+                </div>
+
+                <div className="detail-row">
+                  <strong>Joined On</strong>
+                  <span>{selectedUser.joined}</span>
+                </div>
+
+              </div>
+
+            </div>
+
+          )}
+
         </div>
 
-        {loading ? (
-          <div style={{ color: "var(--text-secondary)", textAlign: "center", padding: "40px" }}>
-            <h3>Loading database users...</h3>
-          </div>
-        ) : error ? (
-          <div style={{ color: "#f87171", textAlign: "center", padding: "40px" }}>
-            <h3>{error}</h3>
-          </div>
-        ) : (
-          <div className="users-grid">
-            {filteredUsers.length === 0 ? (
-              <div style={{ color: "var(--text-secondary)", gridColumn: "1/-1", textAlign: "center", padding: "40px" }}>
-                <h3>No Users Found</h3>
-              </div>
-            ) : (
-              filteredUsers.map((u) => (
-                <div className="user-card" key={u.id}>
-                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-                    <h3>{u.name}</h3>
-                    <span
-                      style={{
-                        padding: "2px 8px",
-                        borderRadius: "12px",
-                        fontSize: "11px",
-                        fontWeight: "bold",
-                        background: u.isActive ? "rgba(16, 185, 129, 0.15)" : "rgba(239, 68, 68, 0.15)",
-                        color: u.isActive ? "#10b981" : "#ef4444"
-                      }}
-                    >
-                      {u.isActive ? "Active" : "Inactive"}
-                    </span>
-                  </div>
-                  
-                  <p>
-                    <strong>Email:</strong> {u.email}
-                  </p>
-                  <p>
-                    <strong>Role:</strong> {u.role}
-                  </p>
-
-                  <div style={{ marginTop: "12px", display: "flex", gap: "8px", alignItems: "center" }}>
-                    <label style={{ fontSize: "12px", color: "var(--text-secondary)" }}>Change Role:</label>
-                    <select
-                      value={u.role}
-                      onChange={(e) => handleRoleChange(u.id, e.target.value)}
-                      style={{
-                        padding: "4px 8px",
-                        background: "#181821",
-                        border: "1px solid rgba(255,255,255,0.08)",
-                        borderRadius: "6px",
-                        color: "#fff",
-                        cursor: "pointer",
-                      }}
-                    >
-                      <option value="STUDENT">Student</option>
-                      <option value="INSTRUCTOR">Instructor</option>
-                      <option value="ADMIN">Admin</option>
-                    </select>
-                  </div>
-
-                  <div className="user-actions" style={{ marginTop: "16px", display: "flex", flexDirection: "column", gap: "8px" }}>
-                    <button
-                      className="status-btn"
-                      onClick={() => handleToggleStatus(u.id, u.isActive)}
-                      style={{
-                        width: "100%",
-                        padding: "8px",
-                        background: u.isActive ? "#d97706" : "#059669",
-                        color: "#fff",
-                        border: "none",
-                        borderRadius: "8px",
-                        cursor: "pointer",
-                        fontWeight: "bold"
-                      }}
-                    >
-                      {u.isActive ? "Deactivate Account" : "Activate Account"}
-                    </button>
-
-                    <button
-                      className="delete-btn"
-                      onClick={() => handleDelete(u.id)}
-                      style={{
-                        width: "100%",
-                        padding: "8px",
-                        background: "#ef4444",
-                        color: "#fff",
-                        border: "none",
-                        borderRadius: "8px",
-                        cursor: "pointer",
-                      }}
-                    >
-                      Delete Account
-                    </button>
-                  </div>
-                </div>
-              ))
-            )}
-          </div>
-        )}
       </div>
+
     </div>
+
   );
+
 }
 
 export default UserManagement;

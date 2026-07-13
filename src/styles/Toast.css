@@ -1,0 +1,138 @@
+.toast-container {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  z-index: 9999;
+  pointer-events: none;
+}
+
+.toast-item {
+  pointer-events: auto;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: var(--card);
+  color: var(--ink);
+  padding: 16px 20px;
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-md);
+  border-left: 5px solid var(--info);
+  min-width: 320px;
+  max-width: 450px;
+  font-family: inherit;
+  font-weight: 500;
+  position: relative;
+  box-sizing: border-box;
+}
+
+.toast-success {
+  border-left-color: var(--success);
+}
+
+.toast-error {
+  border-left-color: var(--danger);
+}
+
+.toast-info {
+  border-left-color: var(--info);
+}
+
+.toast-icon {
+  font-size: 1.25rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.toast-message {
+  flex: 1;
+  font-size: 0.9rem !important;
+  line-height: 1.4;
+  color: var(--ink);
+}
+
+.toast-close {
+  background: none;
+  border: none;
+  color: var(--muted);
+  font-size: 1.3rem;
+  cursor: pointer;
+  padding: 0 4px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: color 0.2s ease;
+  line-height: 1;
+  margin-left: 8px;
+}
+
+.toast-close:hover {
+  color: var(--ink);
+}
+
+/* Dark mode dashboard adjustments for Toast */
+.instructor-dashboard .toast-item,
+.admin-dashboard .toast-item,
+.student-dashboard .toast-item,
+.instructor-settings-page .toast-item,
+.settings-page .toast-item,
+.courses-shell .toast-item,
+.admin-page .toast-item {
+  background: var(--ink-soft);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+.instructor-dashboard .toast-message,
+.admin-dashboard .toast-message,
+.student-dashboard .toast-message,
+.instructor-settings-page .toast-message,
+.settings-page .toast-message,
+.courses-shell .toast-message,
+.admin-page .toast-message {
+  color: #ffffff;
+}
+
+.instructor-dashboard .toast-close:hover,
+.admin-dashboard .toast-close:hover,
+.student-dashboard .toast-close:hover,
+.instructor-settings-page .toast-close:hover,
+.settings-page .toast-close:hover,
+.courses-shell .toast-close:hover,
+.admin-page .toast-close:hover {
+  color: #ffffff;
+}
+
+.instructor-dashboard .toast-success,
+.admin-dashboard .toast-success,
+.student-dashboard .toast-success,
+.instructor-settings-page .toast-success,
+.settings-page .toast-success,
+.courses-shell .toast-success,
+.admin-page .toast-success {
+  border-left-color: var(--success);
+}
+
+.instructor-dashboard .toast-error,
+.admin-dashboard .toast-error,
+.student-dashboard .toast-error,
+.instructor-settings-page .toast-error,
+.settings-page .toast-error,
+.courses-shell .toast-error,
+.admin-page .toast-error {
+  border-left-color: var(--danger);
+}
+
+.instructor-dashboard .toast-info,
+.admin-dashboard .toast-info,
+.student-dashboard .toast-info,
+.instructor-settings-page .toast-info,
+.settings-page .toast-info,
+.courses-shell .toast-info,
+.admin-page .toast-info {
+  border-left-color: var(--info);
+}

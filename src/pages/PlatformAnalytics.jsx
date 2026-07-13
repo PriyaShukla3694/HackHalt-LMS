@@ -1,148 +1,431 @@
-import { useState, useEffect } from "react";
-import "../styles/AdminPages.css";
+import { useState } from "react";
+import WeeklyActivity from "../components/WeeklyActivity";
+
+import {
+  FiUsers,
+  FiBookOpen,
+  FiTrendingUp,
+  FiAward,
+  FiActivity,
+  FiServer,
+} from "react-icons/fi";
+
 import AdminSidebar from "../components/AdminSidebar";
 import Topbar from "../components/Topbar";
-import { authFetch } from "../utils/api";
-import {
-  BarChart,
-  Bar,
-  LineChart,
-  Line,
-  CartesianGrid,
-  XAxis,
-  YAxis,
-  Tooltip,
-  ResponsiveContainer,
-} from "recharts";
+
+import "../styles/AdminPages.css";
 
 function PlatformAnalytics() {
-  const [analytics, setAnalytics] = useState(null);
-  const [monthlyData, setMonthlyData] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState("");
 
-  useEffect(() => {
-    const fetchAnalytics = authFetch("/admin/analytics")
-      .then((res) => {
-        if (!res.ok) throw new Error("Could not load platform analytics");
-        return res.json();
-      })
-      .then((data) => setAnalytics(data));
+  const [sidebarOpen, setSidebarOpen] = useState(false);
 
-    const fetchMonthly = authFetch("/admin/analytics/monthly")
-      .then((res) => {
-        if (!res.ok) throw new Error("Could not load monthly analytics");
-        return res.json();
-      })
-      .then((data) => setMonthlyData(data));
+  const stats = [
 
-    Promise.all([fetchAnalytics, fetchMonthly])
-      .catch((err) => {
-        console.error(err);
-        setError("Error fetching admin platform metrics.");
-      })
-      .finally(() => {
-        setLoading(false);
-      });
-  }, []);
+    {
+      title: "Total Users",
+      value: "1,248",
+      icon: <FiUsers />,
+      color: "orange",
+    },
 
-  const getChartData = () => {
-    if (!analytics) return [];
-    return [
-      { name: "Students", count: analytics.totalStudents },
-      { name: "Instructors", count: analytics.totalInstructors },
-      { name: "Courses", count: analytics.totalCourses },
-      { name: "Enrollments", count: analytics.totalEnrollments },
-      { name: "Certificates", count: analytics.totalCertificates },
-    ];
-  };
+    {
+      title: "Students",
+      value: "1,020",
+      icon: <FiTrendingUp />,
+      color: "green",
+    },
 
-  return (
+    {
+      title: "Instructors",
+      value: "28",
+      icon: <FiAward />,
+      color: "blue",
+    },
+
+    {
+      title: "Courses",
+      value: "18",
+      icon: <FiBookOpen />,
+      color: "purple",
+    },
+
+  ];
+
+  const topCourses = [
+
+    {
+      title: "Cyber Security",
+      students: 420,
+      rating: "4.9",
+    },
+
+    {
+      title: "Ethical Hacking",
+      students: 390,
+      rating: "4.8",
+    },
+
+    {
+      title: "Python Programming",
+      students: 320,
+      rating: "4.7",
+    },
+
+    {
+      title: "Networking",
+      students: 250,
+      rating: "4.6",
+    },
+
+  ];
+
+    return (
+
     <div className="admin-page">
-      <AdminSidebar />
+
+      <AdminSidebar
+        isOpen={sidebarOpen}
+        onClose={() => setSidebarOpen(false)}
+      />
 
       <div className="admin-main">
-        <Topbar />
 
-        <h1 className="page-title">Platform Analytics</h1>
+        <Topbar
+          title="Platform Analytics"
+          subtitle="Track platform performance and engagement"
+          onMenuClick={() => setSidebarOpen(true)}
+        />
 
-        {loading ? (
-          <div style={{ color: "var(--text-secondary)", textAlign: "center", padding: "40px" }}>
-            <h3>Loading platform reports...</h3>
-          </div>
-        ) : error ? (
-          <div style={{ color: "#f87171", textAlign: "center", padding: "40px" }}>
-            <h3>{error}</h3>
-          </div>
-        ) : (
-          <>
-            <div className="analytics-grid">
-              <div className="analytics-card">
-                <h2>{analytics.totalStudents}</h2>
-                <p>Total Students</p>
-              </div>
+        <div className="admin-content">
 
-              <div className="analytics-card">
-                <h2>{analytics.totalInstructors}</h2>
-                <p>Total Instructors</p>
-              </div>
+          {/* PAGE HEADER */}
 
-              <div className="analytics-card">
-                <h2>{analytics.totalCourses}</h2>
-                <p>Total Courses</p>
-              </div>
+          <div className="page-header">
 
-              <div className="analytics-card">
-                <h2>{analytics.totalCertificates}</h2>
-                <p>Certificates Earned</p>
-              </div>
+            <div>
+
+              <h1>Platform Analytics</h1>
+
+              <p>
+                Track overall platform performance and user engagement.
+              </p>
+
             </div>
 
-            <div style={{ display: "flex", flexDirection: "column", gap: "30px", marginTop: "30px" }}>
-              <div className="chart-container">
-                <h2>System Resource Distribution</h2>
+          </div>
 
-                <ResponsiveContainer width="100%" height={350}>
-                  <BarChart data={getChartData()} margin={{ top: 20, right: 30, left: 20, bottom: 20 }}>
-                    <XAxis dataKey="name" stroke="#a1a1aa" />
-                    <YAxis stroke="#a1a1aa" />
-                    <Tooltip
-                      contentStyle={{
-                        background: "#181821",
-                        border: "1px solid rgba(255,255,255,0.08)",
-                        color: "#fff",
-                      }}
-                    />
-                    <Bar dataKey="count" fill="#C48A52" radius={[8, 8, 0, 0]} />
-                  </BarChart>
-                </ResponsiveContainer>
+          {/* OVERVIEW */}
+
+          <div className="analytics-grid">
+
+            {stats.map((item, index) => (
+
+              <div
+                className="analytics-card"
+                key={index}
+              >
+
+                <div className={`analytics-icon ${item.color}`}>
+
+                  {item.icon}
+
+                </div>
+
+                <div>
+
+                  <h2>{item.value}</h2>
+
+                  <h4>{item.title}</h4>
+
+                  <p>Updated Today</p>
+
+                </div>
+
               </div>
 
-              <div className="chart-container">
-                <h2>Monthly Enrollment Growth Trend</h2>
+            ))}
 
-                <ResponsiveContainer width="100%" height={350}>
-                  <LineChart data={monthlyData} margin={{ top: 20, right: 30, left: 20, bottom: 20 }}>
-                    <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.05)" />
-                    <XAxis dataKey="month" stroke="#a1a1aa" />
-                    <YAxis stroke="#a1a1aa" />
-                    <Tooltip
-                      contentStyle={{
-                        background: "#181821",
-                        border: "1px solid rgba(255,255,255,0.08)",
-                        color: "#fff",
-                      }}
-                    />
-                    <Line type="monotone" dataKey="enrollments" stroke="#00f5ff" strokeWidth={3} dot={{ fill: "#00f5ff" }} />
-                  </LineChart>
-                </ResponsiveContainer>
+          </div>
+
+          {/* ANALYTICS */}
+
+          <div className="analytics-flex">
+
+            {/* PIE CARD */}
+
+            <div className="pie-card">
+
+              <h2>Course Distribution</h2>
+
+              <div className="pie-chart"></div>
+
+              <div className="pie-legend">
+
+                <div>
+
+                  <span className="dot cyber"></span>
+
+                  Cyber Security (40%)
+
+                </div>
+
+                <div>
+
+                  <span className="dot ethical"></span>
+
+                  Ethical Hacking (25%)
+
+                </div>
+
+                <div>
+
+                  <span className="dot python"></span>
+
+                  Python Programming (20%)
+
+                </div>
+
+                <div>
+
+                  <span className="dot network"></span>
+
+                  Networking (15%)
+
+                </div>
+
               </div>
+
             </div>
-          </>
-        )}
+
+            {/* SERVER STATUS */}
+
+            <div className="server-card">
+
+              <h2>
+
+                <FiServer />
+
+                System Status
+
+              </h2>
+
+              <div className="server-item">
+
+                <span>CPU Usage</span>
+
+                <strong>48%</strong>
+
+              </div>
+
+              <div className="server-item">
+
+                <span>Memory</span>
+
+                <strong>62%</strong>
+
+              </div>
+
+              <div className="server-item">
+
+                <span>Storage</span>
+
+                <strong>78%</strong>
+
+              </div>
+
+              <div className="server-item">
+
+                <span>Uptime</span>
+
+                <strong>99.9%</strong>
+
+              </div>
+
+            </div>
+
+          </div>
+
+                    {/* TOP COURSES */}
+
+          <h2 className="section-title">
+
+            Top Performing Courses
+
+          </h2>
+
+          <div className="analytics-table">
+
+            <table>
+
+              <thead>
+
+                <tr>
+
+                  <th>Course</th>
+
+                  <th>Students</th>
+
+                  <th>Rating</th>
+
+                </tr>
+
+              </thead>
+
+              <tbody>
+
+                {topCourses.map((course, index) => (
+
+                  <tr key={index}>
+
+                    <td>{course.title}</td>
+
+                    <td>{course.students}</td>
+
+                    <td>⭐ {course.rating}</td>
+
+                  </tr>
+
+                ))}
+
+              </tbody>
+
+            </table>
+
+          </div>
+
+          {/* WEEKLY ACTIVITY */}
+
+          <h2 className="section-title">
+
+            Weekly Activity
+
+          </h2>
+
+          <WeeklyActivity />
+
+          {/* RECENT ACTIVITY */}
+
+          <h2 className="section-title">
+
+            Recent Activity
+
+          </h2>
+
+          <div className="recent-card">
+
+            <div className="recent-item">
+
+              <div className="recent-dot"></div>
+
+              <p>
+
+                <b>Rohit Sharma</b> enrolled in
+                <b> Cyber Security</b>
+
+              </p>
+
+              <span>2 mins ago</span>
+
+            </div>
+
+            <div className="recent-item">
+
+              <div className="recent-dot"></div>
+
+              <p>
+
+                <b>Priya Singh</b> completed
+                <b> Python Programming</b>
+
+              </p>
+
+              <span>12 mins ago</span>
+
+            </div>
+
+            <div className="recent-item">
+
+              <div className="recent-dot"></div>
+
+              <p>
+
+                <b>Instructor Aman</b> uploaded a new
+                <b> Networking</b> module
+
+              </p>
+
+              <span>35 mins ago</span>
+
+            </div>
+
+            <div className="recent-item">
+
+              <div className="recent-dot"></div>
+
+              <p>
+
+                <b>Database Backup</b> completed successfully
+
+              </p>
+
+              <span>Today</span>
+
+            </div>
+
+          </div>
+
+          {/* PLATFORM HEALTH */}
+
+          <h2 className="section-title">
+
+            Platform Health
+
+          </h2>
+
+          <div className="health-grid">
+
+            <div className="health-card">
+
+              <h2>99.9%</h2>
+
+              <p>Server Uptime</p>
+
+            </div>
+
+            <div className="health-card">
+
+              <h2>0</h2>
+
+              <p>Critical Errors</p>
+
+            </div>
+
+            <div className="health-card">
+
+              <h2>18</h2>
+
+              <p>Published Courses</p>
+
+            </div>
+
+            <div className="health-card">
+
+              <h2>97%</h2>
+
+              <p>User Satisfaction</p>
+
+            </div>
+
+          </div>
+
+        </div>
+
       </div>
+
     </div>
+
   );
+
 }
 
 export default PlatformAnalytics;

@@ -1,13 +1,13 @@
+import React from "react";
 import "./StatCard.css";
 
-function StatCard({ title, value, icon }) {
+function StatCard({ title, value, icon, className = "" }) {
   return (
-    <div className="stat-card">
+    <div className={`stat-card ${className}`}>
       <div className="stat-icon">{icon}</div>
-
       <div>
-        <h4>{title}</h4>
         <h2>{value}</h2>
+        <p>{title}</p>
       </div>
     </div>
   );

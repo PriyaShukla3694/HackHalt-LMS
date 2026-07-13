@@ -31,6 +31,8 @@ import AdminSettings from "./pages/AdminSettings";
 /* AUTH */
 import ProtectedRoute from "./routes/ProtectedRoute";
 
+
+import AnimatedBackground from "./components/AnimatedBackground";
 function App() {
   return (
     <BrowserRouter>
@@ -46,9 +48,14 @@ function App() {
         />
 
         <Route
-          path="/login"
-          element={<LoginPage />}
-        />
+  path="/login"
+  element={
+    <>
+      <AnimatedBackground />
+      <LoginPage />
+    </>
+  }
+/>
 
         <Route
           path="/register"

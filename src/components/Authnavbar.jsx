@@ -1,39 +1,70 @@
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { FiMenu, FiX } from "react-icons/fi";
+import { useState, useEffect } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
+import { FiMenu, FiX, FiZap } from "react-icons/fi";
 import "./AuthNavbar.css";
 
 const NAV_LINKS = [
-  { label: "Courses",   href: "/#home" },
-  { label: "Pricing",   href: "/#pricing" },
-  { label: "Resources", href: "/#features" },
-  { label: "About",     href: "/#footer" },
+  { label: "Courses",  href: "#courses" },
+  { label: "Features", href: "#features" },
+  { label: "Pricing",  href: "#pricing" },
+  { label: "About",    href: "#about" },
 ];
 
 function AuthNavbar({ active }) {
   const navigate = useNavigate();
+  const location = useLocation();
   const [menuOpen, setMenuOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 8);
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
 
   const goTo = (path) => {
     setMenuOpen(false);
     navigate(path);
   };
 
+  const handleNavLinkClick = (e, id) => {
+    e.preventDefault();
+    setMenuOpen(false);
+
+    if (location.pathname !== "/") {
+      // Navigate home first, then scroll once mounted
+      navigate("/");
+      setTimeout(() => {
+        document.getElementById(id)?.scrollIntoView({ behavior: "smooth", block: "start" });
+      }, 80);
+      return;
+    }
+
+    document.getElementById(id)?.scrollIntoView({ behavior: "smooth", block: "start" });
+  };
+
   return (
-    <header className="auth-navbar-band">
+    <header className={`auth-navbar-band ${scrolled ? "is-scrolled" : ""}`}>
       <nav className="auth-navbar">
         {/* Logo */}
         <button className="auth-navbar-logo" onClick={() => goTo("/")}>
-          INTEXIA
+          <span className="auth-navbar-logo-icon">
+            <FiZap />
+          </span>
+          <span className="auth-navbar-logo-text">
+            Intexia<span className="auth-navbar-logo-dot">.</span>
+          </span>
         </button>
 
-        {/* Centre nav links (desktop) */}
+        {/* Centre nav links (desktop) — button-style pills */}
         <div className={`auth-navbar-links ${menuOpen ? "open" : ""}`}>
           {NAV_LINKS.map((link) => (
             <a
               key={link.label}
               href={link.href}
-              onClick={() => setMenuOpen(false)}
+              className="auth-navbar-pill"
+              onClick={(e) => handleNavLinkClick(e, link.href.replace("#", ""))}
             >
               {link.label}
             </a>

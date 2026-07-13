@@ -1,447 +1,304 @@
-import { useState, useEffect } from "react";
-import "../styles/Settings.css";
+import { useState } from "react";
 import Sidebar from "../components/Sidebar";
 import Topbar from "../components/Topbar";
-import Footer from "../components/Footer";
-import { useAuth } from "../context/AuthContext";
-import { useEnrolledCourses } from "../hooks/useCourses";
-import { authFetch } from "../utils/api";
+import { useToast } from "../context/ToastContext";
+import Button from "../components/Button";
+import "../styles/Settings.css";
 
 function Settings() {
-  const { user, updateUser } = useAuth();
-  const { enrolledCourses } = useEnrolledCourses();
+  const { showToast } = useToast();
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [errors, setErrors] = useState({});
 
-  const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    mobile: "",
-  });
-
-  const [certificatesCount, setCertificatesCount] = useState(0);
-  const [completedModulesCount, setCompletedModulesCount] = useState(0);
-
-  const [passwordData, setPasswordData] = useState({
-    currentPassword: "",
-    newPassword: "",
+  const [profile, setProfile] = useState({
+    name: "Kritika Saxena",
+    email: "kritika@gmail.com",
+    phone: "+91 9876543210",
+    college: "ABC University",
+    course: "Cyber Security",
+    year: "3rd Year",
+    password: "",
     confirmPassword: "",
+    notifications: true,
   });
 
-  const [avatarFile, setAvatarFile] = useState(null);
-  const [avatarPreview, setAvatarPreview] = useState("");
-
-  useEffect(() => {
-    if (user) {
-      setFormData({
-        name: user.name || "",
-        email: user.email || "",
-        mobile: user.mobile || "",
-      });
-    }
-  }, [user]);
-
-  useEffect(() => {
-    if (enrolledCourses.length === 0) return;
-
-    authFetch("/courses/certificates")
-      .then((res) => (res.ok ? res.json() : []))
-      .then((data) => setCertificatesCount(data ? data.length : 0))
-      .catch(console.error);
-
-    Promise.all(
-      enrolledCourses.map((course) =>
-        authFetch(`/courses/${course.id}/progress`)
-          .then((res) => (res.ok ? res.json() : null))
-          .catch(() => null)
-      )
-    ).then((list) => {
-      let total = 0;
-      list.forEach((item) => {
-        if (item) total += item.completedLessons || 0;
-      });
-      setCompletedModulesCount(total);
-    });
-  }, [enrolledCourses]);
-
-  const handleAvatarChange = (e) => {
-    const file = e.target.files[0];
-
-    if (!file) return;
-
-    if (file.size > 2 * 1024 * 1024) {
-      alert("File must be below 2MB");
-      return;
-    }
-
-    setAvatarFile(file);
-    setAvatarPreview(URL.createObjectURL(file));
-  };
-
-  const handleProfileUpdate = async (e) => {
-    e.preventDefault();
-
-    try {
-      const form = new FormData();
-
-      form.append("name", formData.name);
-      form.append("email", formData.email);
-      form.append("mobile", formData.mobile);
-
-      if (avatarFile) {
-        form.append("avatar", avatarFile);
+  const validateField = (name, value, allProfile = profile) => {
+    let error = "";
+    if (name === "name" && !value.trim()) {
+      error = "Full Name is required";
+    } else if (name === "email") {
+      if (!value.trim()) {
+        error = "Email address is required";
+      } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) {
+        error = "Enter a valid email address";
       }
+    } else if (name === "phone" && !value.trim()) {
+      error = "Phone number is required";
+    } else if (name === "college" && !value.trim()) {
+      error = "College is required";
+    } else if (name === "course" && !value.trim()) {
+      error = "Course is required";
+    } else if (name === "year" && !value.trim()) {
+      error = "Academic Year is required";
+    } else if (name === "password" && value) {
+      if (value.length < 8) {
+        error = "Password must be at least 8 characters long";
+      } else if (!/\d/.test(value)) {
+        error = "Password must contain at least one number";
+      }
+    } else if (name === "confirmPassword" && allProfile.password) {
+      if (value !== allProfile.password) {
+        error = "Passwords do not match";
+      }
+    }
+    return error;
+  };
 
-      const res = await authFetch(`/users/${user.id}`, {
-        method: "PATCH",
-        body: form,
+  const handleChange = (e) => {
+    const { name, value, type, checked } = e.target;
+    const val = type === "checkbox" ? checked : value;
+    const updated = { ...profile, [name]: val };
+    setProfile(updated);
+
+    if (type !== "checkbox") {
+      const err = validateField(name, val, updated);
+      setErrors((prev) => {
+        const next = { ...prev, [name]: err };
+        if (name === "password") {
+          next.confirmPassword = validateField("confirmPassword", updated.confirmPassword, updated);
+        }
+        return next;
       });
-
-      const data = await res.json();
-
-      if (!res.ok) throw new Error(data.error);
-
-      updateUser(data);
-
-      alert("Profile Updated Successfully");
-    } catch (err) {
-      alert(err.message);
     }
   };
 
-  const handlePasswordChange = (e) => {
-    e.preventDefault();
-
-    if (
-      !passwordData.currentPassword ||
-      !passwordData.newPassword ||
-      !passwordData.confirmPassword
-    ) {
-      alert("Fill all fields");
-      return;
-    }
-
-    if (passwordData.newPassword.length < 8) {
-      alert("Minimum 8 characters");
-      return;
-    }
-
-    if (
-      passwordData.newPassword !==
-      passwordData.confirmPassword
-    ) {
-      alert("Passwords do not match");
-      return;
-    }
-
-    alert("Password Updated");
-
-    setPasswordData({
-      currentPassword: "",
-      newPassword: "",
-      confirmPassword: "",
+  const handleSave = () => {
+    const newErrors = {};
+    Object.keys(profile).forEach((key) => {
+      if (key !== "notifications" && key !== "confirmPassword") {
+        const err = validateField(key, profile[key]);
+        if (err) newErrors[key] = err;
+      }
     });
-  };
+    if (profile.password) {
+      const confirmErr = validateField("confirmPassword", profile.confirmPassword);
+      if (confirmErr) newErrors.confirmPassword = confirmErr;
+    }
 
-  const getInitials = (name) => {
-    if (!name) return "ST";
+    if (Object.keys(newErrors).length > 0) {
+      setErrors(newErrors);
+      showToast("Please fix the validation errors", "error");
+      return;
+    }
 
-    return name
-      .split(" ")
-      .map((n) => n[0])
-      .join("")
-      .substring(0, 2)
-      .toUpperCase();
+    setLoading(true);
+    setTimeout(() => {
+      setLoading(false);
+      showToast("Settings Updated Successfully!", "success");
+    }, 800);
   };
 
   return (
-    <div className="student-dashboard">
-      <Sidebar />
+    <div className="settings-page">
+      <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
 
-      <div className="main-content">
-        <Topbar />
+      <div className="settings-main">
+        <Topbar
+          title="Settings"
+          subtitle="Manage your account and preferences."
+          onMenuClick={() => setSidebarOpen(true)}
+        />
 
-        <div className="settings-header">
-          <div>
-            <span className="settings-tag">
-              ACCOUNT MANAGEMENT
-            </span>
-
-            <h1 className="page-title">
-              Settings
-            </h1>
-
-            <p className="page-subtitle">
-              Manage your profile, learning account and credentials.
-            </p>
-          </div>
-        </div>
-
-        <div className="settings-container">
-
-          {/* PERSONAL PROFILE */}
-
+        <div className="settings-content">
           <div className="settings-card">
+            <div className="profile-header">
+              <div className="profile-avatar">{profile.name.charAt(0)}</div>
+              <div>
+                <h2>{profile.name}</h2>
+                <span>Cyber Security Student</span>
+              </div>
+            </div>
 
-            <h2>Personal Profile</h2>
-
-            <div className="profile-avatar">
-
-              {avatarPreview ? (
-
-                <img
-                  className="avatar-image"
-                  src={avatarPreview}
-                  alt="Avatar"
+            <h3 className="section-heading">Personal Information</h3>
+            <div className="form-grid">
+              <div className="input-group">
+                <label>Full Name</label>
+                <input
+                  type="text"
+                  name="name"
+                  value={profile.name}
+                  onChange={handleChange}
                 />
+                {errors.name && (
+                  <span className="error-message" style={{ color: "var(--danger)", fontSize: "0.8rem", marginTop: "4px", display: "block" }}>
+                    {errors.name}
+                  </span>
+                )}
+              </div>
 
-              ) : user?.avatar ? (
-
-                <img
-                  className="avatar-image"
-                  src={
-                    user.avatar.startsWith("http")
-                      ? user.avatar
-                      : `${(
-                          import.meta.env.VITE_API_URL ||
-                          "http://localhost:5000/api"
-                        ).replace("/api", "")}${user.avatar}`
-                  }
-                  alt="Avatar"
+              <div className="input-group">
+                <label>Email</label>
+                <input
+                  type="email"
+                  name="email"
+                  value={profile.email}
+                  onChange={handleChange}
                 />
-
-              ) : (
-                getInitials(formData.name)
-              )}
-
-            </div>
-
-            <label className="avatar-upload">
-              Choose Avatar Image
-
-              <input
-                type="file"
-                accept="image/*"
-                onChange={handleAvatarChange}
-                hidden
-              />
-            </label>
-
-            <form
-              className="settings-form"
-              onSubmit={handleProfileUpdate}
-            >
-
-              <label className="input-label">
-                Full Name
-              </label>
-
-              <input
-                type="text"
-                value={formData.name}
-                onChange={(e) =>
-                  setFormData({
-                    ...formData,
-                    name: e.target.value,
-                  })
-                }
-              />
-
-              <label className="input-label">
-                Email Address
-              </label>
-
-              <input
-                type="email"
-                value={formData.email}
-                onChange={(e) =>
-                  setFormData({
-                    ...formData,
-                    email: e.target.value,
-                  })
-                }
-              />
-
-              <label className="input-label">
-                Mobile Number
-              </label>
-
-              <input
-                type="tel"
-                placeholder="+91 9876543210"
-                value={formData.mobile}
-                onChange={(e) =>
-                  setFormData({
-                    ...formData,
-                    mobile: e.target.value,
-                  })
-                }
-              />
-
-              <button
-                type="submit"
-                className="save-btn"
-              >
-                Update Profile
-              </button>
-
-            </form>
-
-          </div>
-                    {/* ACADEMIC INFORMATION */}
-
-          <div className="settings-card">
-
-            <h2>Academic Information</h2>
-
-            <div className="detail-box">
-              <span>Account ID</span>
-              <h4>SEC-USER-{user?.id || "N/A"}</h4>
-            </div>
-
-            <div className="detail-box">
-              <span>Access Role</span>
-              <h4>{user?.role?.toUpperCase() || "STUDENT"}</h4>
-            </div>
-
-            <div className="detail-box">
-              <span>Academic Track</span>
-              <h4>Cyber Security & Hacking</h4>
-            </div>
-
-            <div className="detail-box">
-              <span>Batch Assigned</span>
-              <h4>Elite Cyber Batch 2026</h4>
-            </div>
-
-            <div className="detail-box">
-              <span>Authorized Mentor</span>
-              <h4>Shourya Cyber Academy Support</h4>
-            </div>
-
-          </div>
-
-          {/* SECURITY */}
-
-          <div className="settings-card">
-
-            <h2>Security Center</h2>
-
-            <form
-              className="settings-form"
-              onSubmit={handlePasswordChange}
-            >
-
-              <input
-                type="password"
-                placeholder="Current Password"
-                value={passwordData.currentPassword}
-                onChange={(e) =>
-                  setPasswordData({
-                    ...passwordData,
-                    currentPassword: e.target.value,
-                  })
-                }
-              />
-
-              <input
-                type="password"
-                placeholder="New Password"
-                value={passwordData.newPassword}
-                onChange={(e) =>
-                  setPasswordData({
-                    ...passwordData,
-                    newPassword: e.target.value,
-                  })
-                }
-              />
-
-              <input
-                type="password"
-                placeholder="Confirm Password"
-                value={passwordData.confirmPassword}
-                onChange={(e) =>
-                  setPasswordData({
-                    ...passwordData,
-                    confirmPassword: e.target.value,
-                  })
-                }
-              />
-
-              <button
-                type="submit"
-                className="save-btn"
-              >
-                Change Password
-              </button>
-
-            </form>
-
-            <div className="security-info">
-
-              <div className="detail-box">
-                <span>Account Status</span>
-                <h4>Protected & Active</h4>
+                {errors.email && (
+                  <span className="error-message" style={{ color: "var(--danger)", fontSize: "0.8rem", marginTop: "4px", display: "block" }}>
+                    {errors.email}
+                  </span>
+                )}
               </div>
 
+              <div className="input-group">
+                <label>Phone</label>
+                <input
+                  type="text"
+                  name="phone"
+                  value={profile.phone}
+                  onChange={handleChange}
+                />
+                {errors.phone && (
+                  <span className="error-message" style={{ color: "var(--danger)", fontSize: "0.8rem", marginTop: "4px", display: "block" }}>
+                    {errors.phone}
+                  </span>
+                )}
+              </div>
+
+              <div className="input-group">
+                <label>College</label>
+                <input
+                  type="text"
+                  name="college"
+                  value={profile.college}
+                  onChange={handleChange}
+                />
+                {errors.college && (
+                  <span className="error-message" style={{ color: "var(--danger)", fontSize: "0.8rem", marginTop: "4px", display: "block" }}>
+                    {errors.college}
+                  </span>
+                )}
+              </div>
             </div>
 
-          </div>
-
-          {/* LEARNING OVERVIEW */}
-
-          <div className="settings-card">
-
-            <h2>Learning Overview</h2>
-
-            <div className="stats-grid">
-
-              <div className="stat-box">
-                <h3>
-                  {enrolledCourses.length
-                    .toString()
-                    .padStart(2, "0")}
-                </h3>
-
-                <span>Courses Enrolled</span>
+            <h3 className="section-heading">Academic Details</h3>
+            <div className="form-grid">
+              <div className="input-group">
+                <label>Course</label>
+                <input
+                  type="text"
+                  name="course"
+                  value={profile.course}
+                  onChange={handleChange}
+                />
+                {errors.course && (
+                  <span className="error-message" style={{ color: "var(--danger)", fontSize: "0.8rem", marginTop: "4px", display: "block" }}>
+                    {errors.course}
+                  </span>
+                )}
               </div>
 
-              <div className="stat-box">
-                <h3>
-                  {completedModulesCount
-                    .toString()
-                    .padStart(2, "0")}
-                </h3>
+              <div className="input-group">
+                <label>Academic Year</label>
+                <input
+                  type="text"
+                  name="year"
+                  value={profile.year}
+                  onChange={handleChange}
+                />
+                {errors.year && (
+                  <span className="error-message" style={{ color: "var(--danger)", fontSize: "0.8rem", marginTop: "4px", display: "block" }}>
+                    {errors.year}
+                  </span>
+                )}
+              </div>
+            </div>
 
-                <span>Lessons Finished</span>
+            <h3 className="section-heading">Security</h3>
+            <div className="form-grid">
+              <div className="input-group">
+                <label>New Password</label>
+                <input
+                  type="password"
+                  name="password"
+                  placeholder="Enter new password"
+                  value={profile.password}
+                  onChange={handleChange}
+                />
+                {errors.password && (
+                  <span className="error-message" style={{ color: "var(--danger)", fontSize: "0.8rem", marginTop: "4px", display: "block" }}>
+                    {errors.password}
+                  </span>
+                )}
               </div>
 
-              <div className="stat-box">
-                <h3>
-                  {certificatesCount
-                    .toString()
-                    .padStart(2, "0")}
-                </h3>
+              <div className="input-group">
+                <label>Confirm Password</label>
+                <input
+                  type="password"
+                  name="confirmPassword"
+                  placeholder="Confirm password"
+                  value={profile.confirmPassword}
+                  onChange={handleChange}
+                />
+                {errors.confirmPassword && (
+                  <span className="error-message" style={{ color: "var(--danger)", fontSize: "0.8rem", marginTop: "4px", display: "block" }}>
+                    {errors.confirmPassword}
+                  </span>
+                )}
+              </div>
+            </div>
 
+            <h3 className="section-heading">Preferences</h3>
+            <div className="preference-card">
+              <div>
+                <h4>Email Notifications</h4>
+                <p>Receive updates about courses and announcements.</p>
+              </div>
+
+              <label className="switch">
+                <input
+                  type="checkbox"
+                  name="notifications"
+                  checked={profile.notifications}
+                  onChange={handleChange}
+                />
+                <span className="slider"></span>
+              </label>
+            </div>
+
+            <div className="profile-stats">
+              <div className="stat-box">
+                <h2>3</h2>
+                <span>Courses</span>
+              </div>
+              <div className="stat-box">
+                <h2>18h</h2>
+                <span>Learning</span>
+              </div>
+              <div className="stat-box">
+                <h2>2</h2>
                 <span>Certificates</span>
               </div>
-
               <div className="stat-box">
-                <h3>
-                  {(completedModulesCount * 1.5).toFixed(1)}
-                </h3>
-
-                <span>Hours Studied</span>
+                <h2>68%</h2>
+                <span>Progress</span>
               </div>
-
             </div>
 
+            <Button
+              className="save-btn"
+              loading={loading}
+              disabled={loading || Object.values(errors).some((e) => !!e)}
+              onClick={handleSave}
+            >
+              Save Changes
+            </Button>
           </div>
-
         </div>
-
-        <Footer />
-
       </div>
-
     </div>
   );
 }

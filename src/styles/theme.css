@@ -1,0 +1,32 @@
+:root {
+  /* Brand orange */
+  --orange: #F97316;        /* primary brand color */
+  --orange-dark: #C2570B;   /* hover/active states, darker accents */
+  --orange-light: #FFB347;  /* highlights, soft backgrounds */
+  --orange-tint: #FFF4E8;   /* very light background washes, badges */
+
+  /* Neutrals / ink */
+  --ink: #18171C;           /* primary text / dark backgrounds */
+  --ink-soft: #2F2F2F;      /* secondary dark surfaces */
+  --muted: #6B7280;         /* secondary/gray text */
+  --line: #E5E7EB;          /* borders, dividers */
+  --card: #FFFFFF;          /* card backgrounds */
+  --soft-bg: #F7F8FC;       /* page background, light mode */
+  --cream: #FFF8F2;         /* warm section backgrounds */
+
+  /* Dark shell */
+  --bg-dark: #050816;
+
+  /* Status colors */
+  --success: #22C55E;
+  --warning: #F59E0B;
+  --danger: #EF4444;
+  --info: #3B82F6;
+
+  /* Spacing & radius */
+  --radius-sm: 6px;
+  --radius-md: 12px;
+  --radius-lg: 20px;
+  --shadow-sm: 0 1px 2px rgba(0,0,0,0.06);
+  --shadow-md: 0 4px 12px rgba(0,0,0,0.08);
+}

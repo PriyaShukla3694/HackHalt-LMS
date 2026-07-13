@@ -6,6 +6,8 @@ import { useNavigate, useParams } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { useCourse } from "../hooks/useCourses";
 import { authFetch } from "../utils/api";
+import Skeleton from "../components/Skeleton";
+import { useToast } from "../context/ToastContext";
 
 import cyberSecurity from "../assets/Cyber_Security.jpeg";
 import ethicalHacking from "../assets/Ethical_Hacking.jpeg";
@@ -21,8 +23,9 @@ const getCourseImage = (id) => {
 };
 
 function CourseDetails() {
-  const navigate = useNavigate();
   const { id } = useParams();
+  const navigate = useNavigate();
+  const { showToast } = useToast();
   const { course, loading, error } = useCourse(id);
 
   const [enrolled, setEnrolled] = useState(false);
@@ -57,6 +60,8 @@ function CourseDetails() {
 
       if (res.ok) {
         setEnrolled(true);
+        showToast("Successfully enrolled in this course!", "success");
+        // trigger progress fetch
         const progRes = await authFetch(`/courses/${id}/progress`);
         if (progRes.ok) {
           const progData = await progRes.json();
@@ -79,9 +84,46 @@ function CourseDetails() {
         <Sidebar />
         <div className="course-details-content">
           <Topbar />
-          <div style={{ padding: "40px", textAlign: "center", color: "var(--text-primary)" }}>
-            <h2>Loading course details...</h2>
+          
+          <div className="course-hero">
+            <div className="course-left">
+              <Skeleton variant="text" width="80px" height="24px" style={{ marginBottom: "16px" }} />
+              <Skeleton variant="text" width="60%" height="40px" style={{ marginBottom: "16px" }} />
+              <Skeleton variant="text" width="90%" height="16px" />
+              <Skeleton variant="text" width="85%" height="16px" />
+              <Skeleton variant="text" width="70%" height="16px" style={{ marginBottom: "24px" }} />
+              
+              <div className="course-stats" style={{ display: "flex", gap: "24px" }}>
+                <Skeleton variant="text" width="80px" height="32px" />
+                <Skeleton variant="text" width="80px" height="32px" />
+                <Skeleton variant="text" width="80px" height="32px" />
+              </div>
+              
+              <Skeleton variant="text" width="180px" height="48px" style={{ marginTop: "24px", borderRadius: "var(--radius-sm)" }} />
+            </div>
+            
+            <div className="course-right">
+              <Skeleton variant="card" width="100%" height="260px" />
+            </div>
           </div>
+          
+          <div className="progress-section" style={{ marginTop: "30px" }}>
+            <div className="progress-card">
+              <Skeleton variant="text" width="150px" height="24px" style={{ marginBottom: "16px" }} />
+              <Skeleton variant="text" width="100%" height="16px" />
+            </div>
+          </div>
+
+          <div className="skills-section" style={{ marginTop: "40px" }}>
+            <Skeleton variant="text" width="200px" height="28px" style={{ marginBottom: "20px" }} />
+            <div className="skills-grid" style={{ display: "flex", gap: "12px", flexWrap: "wrap" }}>
+              <Skeleton variant="text" width="120px" height="38px" style={{ borderRadius: "20px" }} />
+              <Skeleton variant="text" width="140px" height="38px" style={{ borderRadius: "20px" }} />
+              <Skeleton variant="text" width="110px" height="38px" style={{ borderRadius: "20px" }} />
+              <Skeleton variant="text" width="130px" height="38px" style={{ borderRadius: "20px" }} />
+            </div>
+          </div>
+
           <Footer />
         </div>
       </div>

@@ -1,0 +1,41 @@
+.skeleton {
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: var(--radius-sm);
+  display: block;
+}
+
+/* Light mode overrides when not nested in dark containers */
+.login-page .skeleton,
+.register-page .skeleton,
+.forgot-password-page .skeleton,
+.welcome-page .skeleton,
+.settings-page .skeleton,
+.instructor-settings-page .skeleton,
+.course-details-page:not(.dark) .skeleton,
+.certificates-page:not(.dark) .skeleton {
+  background: rgba(0, 0, 0, 0.08);
+}
+
+.skeleton-text {
+  height: 16px;
+  margin-bottom: 8px;
+  width: 100%;
+}
+
+.skeleton-avatar {
+  border-radius: 50%;
+  width: 48px;
+  height: 48px;
+}
+
+.skeleton-stat {
+  border-radius: var(--radius-md);
+  height: 100px;
+  width: 100%;
+}
+
+.skeleton-card {
+  border-radius: var(--radius-lg);
+  height: 280px;
+  width: 100%;
+}

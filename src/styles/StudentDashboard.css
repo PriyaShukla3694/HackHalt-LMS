@@ -1,239 +1,204 @@
-/* ===================================
-   STUDENT DASHBOARD
-=================================== */
-
-.student-dashboard{
-    min-height:100vh;
-    background:#FFF8F2;
-    color:#2E2E2E;
-    font-family:'Poppins',sans-serif;
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Poppins,sans-serif;
 }
 
-.main-content{
-    margin-left:280px;
-    padding:35px;
+body{
+    background:#f5f7fb;
+}
+
+.student-shell{
+    display:flex;
+    min-height:100vh;
+    background:#f5f7fb;
+}
+
+.student-main{
+    flex:1;
+    margin-left:250px;
+    display:flex;
+    flex-direction:column;
+    min-height:100vh;
     transition:.3s;
 }
 
-/* ===================================
-   HERO
-=================================== */
+.student-content{
+    padding:30px;
+}
 
-.command-center{
+/* ================= HERO ================= */
+
+.hero-card{
+
     display:flex;
     justify-content:space-between;
     align-items:center;
-    gap:40px;
 
-    background:#FFFFFF;
+    gap:30px;
 
-    border:1px solid #FFE3CF;
+    padding:35px;
 
-    border-radius:28px;
-
-    padding:45px;
-
-    margin-bottom:35px;
-
-    box-shadow:0 15px 40px rgba(249,115,22,.08);
-}
-
-.command-left{
-    flex:1;
-}
-
-.warrior-tag{
-
-    display:inline-block;
-
-    padding:8px 18px;
-
-    background:#FFF4EC;
-
-    color:#F97316;
-
-    border-radius:40px;
-
-    font-size:13px;
-
-    font-weight:600;
-}
-
-.command-left h1{
-
-    margin:18px 0;
-
-    font-size:56px;
-
-    color:#2F2F2F;
-
-    line-height:1.1;
-}
-
-.student-name{
-    color:#F97316;
-}
-
-.command-left p{
-
-    color:#6B7280;
-
-    line-height:1.8;
-
-    max-width:620px;
-}
-
-.command-right img{
-
-    width:340px;
-
-    border-radius:24px;
-
-    box-shadow:0 18px 40px rgba(249,115,22,.12);
-}
-
-/* ===================================
-   XP BOX
-=================================== */
-
-.xp-box{
-
-    display:flex;
-
-    gap:18px;
-
-    margin-top:30px;
-}
-
-.xp-box div{
-
-    flex:1;
-
-    background:#FFFDFB;
-
-    border:1px solid #FFE7D4;
-
-    border-radius:18px;
-
-    padding:22px;
-
-    text-align:center;
-
-    transition:.3s;
-}
-
-.xp-box div:hover{
-
-    transform:translateY(-5px);
-
-    box-shadow:0 12px 28px rgba(249,115,22,.12);
-}
-
-.xp-box h3{
-
-    color:#F97316;
-
-    font-size:32px;
-}
-
-.xp-box span{
-
-    color:#8B8B8B;
-}
-
-/* ===================================
-   BUTTON
-=================================== */
-
-.continue-btn{
-
-    margin-top:30px;
-
-    padding:15px 30px;
-
-    border:none;
-
-    border-radius:14px;
-
-    background:#F97316;
+    border-radius:20px;
 
     color:white;
 
-    cursor:pointer;
+    background:linear-gradient(135deg,#ff8c00,#ffb347);
 
-    font-weight:600;
+    box-shadow:0 12px 30px rgba(255,140,0,.25);
 
-    transition:.3s;
+    margin-bottom:30px;
+
 }
 
-.continue-btn:hover{
+.hero-card h1{
 
-    background:#EA580C;
+    font-size:38px;
 
-    transform:translateY(-3px);
+    margin-bottom:10px;
 
-    box-shadow:0 12px 28px rgba(249,115,22,.25);
 }
 
-/* ===================================
-   STATS
-=================================== */
+.hero-card p{
 
-.stats-row{
+    max-width:520px;
 
-    display:grid;
+    line-height:1.6;
 
-    grid-template-columns:repeat(4,1fr);
+    opacity:.95;
 
-    gap:22px;
-
-    margin-bottom:40px;
 }
 
-.premium-stat{
+.hero-btn{
+
+    margin-top:25px;
+
+    display:inline-flex;
+
+    align-items:center;
+
+    gap:10px;
+
+    padding:13px 22px;
+
+    border:none;
+
+    border-radius:10px;
 
     background:white;
 
-    border-radius:22px;
+    color:#ff8c00;
 
-    padding:30px;
+    font-weight:600;
 
-    border:1px solid #FFE8D6;
+    cursor:pointer;
+
+    transition:.3s;
+
+}
+
+.hero-btn:hover{
+
+    transform:translateY(-2px);
+
+}
+
+.hero-progress{
+
+    width:170px;
+
+    height:170px;
+
+    border-radius:50%;
+
+    background:rgba(255,255,255,.18);
+
+    border:6px solid rgba(255,255,255,.35);
+
+    display:flex;
+
+    flex-direction:column;
+
+    justify-content:center;
+
+    align-items:center;
+
+    flex-shrink:0;
+
+}
+
+.hero-progress h2{
+
+    font-size:42px;
+
+}
+
+.hero-progress span{
+
+    font-size:14px;
+
+}
+
+/* ================= STATS ================= */
+
+.stats-grid{
+
+    display:grid;
+
+    grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
+
+    gap:22px;
+
+    margin-bottom:35px;
+
+}
+
+.stat-card{
+
+    background:white;
+
+    border-radius:18px;
+
+    padding:25px;
 
     text-align:center;
 
     transition:.3s;
 
-    box-shadow:0 8px 20px rgba(0,0,0,.05);
+    box-shadow:0 10px 25px rgba(0,0,0,.05);
+
 }
 
-.premium-stat:hover{
+.stat-card:hover{
 
-    transform:translateY(-8px);
+    transform:translateY(-6px);
 
-    box-shadow:0 15px 35px rgba(249,115,22,.15);
 }
 
-.premium-stat h2{
+.stat-card svg{
 
-    color:#F97316;
+    font-size:32px;
 
-    font-size:42px;
+    color:#ff8c00;
+
+    margin-bottom:14px;
+
 }
 
-.premium-stat p{
+.stat-card h2{
 
-    color:#6B7280;
+    margin-bottom:6px;
+
 }
 
-/* ===================================
-   SECTION
-=================================== */
+.stat-card p{
 
-.dashboard-block{
+    color:#666;
 
-    margin-bottom:45px;
 }
+
+/* ================= HEAD ================= */
 
 .section-head{
 
@@ -243,393 +208,452 @@
 
     align-items:center;
 
-    margin-bottom:25px;
+    margin:35px 0 20px;
+
 }
 
 .section-head h2{
 
-    font-size:30px;
+    color:#222;
 
-    color:#2F2F2F;
 }
 
-.section-head span{
+.section-head button{
 
-    color:#F97316;
+    border:none;
+
+    background:#ff8c00;
+
+    color:white;
+
+    padding:10px 18px;
+
+    border-radius:10px;
 
     cursor:pointer;
 
-    font-weight:600;
 }
 
-/* ===================================
-   COURSE GRID
-=================================== */
+/* ================= COURSES ================= */
 
 .course-grid{
 
     display:grid;
 
-    grid-template-columns:repeat(3,1fr);
+    grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
 
     gap:24px;
+
 }
 
 .course-card{
 
-    background:#FFFFFF;
-
-    border-radius:24px;
+    background:white;
 
     overflow:hidden;
 
-    border:1px solid #FFE8D6;
+    border-radius:18px;
 
-    transition:.35s;
+    transition:.3s;
 
-    cursor:pointer;
+    box-shadow:0 8px 24px rgba(0,0,0,.06);
+
 }
 
 .course-card:hover{
 
-    transform:translateY(-8px);
+    transform:translateY(-6px);
 
-    box-shadow:0 18px 35px rgba(249,115,22,.15);
 }
 
 .course-card img{
 
     width:100%;
 
-    height:220px;
+    height:190px;
 
     object-fit:cover;
 
-    transition:.4s;
-}
-
-.course-card:hover img{
-
-    transform:scale(1.05);
 }
 
 .course-content{
 
-    padding:22px;
+    padding:20px;
+
 }
 
-.course-content h3{
 
-    color:#2F2F2F;
 
-    margin-bottom:8px;
+/* ================= PROGRESS ================= */
 
-    font-size:22px;
-}
-
-.course-content p{
-
-    color:#777;
-}
-
-/* ===================================
-   MINI PROGRESS
-=================================== */
-
-.mini-progress{
+.progress-bar{
 
     height:8px;
 
-    background:#FFE6D3;
+    background:#ececec;
 
     border-radius:30px;
 
     overflow:hidden;
 
-    margin-top:18px;
+    margin:14px 0;
+
 }
 
-.mini-progress div{
+.progress-fill{
 
     height:100%;
 
-    background:#F97316;
-
     border-radius:30px;
+
+    background:linear-gradient(90deg,#ff8c00,#ffb347);
+
 }
 
-/* ===================================
-   BOTTOM GRID
-=================================== */
+.course-content span{
 
-.bottom-grid{
+    font-size:13px;
 
-    display:grid;
+    color:#777;
 
-    grid-template-columns:2fr 1fr;
-
-    gap:25px;
-
-    margin-top:20px;
 }
 
-/* ===================================
-   ACTIVITY & ACHIEVEMENTS
-=================================== */
+.course-content button{
 
-.activity-box,
-.achievement-box{
+    margin-top:18px;
 
-    background:#FFFFFF;
+    width:100%;
 
-    border:1px solid #FFE6D3;
+    border:none;
 
-    border-radius:22px;
-
-    padding:28px;
-
-    box-shadow:0 10px 25px rgba(0,0,0,.06);
-
-    transition:.3s;
-}
-
-.activity-box:hover,
-.achievement-box:hover{
-
-    transform:translateY(-6px);
-
-    box-shadow:0 15px 30px rgba(249,115,22,.12);
-}
-
-.activity-box h2,
-.achievement-box h2{
-
-    color:#2F2F2F;
-
-    margin-bottom:20px;
-
-    font-size:26px;
-}
-
-.timeline{
-
-    display:flex;
-
-    flex-direction:column;
-
-    gap:16px;
-}
-
-.timeline p{
-
-    padding:16px 18px;
-
-    background:#FFF6EF;
-
-    border-left:4px solid #F97316;
-
-    border-radius:12px;
-
-    color:#555;
-
-    line-height:1.7;
-}
-
-/* ===================================
-   BADGES
-=================================== */
-
-.badge{
-
-    background:#FFF4EB;
-
-    color:#F97316;
-
-    border:1px solid #FFD9BE;
-
-    border-radius:14px;
-
-    padding:15px 18px;
-
-    margin-bottom:15px;
-
-    font-weight:600;
-
-    transition:.3s;
-}
-
-.badge:hover{
-
-    background:#F97316;
+    background:#ff8c00;
 
     color:white;
 
-    transform:translateX(6px);
+    padding:12px;
 
-    box-shadow:0 10px 20px rgba(249,115,22,.18);
+    border-radius:10px;
+
+    font-weight:600;
+
+    cursor:pointer;
+
+    transition:.3s;
+
 }
 
-/* ===================================
-   HERO IMAGE
-=================================== */
+.course-content button:hover{
 
-.command-right{
+    background:#f57c00;
+
+}
+
+/* ================= CONTINUE ================= */
+
+.continue-learning{
+
+    margin-top:35px;
+
+    background:white;
+
+    border-radius:18px;
+
+    padding:30px;
 
     display:flex;
 
-    justify-content:center;
+    justify-content:space-between;
 
     align-items:center;
-}
 
-.command-right img{
-
-    transition:.4s;
-}
-
-.command-right img:hover{
-
-    transform:scale(1.04);
-}
-
-/* ===================================
-   SCROLLBAR
-=================================== */
-
-::-webkit-scrollbar{
-
-    width:8px;
-}
-
-::-webkit-scrollbar-track{
-
-    background:#FFF8F2;
-}
-
-::-webkit-scrollbar-thumb{
-
-    background:#F6A66A;
-
-    border-radius:20px;
-}
-
-::-webkit-scrollbar-thumb:hover{
-
-    background:#F97316;
-}
-
-/* ===================================
-   RESPONSIVE
-=================================== */
-
-@media(max-width:1400px){
-
-    .course-grid{
-
-        grid-template-columns:repeat(2,1fr);
-    }
+    box-shadow:0 8px 24px rgba(0,0,0,.06);
 
 }
 
-@media(max-width:1200px){
+.continue-learning h2{
 
-    .stats-row{
-
-        grid-template-columns:repeat(2,1fr);
-    }
-
-    .bottom-grid{
-
-        grid-template-columns:1fr;
-    }
-
-    .command-center{
-
-        flex-direction:column;
-
-        text-align:center;
-    }
+    margin-bottom:10px;
 
 }
+
+.continue-learning p{
+
+    color:#666;
+
+    margin-bottom:18px;
+
+}
+
+.resume-btn{
+
+    border:none;
+
+    background:#ff8c00;
+
+    color:white;
+
+    padding:13px 22px;
+
+    border-radius:10px;
+
+    font-weight:600;
+
+    cursor:pointer;
+
+    transition:.3s;
+
+}
+
+.resume-btn:hover{
+
+    background:#f57c00;
+
+}
+
+/* ================= QUICK ================= */
+
+.quick-grid{
+
+    display:grid;
+
+    grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
+
+    gap:22px;
+
+    margin-bottom:40px;
+
+}
+
+.quick-card{
+
+    background:white;
+
+    border-radius:18px;
+
+    padding:35px 20px;
+
+    text-align:center;
+
+    cursor:pointer;
+
+    transition:.3s;
+
+    box-shadow:0 8px 24px rgba(0,0,0,.06);
+
+    font-size:42px;
+
+}
+
+.quick-card:hover{
+
+    transform:translateY(-6px);
+
+}
+
+.quick-card h3{
+
+    margin-top:12px;
+
+    color:#333;
+
+    font-size:18px;
+
+}
+
+/* ================= TABLET ================= */
+
+@media(max-width:992px){
+
+.student-main{
+
+margin-left:0;
+
+}
+
+.student-content{
+
+padding:22px;
+
+}
+
+.hero-card{
+
+flex-direction:column;
+
+text-align:center;
+
+}
+
+.hero-progress{
+
+width:140px;
+height:140px;
+
+}
+
+}
+
+/* ================= MOBILE ================= */
 
 @media(max-width:768px){
 
-    .main-content{
+.student-content{
 
-        margin-left:0;
-
-        padding:20px;
-    }
-
-    .command-center{
-
-        padding:30px;
-    }
-
-    .command-left h1{
-
-        font-size:38px;
-    }
-
-    .command-right img{
-
-        width:230px;
-    }
-
-    .stats-row,
-    .course-grid{
-
-        grid-template-columns:1fr;
-    }
-
-    .xp-box{
-
-        flex-direction:column;
-    }
+padding:15px;
 
 }
 
-@media(max-width:500px){
+/* Hero */
 
-    .command-left h1{
+.hero-card{
 
-        font-size:30px;
-    }
+padding:22px;
 
-    .continue-btn{
-
-        width:100%;
-    }
+border-radius:16px;
 
 }
 
-/* ===================================
-   ANIMATION
-=================================== */
+.hero-card h1{
 
-.command-center,
-.premium-stat,
-.course-card,
-.activity-box,
-.achievement-box{
+font-size:28px;
 
-    animation:fadeUp .6s ease;
 }
 
-@keyframes fadeUp{
+.hero-card p{
 
-    from{
+font-size:14px;
 
-        opacity:0;
+}
 
-        transform:translateY(25px);
-    }
+.hero-progress{
 
-    to{
+width:120px;
 
-        opacity:1;
+height:120px;
 
-        transform:translateY(0);
-    }
+}
+
+.hero-progress h2{
+
+font-size:30px;
+
+}
+
+/* Stats */
+
+.stats-grid{
+
+grid-template-columns:repeat(2,1fr);
+
+gap:14px;
+
+}
+
+.stat-card{
+
+padding:18px;
+
+}
+
+/* Course */
+
+.course-grid{
+
+grid-template-columns:1fr;
+
+}
+
+/* Continue */
+
+.continue-learning{
+
+flex-direction:column;
+
+align-items:flex-start;
+
+gap:18px;
+
+padding:22px;
+
+}
+
+/* Quick */
+
+.quick-grid{
+
+grid-template-columns:repeat(2,1fr);
+
+gap:15px;
+
+}
+
+.quick-card{
+
+padding:22px 15px;
+
+font-size:30px;
+
+}
+
+.quick-card h3{
+
+font-size:15px;
+
+}
+
+.section-head{
+
+margin:25px 0 15px;
+
+}
+
+}
+
+/* ================= EXTRA SMALL ================= */
+
+@media(max-width:480px){
+
+.stats-grid{
+
+grid-template-columns:1fr;
+
+}
+
+.quick-grid{
+
+grid-template-columns:1fr;
+
+}
+
+.hero-card h1{
+
+font-size:24px;
+
+}
+
+.hero-btn,
+.resume-btn{
+
+width:100%;
+
+justify-content:center;
+
+}
+
+.section-head{
+
+flex-direction:column;
+
+align-items:flex-start;
+
+gap:10px;
+
+}
+
+.section-head button{
+
+width:100%;
+
+}
 
 }

@@ -2,6 +2,8 @@ import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { useState } from "react";
 import { useAuth } from "../context/AuthContext";
+import { useToast } from "../context/ToastContext";
+import Button from "../components/Button";
 import {
   FiEye,
   FiEyeOff,
@@ -10,8 +12,10 @@ import {
   FiChevronDown,
 } from "react-icons/fi";
 import { FcGoogle } from "react-icons/fc";
-import { FaGithub } from "react-icons/fa";
+import { MOCK_MODE, buildMockUser, buildMockTokens } from "../utils/mockMode";
 import "../styles/RegisterPage.css";
+import AuthNavbar from "../components/AuthNavbar";
+
 
 const rawBase = import.meta.env.VITE_API_URL || "http://localhost:5000/api";
 const BASE = rawBase.endsWith("/api") ? rawBase : `${rawBase}/api`;
@@ -19,6 +23,7 @@ const BASE = rawBase.endsWith("/api") ? rawBase : `${rawBase}/api`;
 function RegisterPage() {
   const navigate = useNavigate();
   const { login } = useAuth();
+  const { showToast } = useToast();
 
   const [formData, setFormData] = useState({
     name: "",
@@ -26,59 +31,129 @@ function RegisterPage() {
     mobile: "",
     role: "",
     password: "",
+    confirmPassword: "",
   });
   const [agreeTerms, setAgreeTerms] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
-  const [error, setError] = useState("");
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [errors, setErrors] = useState({});
   const [notice, setNotice] = useState("");
   const [loading, setLoading] = useState(false);
+  const [googleLoading, setGoogleLoading] = useState(false);
+
+  const getPasswordStrength = (pwd) => {
+    if (!pwd) return { label: "", color: "" };
+    const hasNumber = /\d/.test(pwd);
+    const hasSpecialOrUpper = /[A-Z!@#$%^&*(),.?":{}|<>]/.test(pwd);
+    if (pwd.length < 8 || !hasNumber) {
+      return { label: "Weak", color: "var(--danger)" };
+    }
+    if (hasSpecialOrUpper) {
+      return { label: "Strong", color: "var(--success)" };
+    }
+    return { label: "Medium", color: "var(--warning)" };
+  };
+
+  const validateField = (name, value, allData = formData) => {
+    let error = "";
+    if (name === "name") {
+      if (!value.trim()) {
+        error = "Full Name is required";
+      } else if (value.trim().length < 3) {
+        error = "Name must be at least 3 characters";
+      }
+    } else if (name === "email") {
+      if (!value.trim()) {
+        error = "Email address is required";
+      } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) {
+        error = "Enter a valid email address";
+      }
+    } else if (name === "mobile") {
+      if (!value.trim()) {
+        error = "Mobile number is required";
+      } else if (!/^\d{10}$/.test(value)) {
+        error = "Enter a valid 10-digit mobile number";
+      }
+    } else if (name === "role") {
+      if (!value) {
+        error = "Please select a role";
+      }
+    } else if (name === "password") {
+      if (!value) {
+        error = "Password is required";
+      } else if (value.length < 8) {
+        error = "Password must be at least 8 characters long";
+      } else if (!/\d/.test(value)) {
+        error = "Password must contain at least one number";
+      }
+    } else if (name === "confirmPassword") {
+      if (!value) {
+        error = "Please confirm your password";
+      } else if (value !== allData.password) {
+        error = "Passwords do not match";
+      }
+    }
+    return error;
+  };
 
   const handleChange = (e) => {
-    setError("");
-    setFormData((prev) => ({
-      ...prev,
-      [e.target.name]: e.target.value,
-    }));
+    const { name, value } = e.target;
+    const updatedForm = { ...formData, [name]: value };
+    setFormData(updatedForm);
+    const error = validateField(name, value, updatedForm);
+    setErrors((prev) => {
+      const next = { ...prev, [name]: error };
+      if (name === "password") {
+        next.confirmPassword = validateField("confirmPassword", updatedForm.confirmPassword, updatedForm);
+      }
+      return next;
+    });
   };
 
   const handleRegister = async (e) => {
     e.preventDefault();
-    setError("");
     setNotice("");
 
-    const { name, email, mobile, role, password } = formData;
-
-    if (name.trim().length < 3) {
-      setError("Name must be at least 3 characters.");
-      return;
-    }
-
-    if (!/^\S+@\S+\.\S+$/.test(email)) {
-      setError("Enter a valid email address.");
-      return;
-    }
-
-    if (!/^\d{10}$/.test(mobile)) {
-      setError("Enter a valid 10-digit mobile number.");
-      return;
-    }
-
-    if (!role) {
-      setError("Please select a role.");
-      return;
-    }
-
-    if (password.length < 6) {
-      setError("Password must be at least 6 characters.");
-      return;
-    }
+    const newErrors = {};
+    Object.keys(formData).forEach((key) => {
+      const error = validateField(key, formData[key]);
+      if (error) newErrors[key] = error;
+    });
 
     if (!agreeTerms) {
-      setError("Please agree to the Terms of Service and Privacy Policy.");
+      newErrors.agree = "You must agree to the Terms of Service and Privacy Policy";
+    }
+
+    if (Object.keys(newErrors).length > 0) {
+      setErrors(newErrors);
+      showToast("Please check the validation errors", "error");
       return;
     }
 
     setLoading(true);
+    const { name, email, mobile, role, password } = formData;
+
+    // ---- MOCK MODE: skip the real backend entirely ----
+    if (MOCK_MODE) {
+      setTimeout(() => {
+        const mockUser = buildMockUser({ name, email, mobile, role });
+        const { token, refreshToken } = buildMockTokens();
+        login(token, refreshToken, mockUser);
+        showToast("Account created successfully (Demo)!", "success");
+
+        switch (role) {
+          case "admin":
+            navigate("/admin-dashboard");
+            break;
+          case "instructor":
+            navigate("/instructor-dashboard");
+            break;
+          default:
+            navigate("/student-dashboard");
+        }
+      }, 500);
+      return;
+    }
 
     try {
       const res = await fetch(`${BASE}/auth/register`, {
@@ -99,10 +174,8 @@ function RegisterPage() {
         throw new Error(data.error || data.message || "Registration failed");
       }
 
-      // Log the new user in immediately so the dashboard redirect below
-      // actually has a valid session.
       login(data.token, data.refreshToken, data.user);
-
+      showToast("Account created successfully!", "success");
       const userRole = data.user.role.toLowerCase();
 
       switch (userRole) {
@@ -119,33 +192,59 @@ function RegisterPage() {
           navigate("/");
       }
     } catch (err) {
-      setError(err.message);
+      showToast(err.message, "error");
       setLoading(false);
     }
   };
 
-  const handleOAuth = (provider) => {
-    setError("");
-    setNotice(`${provider} sign-up isn't connected yet — coming soon.`);
+  const handleGoogleSignup = () => {
+    setNotice("");
+
+    if (!formData.role) {
+      showToast("Please select a role before continuing with Google.", "error");
+      return;
+    }
+
+    if (!agreeTerms) {
+      showToast("Please agree to the Terms of Service and Privacy Policy.", "error");
+      return;
+    }
+
+    if (!MOCK_MODE) {
+      setNotice("Google sign-up isn't connected to a real backend yet.");
+      return;
+    }
+
+    setGoogleLoading(true);
+    setTimeout(() => {
+      const mockUser = buildMockUser({
+        name: "Google User",
+        email: "google.user@gmail.com",
+        role: formData.role,
+      });
+      const { token, refreshToken } = buildMockTokens();
+      login(token, refreshToken, mockUser);
+      showToast("Signed up with Google (Demo)!", "success");
+
+      switch (formData.role) {
+        case "admin":
+          navigate("/admin-dashboard");
+          break;
+        case "instructor":
+          navigate("/instructor-dashboard");
+          break;
+        default:
+          navigate("/student-dashboard");
+      }
+    }, 600);
   };
 
   return (
     <div className="register-page">
-      {/* NAVBAR */}
-      <nav className="reg-navbar">
-        <span className="reg-logo" onClick={() => navigate("/")}>
-          INTEXIA
-        </span>
-        <div className="reg-nav-links">
-          <a href="/#pricing" onClick={(e) => { e.preventDefault(); navigate("/#pricing"); }}>
-            Pricing
-          </a>
-          <a href="/#features" onClick={(e) => { e.preventDefault(); navigate("/#features"); }}>
-            Resources
-          </a>
-          <span className="reg-nav-active">Get Started</span>
-        </div>
-      </nav>
+
+      
+      <AuthNavbar />
+     
 
       {/* HERO */}
       <section className="reg-hero">
@@ -191,6 +290,12 @@ function RegisterPage() {
               Start your learning journey today.
             </p>
 
+            {MOCK_MODE && (
+              <p className="demo-mode-badge">
+                Demo Mode — no backend needed, accounts aren't saved
+              </p>
+            )}
+
             <form onSubmit={handleRegister}>
               <label htmlFor="name">Full Name</label>
               <input
@@ -201,6 +306,11 @@ function RegisterPage() {
                 onChange={handleChange}
                 required
               />
+              {errors.name && (
+                <span className="error-message" style={{ color: "var(--danger)", fontSize: "0.8rem", marginTop: "4px", display: "block" }}>
+                  {errors.name}
+                </span>
+              )}
 
               <label htmlFor="email">Email Address</label>
               <input
@@ -212,6 +322,11 @@ function RegisterPage() {
                 onChange={handleChange}
                 required
               />
+              {errors.email && (
+                <span className="error-message" style={{ color: "var(--danger)", fontSize: "0.8rem", marginTop: "4px", display: "block" }}>
+                  {errors.email}
+                </span>
+              )}
 
               <label htmlFor="mobile">Mobile Number</label>
               <input
@@ -224,6 +339,11 @@ function RegisterPage() {
                 maxLength={10}
                 required
               />
+              {errors.mobile && (
+                <span className="error-message" style={{ color: "var(--danger)", fontSize: "0.8rem", marginTop: "4px", display: "block" }}>
+                  {errors.mobile}
+                </span>
+              )}
 
               <label htmlFor="password">Password</label>
               <div className="password-shell">
@@ -231,7 +351,7 @@ function RegisterPage() {
                   id="password"
                   name="password"
                   type={showPassword ? "text" : "password"}
-                  placeholder="At least 6 characters"
+                  placeholder="At least 8 characters"
                   value={formData.password}
                   onChange={handleChange}
                   required
@@ -245,6 +365,52 @@ function RegisterPage() {
                   {showPassword ? <FiEyeOff /> : <FiEye />}
                 </button>
               </div>
+              {formData.password && (
+                <div style={{ marginTop: "6px" }}>
+                  <div style={{ fontSize: "0.85rem", fontWeight: 600, color: getPasswordStrength(formData.password).color }}>
+                    Password Strength: {getPasswordStrength(formData.password).label}
+                  </div>
+                  <div style={{ height: "4px", background: "#e5e7eb", borderRadius: "2px", marginTop: "4px", overflow: "hidden" }}>
+                    <div style={{
+                      height: "100%",
+                      width: getPasswordStrength(formData.password).label === "Weak" ? "33%" : getPasswordStrength(formData.password).label === "Medium" ? "66%" : "100%",
+                      background: getPasswordStrength(formData.password).color,
+                      transition: "all 0.3s ease"
+                    }} />
+                  </div>
+                </div>
+              )}
+              {errors.password && (
+                <span className="error-message" style={{ color: "var(--danger)", fontSize: "0.8rem", marginTop: "4px", display: "block" }}>
+                  {errors.password}
+                </span>
+              )}
+
+              <label htmlFor="confirmPassword">Confirm Password</label>
+              <div className="password-shell">
+                <input
+                  id="confirmPassword"
+                  name="confirmPassword"
+                  type={showConfirmPassword ? "text" : "password"}
+                  placeholder="Re-enter your password"
+                  value={formData.confirmPassword}
+                  onChange={handleChange}
+                  required
+                />
+                <button
+                  type="button"
+                  className="eye-toggle"
+                  onClick={() => setShowConfirmPassword((v) => !v)}
+                  aria-label={showConfirmPassword ? "Hide password" : "Show password"}
+                >
+                  {showConfirmPassword ? <FiEyeOff /> : <FiEye />}
+                </button>
+              </div>
+              {errors.confirmPassword && (
+                <span className="error-message" style={{ color: "var(--danger)", fontSize: "0.8rem", marginTop: "4px", display: "block" }}>
+                  {errors.confirmPassword}
+                </span>
+              )}
 
               <label htmlFor="role">Register As</label>
               <div className="select-shell">
@@ -262,12 +428,20 @@ function RegisterPage() {
                 </select>
                 <FiChevronDown className="select-chevron" />
               </div>
+              {errors.role && (
+                <span className="error-message" style={{ color: "var(--danger)", fontSize: "0.8rem", marginTop: "4px", display: "block" }}>
+                  {errors.role}
+                </span>
+              )}
 
               <label className="terms-row">
                 <input
                   type="checkbox"
                   checked={agreeTerms}
-                  onChange={(e) => setAgreeTerms(e.target.checked)}
+                  onChange={(e) => {
+                    setAgreeTerms(e.target.checked);
+                    setErrors((prev) => ({ ...prev, agree: "" }));
+                  }}
                 />
                 <span>
                   I agree to the{" "}
@@ -281,16 +455,25 @@ function RegisterPage() {
                   .
                 </span>
               </label>
+              {errors.agree && (
+                <span className="error-message" style={{ color: "var(--danger)", fontSize: "0.8rem", marginTop: "4px", display: "block" }}>
+                  {errors.agree}
+                </span>
+              )}
 
-              {error && <p className="form-banner error">{error}</p>}
-              {notice && !error && (
+              {notice && (
                 <p className="form-banner notice">{notice}</p>
               )}
 
-              <button type="submit" className="submit-btn" disabled={loading}>
-                {loading ? "Creating Account..." : "Create Account"}
-                {!loading && <FiArrowRight />}
-              </button>
+              <Button
+                type="submit"
+                className="submit-btn"
+                loading={loading}
+                disabled={loading || Object.values(errors).some((e) => !!e)}
+                style={{ width: "100%", marginTop: "20px" }}
+              >
+                Create Account
+              </Button>
             </form>
 
             <div className="divider">
@@ -298,11 +481,14 @@ function RegisterPage() {
             </div>
 
             <div className="oauth-row">
-              <button type="button" onClick={() => handleOAuth("Google")}>
-                <FcGoogle /> Google
-              </button>
-              <button type="button" onClick={() => handleOAuth("GitHub")}>
-                <FaGithub /> GitHub
+              <button
+                type="button"
+                className="google-btn"
+                onClick={handleGoogleSignup}
+                disabled={googleLoading}
+              >
+                <FcGoogle />
+                {googleLoading ? "Signing up..." : "Continue with Google"}
               </button>
             </div>
 

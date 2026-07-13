@@ -1,191 +1,361 @@
-import { useState, useEffect } from "react";
-import "../styles/InstructorSettings.css";
+import { useState } from "react";
+import {
+  FiUser,
+  FiMail,
+  FiPhone,
+  FiBook,
+  FiLock,
+  FiSave,
+  FiEye,
+  FiEyeOff,
+} from "react-icons/fi";
 import InstructorSidebar from "../components/InstructorSidebar";
 import Topbar from "../components/Topbar";
-import { useAuth } from "../context/AuthContext";
+import { useToast } from "../context/ToastContext";
+import Button from "../components/Button";
+import "../styles/InstructorSettings.css";
 
 function InstructorSettings() {
-  const { user, updateUser } = useAuth();
+  const { showToast } = useToast();
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [errors, setErrors] = useState({});
 
-  const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    mobile: "",
-    designation: "Certified Cyber Security Trainer",
-    experience: "8 Years",
+  const [showPassword, setShowPassword] = useState({
+    current: false,
+    new: false,
+    confirm: false,
   });
 
-  const [passwordData, setPasswordData] = useState({
+  const [settings, setSettings] = useState({
+    fullName: "Priya Verma",
+    email: "priya@example.com",
+    phone: "+91 9123456780",
+    specialization: "Ethical Hacking",
+    bio: "Certified Security Analyst and LMS Mentor.",
     currentPassword: "",
     newPassword: "",
     confirmPassword: "",
+    emailNotification: true,
   });
 
-  useEffect(() => {
-    if (user) {
-      setFormData((prev) => ({
-        ...prev,
-        name: user.name || "",
-        email: user.email || "",
-        mobile: user.mobile || "",
-      }));
+  const validateField = (name, value, allSettings = settings) => {
+    let error = "";
+    if (name === "fullName" && !value.trim()) {
+      error = "Full Name is required";
+    } else if (name === "email") {
+      if (!value.trim()) {
+        error = "Email address is required";
+      } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) {
+        error = "Enter a valid email address";
+      }
+    } else if (name === "phone" && !value.trim()) {
+      error = "Phone number is required";
+    } else if (name === "specialization" && !value.trim()) {
+      error = "Specialization is required";
+    } else if (name === "newPassword" && value) {
+      if (value.length < 8) {
+        error = "Password must be at least 8 characters long";
+      } else if (!/\d/.test(value)) {
+        error = "Password must contain at least one number";
+      }
+    } else if (name === "confirmPassword" && allSettings.newPassword) {
+      if (value !== allSettings.newPassword) {
+        error = "Passwords do not match";
+      }
     }
-  }, [user]);
-
-  const handleSave = (e) => {
-    e.preventDefault();
-    if (!formData.name || !formData.email) {
-      alert("Name and Email are required.");
-      return;
-    }
-
-    updateUser({
-      name: formData.name,
-      email: formData.email,
-      mobile: formData.mobile,
-    });
-
-    alert("Settings updated successfully!");
+    return error;
   };
 
-  const handlePasswordChange = (e) => {
-    e.preventDefault();
-    const { currentPassword, newPassword, confirmPassword } = passwordData;
+  const handleChange = (e) => {
+    const { name, value, type, checked } = e.target;
+    const val = type === "checkbox" ? checked : value;
+    const updated = { ...settings, [name]: val };
+    setSettings(updated);
 
-    if (!currentPassword || !newPassword || !confirmPassword) {
-      alert("Please fill all password fields.");
-      return;
+    if (type !== "checkbox") {
+      const err = validateField(name, val, updated);
+      setErrors((prev) => {
+        const next = { ...prev, [name]: err };
+        if (name === "newPassword") {
+          next.confirmPassword = validateField("confirmPassword", updated.confirmPassword, updated);
+        }
+        return next;
+      });
     }
+  };
 
-    if (newPassword.length < 8) {
-      alert("New password must be at least 8 characters.");
-      return;
-    }
-
-    if (newPassword !== confirmPassword) {
-      alert("Passwords do not match.");
-      return;
-    }
-
-    alert("Password updated successfully!");
-    setPasswordData({
-      currentPassword: "",
-      newPassword: "",
-      confirmPassword: "",
+  const handleSave = () => {
+    const newErrors = {};
+    Object.keys(settings).forEach((key) => {
+      if (
+        key !== "currentPassword" &&
+        key !== "confirmPassword" &&
+        key !== "emailNotification" &&
+        key !== "bio"
+      ) {
+        const err = validateField(key, settings[key]);
+        if (err) newErrors[key] = err;
+      }
     });
+
+    if (settings.newPassword) {
+      const confirmErr = validateField("confirmPassword", settings.confirmPassword);
+      if (confirmErr) newErrors.confirmPassword = confirmErr;
+    }
+
+    if (Object.keys(newErrors).length > 0) {
+      setErrors(newErrors);
+      showToast("Please check for validation errors", "error");
+      return;
+    }
+
+    setLoading(true);
+    setTimeout(() => {
+      setLoading(false);
+      showToast("Instructor settings updated successfully!", "success");
+    }, 800);
   };
 
   return (
-    <div className="settings-page">
-      <InstructorSidebar />
+    <div className="instructor-settings-page">
+      <InstructorSidebar
+        isOpen={sidebarOpen}
+        onClose={() => setSidebarOpen(false)}
+      />
 
-      <div className="settings-content">
-        <Topbar />
+      <div className="instructor-settings-main">
+        <Topbar
+          title="Instructor Settings"
+          onMenuClick={() => setSidebarOpen(true)}
+        />
 
-        <div className="settings-header">
-          <div>
-            <span>ACCOUNT SETTINGS</span>
+        <div className="settings-content">
+          <div className="settings-header">
             <h1>Instructor Settings</h1>
-            <p>Manage your profile, teaching details and security credentials.</p>
+            <p>Update your profile information and account settings.</p>
           </div>
-        </div>
 
-        <div className="settings-card">
-          <h2>Profile Information</h2>
+          <div className="settings-card">
+            <div className="profile-avatar">
+              <FiUser />
+            </div>
 
-          <form onSubmit={handleSave} style={{ display: "flex", flexDirection: "column", gap: "15px" }}>
-            <div className="form-group">
-              <label>Full Name</label>
-              <input
-                type="text"
-                value={formData.name}
-                onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                required
+            <h2>Profile Information</h2>
+
+            <div className="settings-grid">
+              <div className="input-group">
+                <label>
+                  <FiUser />
+                  Full Name
+                </label>
+                <input
+                  type="text"
+                  name="fullName"
+                  placeholder="Enter your full name"
+                  value={settings.fullName}
+                  onChange={handleChange}
+                />
+                {errors.fullName && (
+                  <span className="error-message" style={{ color: "var(--danger)", fontSize: "0.8rem", marginTop: "4px", display: "block" }}>
+                    {errors.fullName}
+                  </span>
+                )}
+              </div>
+
+              <div className="input-group">
+                <label>
+                  <FiMail />
+                  Email Address
+                </label>
+                <input
+                  type="email"
+                  name="email"
+                  placeholder="Enter your email address"
+                  value={settings.email}
+                  onChange={handleChange}
+                />
+                {errors.email && (
+                  <span className="error-message" style={{ color: "var(--danger)", fontSize: "0.8rem", marginTop: "4px", display: "block" }}>
+                    {errors.email}
+                  </span>
+                )}
+              </div>
+
+              <div className="input-group">
+                <label>
+                  <FiPhone />
+                  Phone Number
+                </label>
+                <input
+                  type="tel"
+                  name="phone"
+                  placeholder="Enter your phone number"
+                  value={settings.phone}
+                  onChange={handleChange}
+                />
+                {errors.phone && (
+                  <span className="error-message" style={{ color: "var(--danger)", fontSize: "0.8rem", marginTop: "4px", display: "block" }}>
+                    {errors.phone}
+                  </span>
+                )}
+              </div>
+
+              <div className="input-group">
+                <label>
+                  <FiBook />
+                  Specialization
+                </label>
+                <input
+                  type="text"
+                  name="specialization"
+                  placeholder="e.g. Cyber Security"
+                  value={settings.specialization}
+                  onChange={handleChange}
+                />
+                {errors.specialization && (
+                  <span className="error-message" style={{ color: "var(--danger)", fontSize: "0.8rem", marginTop: "4px", display: "block" }}>
+                    {errors.specialization}
+                  </span>
+                )}
+              </div>
+            </div>
+
+            <div className="textarea-group">
+              <label>About Yourself</label>
+              <textarea
+                rows="5"
+                name="bio"
+                placeholder="Write a short bio..."
+                value={settings.bio}
+                onChange={handleChange}
               />
             </div>
 
-            <div className="form-group">
-              <label>Email Address</label>
-              <input
-                type="email"
-                value={formData.email}
-                onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                required
-              />
+            <div className="settings-options">
+              <h3>Notification Settings</h3>
+              <div className="toggle-item">
+                <label>Email Notifications</label>
+                <input
+                  type="checkbox"
+                  name="emailNotification"
+                  checked={settings.emailNotification}
+                  onChange={handleChange}
+                />
+              </div>
             </div>
 
-            <div className="form-group">
-              <label>Mobile Number</label>
-              <input
-                type="text"
-                value={formData.mobile}
-                onChange={(e) => setFormData({ ...formData, mobile: e.target.value })}
-                placeholder="e.g. +91 9876543210"
-              />
+            <div className="password-section">
+              <h3>Change Password</h3>
+              <div className="settings-grid">
+                <div className="input-group">
+                  <label>
+                    <FiLock />
+                    Current Password
+                  </label>
+                  <div className="password-input">
+                    <input
+                      type={showPassword.current ? "text" : "password"}
+                      name="currentPassword"
+                      placeholder="Enter current password"
+                      value={settings.currentPassword}
+                      onChange={handleChange}
+                    />
+                    <button
+                      type="button"
+                      className="eye-btn"
+                      onClick={() =>
+                        setShowPassword((prev) => ({
+                          ...prev,
+                          current: !prev.current,
+                        }))
+                      }
+                    >
+                      {showPassword.current ? <FiEyeOff /> : <FiEye />}
+                    </button>
+                  </div>
+                </div>
+
+                <div className="input-group">
+                  <label>
+                    <FiLock />
+                    New Password
+                  </label>
+                  <div className="password-input">
+                    <input
+                      type={showPassword.new ? "text" : "password"}
+                      name="newPassword"
+                      placeholder="Enter new password"
+                      value={settings.newPassword}
+                      onChange={handleChange}
+                    />
+                    <button
+                      type="button"
+                      className="eye-btn"
+                      onClick={() =>
+                        setShowPassword((prev) => ({
+                          ...prev,
+                          new: !prev.new,
+                        }))
+                      }
+                    >
+                      {showPassword.new ? <FiEyeOff /> : <FiEye />}
+                    </button>
+                  </div>
+                  {errors.newPassword && (
+                    <span className="error-message" style={{ color: "var(--danger)", fontSize: "0.8rem", marginTop: "4px", display: "block" }}>
+                      {errors.newPassword}
+                    </span>
+                  )}
+                </div>
+
+                <div className="input-group">
+                  <label>
+                    <FiLock />
+                    Confirm Password
+                  </label>
+                  <div className="password-input">
+                    <input
+                      type={showPassword.confirm ? "text" : "password"}
+                      name="confirmPassword"
+                      placeholder="Confirm new password"
+                      value={settings.confirmPassword}
+                      onChange={handleChange}
+                    />
+                    <button
+                      type="button"
+                      className="eye-btn"
+                      onClick={() =>
+                        setShowPassword((prev) => ({
+                          ...prev,
+                          confirm: !prev.confirm,
+                        }))
+                      }
+                    >
+                      {showPassword.confirm ? <FiEyeOff /> : <FiEye />}
+                    </button>
+                  </div>
+                  {errors.confirmPassword && (
+                    <span className="error-message" style={{ color: "var(--danger)", fontSize: "0.8rem", marginTop: "4px", display: "block" }}>
+                      {errors.confirmPassword}
+                    </span>
+                  )}
+                </div>
+              </div>
             </div>
 
-            <div className="form-group">
-              <label>Designation</label>
-              <input
-                type="text"
-                value={formData.designation}
-                onChange={(e) => setFormData({ ...formData, designation: e.target.value })}
-              />
+            <div className="settings-buttons">
+              <Button
+                className="save-btn"
+                loading={loading}
+                disabled={loading || Object.values(errors).some((e) => !!e)}
+                onClick={handleSave}
+              >
+                <FiSave />
+                Save Changes
+              </Button>
             </div>
-
-            <div className="form-group">
-              <label>Experience</label>
-              <input
-                type="text"
-                value={formData.experience}
-                onChange={(e) => setFormData({ ...formData, experience: e.target.value })}
-              />
-            </div>
-
-            <button type="submit" className="save-btn" style={{ width: "fit-content", padding: "12px 30px" }}>
-              Save Changes
-            </button>
-          </form>
-
-          <hr style={{ margin: "30px 0", borderColor: "rgba(255,255,255,0.08)" }} />
-
-          <h2>Change Password</h2>
-
-          <form onSubmit={handlePasswordChange} style={{ display: "flex", flexDirection: "column", gap: "15px" }}>
-            <div className="form-group">
-              <label>Current Password</label>
-              <input
-                type="password"
-                placeholder="Current Password"
-                value={passwordData.currentPassword}
-                onChange={(e) => setPasswordData({ ...passwordData, currentPassword: e.target.value })}
-              />
-            </div>
-
-            <div className="form-group">
-              <label>New Password (min 8 chars)</label>
-              <input
-                type="password"
-                placeholder="New Password"
-                value={passwordData.newPassword}
-                onChange={(e) => setPasswordData({ ...passwordData, newPassword: e.target.value })}
-              />
-            </div>
-
-            <div className="form-group">
-              <label>Confirm Password</label>
-              <input
-                type="password"
-                placeholder="Confirm Password"
-                value={passwordData.confirmPassword}
-                onChange={(e) => setPasswordData({ ...passwordData, confirmPassword: e.target.value })}
-              />
-            </div>
-
-            <button type="submit" className="save-btn" style={{ width: "fit-content", padding: "12px 30px" }}>
-              Update Password
-            </button>
-          </form>
+          </div>
         </div>
       </div>
     </div>

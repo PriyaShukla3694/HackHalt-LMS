@@ -1,135 +1,327 @@
-import { useState, useEffect } from "react";
-import "../styles/AdminPages.css";
+import { useState } from "react";
+import { useToast } from "../context/ToastContext";
+import {
+  FiSearch,
+  FiCheck,
+  FiX,
+  FiEye,
+  FiBookOpen,
+} from "react-icons/fi";
+import EmptyState from "../components/EmptyState";
+
 import AdminSidebar from "../components/AdminSidebar";
 import Topbar from "../components/Topbar";
-import { authFetch } from "../utils/api";
+
+import "../styles/AdminPages.css";
 
 function CourseApproval() {
-  const [courses, setCourses] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState("");
+  const { showToast } = useToast();
+  const [sidebarOpen, setSidebarOpen] = useState(false);
 
-  const fetchPendingCourses = () => {
-    setLoading(true);
-    authFetch("/admin/courses/pending")
-      .then((res) => {
-        if (!res.ok) throw new Error("Failed to load pending courses");
-        return res.json();
+  const [search, setSearch] = useState("");
+
+  const [selectedCourse, setSelectedCourse] = useState(null);
+
+  const [showDetails, setShowDetails] = useState(false);
+
+  const [courses, setCourses] = useState([
+    {
+      id: 1,
+      title: "Cyber Security",
+      instructor: "John Anderson",
+      submitted: "12 Jun 2026",
+      description:
+        "Complete cyber security course for beginners.",
+      status: "Pending",
+    },
+    {
+      id: 2,
+      title: "Ethical Hacking",
+      instructor: "David Smith",
+      submitted: "15 Jun 2026",
+      description:
+        "Learn penetration testing and ethical hacking.",
+      status: "Pending",
+    },
+    {
+      id: 3,
+      title: "Python Programming",
+      instructor: "Emma Wilson",
+      submitted: "20 Jun 2026",
+      description:
+        "Python from beginner to advanced.",
+      status: "Pending",
+    },
+  ]);
+
+  const filteredCourses = courses.filter((course) =>
+    course.title
+      .toLowerCase()
+      .includes(search.toLowerCase())
+  );
+
+  const updateStatus = (id, status) => {
+    setCourses(
+      courses.map((course) => {
+        if (course.id === id) {
+          const type = status === "Approved" ? "success" : "error";
+          showToast(`Course "${course.title}" has been ${status.toLowerCase()}!`, type);
+          return { ...course, status };
+        }
+        return course;
       })
-      .then((data) => {
-        setCourses(data);
-      })
-      .catch((err) => {
-        console.error(err);
-        setError("Error fetching pending course applications.");
-      })
-      .finally(() => {
-        setLoading(false);
-      });
+    );
   };
 
-  useEffect(() => {
-    fetchPendingCourses();
-  }, []);
+    return (
 
-  const handleApprove = async (id) => {
-    try {
-      const res = await authFetch(`/admin/courses/${id}/approve`, {
-        method: "PATCH",
-        body: JSON.stringify({ approved: true }),
-      });
-
-      if (res.ok) {
-        alert("Course approved successfully!");
-        fetchPendingCourses();
-      } else {
-        alert("Failed to approve course.");
-      }
-    } catch (err) {
-      console.error(err);
-      alert("Error approving course.");
-    }
-  };
-
-  const handleReject = async (id) => {
-    const confirmReject = window.confirm("Are you sure you want to reject and delete this course submission?");
-    if (!confirmReject) return;
-
-    try {
-      // Rejection deletes the pending course for clean database records
-      const res = await authFetch(`/instructor/courses/${id}`, {
-        method: "DELETE",
-      });
-
-      if (res.ok) {
-        alert("Course proposal rejected and deleted.");
-        fetchPendingCourses();
-      } else {
-        alert("Failed to reject course proposal.");
-      }
-    } catch (err) {
-      console.error(err);
-      alert("Error rejecting course proposal.");
-    }
-  };
-
-  return (
     <div className="admin-page">
-      <AdminSidebar />
+
+      <AdminSidebar
+        isOpen={sidebarOpen}
+        onClose={() => setSidebarOpen(false)}
+      />
 
       <div className="admin-main">
-        <Topbar />
 
-        <h1 className="page-title">Course Approval</h1>
+        <Topbar
+          title="Course Approval"
+          subtitle="Approve or reject submitted courses"
+          onMenuClick={() => setSidebarOpen(true)}
+        />
 
-        {loading ? (
-          <div style={{ color: "var(--text-secondary)", textAlign: "center", padding: "40px" }}>
-            <h3>Loading pending submissions...</h3>
+        <div className="admin-content">
+
+          <div className="page-header">
+
+            <div>
+
+              <h1>Course Approval</h1>
+
+              <p>
+                Review instructor submitted courses before publishing.
+              </p>
+
+            </div>
+
           </div>
-        ) : error ? (
-          <div style={{ color: "#f87171", textAlign: "center", padding: "40px" }}>
-            <h3>{error}</h3>
+
+          {/* SEARCH */}
+
+          <div className="search-box">
+
+            <FiSearch />
+
+            <input
+              type="text"
+              placeholder="Search course..."
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+            />
+
           </div>
-        ) : (
-          <div className="approval-grid">
-            {courses.length === 0 ? (
-              <div style={{ color: "var(--text-secondary)", gridColumn: "1/-1", textAlign: "center", padding: "40px" }}>
-                <h3>No Pending Courses Awaiting Approval</h3>
-              </div>
-            ) : (
-              courses.map((course) => (
-                <div className="approval-card" key={course.id}>
-                  <h3>{course.title}</h3>
-                  <p style={{ color: "var(--text-secondary)", margin: "8px 0" }}>
-                    {course.tag} • {course.difficulty} • {course.duration}
-                  </p>
-                  <p style={{ fontSize: "14px", lineHeight: "1.5", marginBottom: "12px" }}>
-                    {course.description}
-                  </p>
-                  <p style={{ fontSize: "13px", color: "var(--text-secondary)" }}>
-                    <strong>Instructor:</strong> {course.instructor}
-                  </p>
-                  <p style={{ fontSize: "13px", color: "var(--text-secondary)", marginBottom: "16px" }}>
-                    <strong>Modules:</strong> {course.modules ? course.modules.length : 0}
-                  </p>
 
-                  <div className="action-row">
-                    <button className="approve" onClick={() => handleApprove(course.id)}>
-                      Approve
-                    </button>
+          {/* TABLE */}
 
-                    <button className="reject" onClick={() => handleReject(course.id)}>
-                      Reject
-                    </button>
-                  </div>
+          {filteredCourses.length === 0 ? (
+            <EmptyState
+              icon={FiBookOpen}
+              title="No courses pending"
+              description="There are currently no instructor course submissions pending review."
+            />
+          ) : (
+            <div className="table-card">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Course</th>
+                    <th>Instructor</th>
+                    <th>Submitted</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {filteredCourses.map((course) => (
+                    <tr key={course.id}>
+                      <td>{course.title}</td>
+                      <td>{course.instructor}</td>
+                      <td>{course.submitted}</td>
+                      <td>
+                        <span
+                          className={
+                            course.status === "Approved"
+                              ? "status-active"
+                              : course.status === "Rejected"
+                              ? "status-inactive"
+                              : "status-pending"
+                          }
+                        >
+                          {course.status}
+                        </span>
+                      </td>
+                      <td>
+                        <div className="table-actions">
+                          <button
+                            className="view-btn"
+                            onClick={() => {
+                              setSelectedCourse(course);
+                              setShowDetails(true);
+                            }}
+                          >
+                            <FiEye />
+                          </button>
+                          <button
+                            className="edit-btn"
+                            onClick={() =>
+                              updateStatus(course.id, "Approved")
+                            }
+                          >
+                            <FiCheck />
+                          </button>
+                          <button
+                            className="delete-btn"
+                            onClick={() =>
+                              updateStatus(course.id, "Rejected")
+                            }
+                          >
+                            <FiX />
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          )}
+
+                    {/* COURSE DETAILS POPUP */}
+
+          {showDetails && selectedCourse && (
+
+            <div
+              className="popup-overlay"
+              onClick={() => setShowDetails(false)}
+            >
+
+              <div
+                className="details-card"
+                onClick={(e) => e.stopPropagation()}
+              >
+
+                <h2>Course Details</h2>
+
+                <div className="detail-row">
+
+                  <strong>Course</strong>
+
+                  <span>{selectedCourse.title}</span>
+
                 </div>
-              ))
-            )}
-          </div>
-        )}
+
+                <div className="detail-row">
+
+                  <strong>Instructor</strong>
+
+                  <span>{selectedCourse.instructor}</span>
+
+                </div>
+
+                <div className="detail-row">
+
+                  <strong>Submitted On</strong>
+
+                  <span>{selectedCourse.submitted}</span>
+
+                </div>
+
+                <div className="detail-row">
+
+                  <strong>Status</strong>
+
+                  <span
+                    className={
+                      selectedCourse.status === "Approved"
+                        ? "status-active"
+                        : selectedCourse.status === "Rejected"
+                        ? "status-inactive"
+                        : "status-pending"
+                    }
+                  >
+
+                    {selectedCourse.status}
+
+                  </span>
+
+                </div>
+
+                <div className="detail-row">
+
+                  <strong>Description</strong>
+
+                  <span>{selectedCourse.description}</span>
+
+                </div>
+
+                <div className="popup-buttons">
+
+                  <button
+                    className="save-btn"
+                    onClick={() => {
+
+                      updateStatus(
+                        selectedCourse.id,
+                        "Approved"
+                      );
+
+                      setShowDetails(false);
+
+                    }}
+                  >
+
+                    <FiCheck />
+
+                    Approve
+
+                  </button>
+
+                  <button
+                    className="cancel-btn"
+                    onClick={() => {
+
+                      updateStatus(
+                        selectedCourse.id,
+                        "Rejected"
+                      );
+
+                      setShowDetails(false);
+
+                    }}
+                  >
+
+                    <FiX />
+
+                    Reject
+
+                  </button>
+
+                </div>
+
+              </div>
+
+            </div>
+
+          )}
+
+        </div>
+
       </div>
+
     </div>
+
   );
+
 }
 
 export default CourseApproval;

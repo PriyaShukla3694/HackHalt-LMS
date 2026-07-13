@@ -1,436 +1,275 @@
-.sidebar {
-  width: 280px;
-  height: 100vh;
-  position: fixed;
-  left: 0;
-  top: 0;
+/* ==========================================
+   STUDENT SIDEBAR
+========================================== */
 
-  background: #FFF8F0;
-  border-right: 1px solid #F3E2D3;
+.sidebar{
+    width:250px;
+    min-width:250px;
+    max-width:250px;
 
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
+    height:100vh;
 
-  padding: 22px;
+    position:fixed;
+    top:0;
+    left:0;
 
-  transition: all .35s ease;
+    display:flex;
+    flex-direction:column;
+    justify-content:space-between;
 
-  box-shadow: 8px 0 30px rgba(0,0,0,.06);
+    padding:24px 18px;
 
-  z-index: 999;
+    background:#fff;
+    border-right:1px solid #ececec;
+
+    overflow-y:auto;
+    overflow-x:hidden;
+
+    z-index:1000;
+
+    transition:transform .35s ease;
 }
 
-.sidebar.collapsed {
-  width: 95px;
+/* ==========================================
+   LOGO
+========================================== */
+
+.logo{
+    flex-shrink:0;
+    margin-bottom:40px;
 }
 
-/* ===========================
-   HEADER
-=========================== */
-
-.sidebar-header{
-  margin-bottom:30px;
+.logo h2{
+    font-size:28px;
+    color:#ff8c00;
+    margin:0;
 }
 
-.brand-top{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-}
-
-.sidebar-brand h1{
-
-  font-size:30px;
-
-  font-weight:800;
-
-  color:#F97316;
-
-  letter-spacing:1px;
-
-  margin:0;
-}
-
-.sidebar-brand p{
-
-  margin-top:5px;
-
-  color:#9A7B6B;
-
-  font-size:13px;
-
-}
-
-/* ===========================
-   TOGGLE
-=========================== */
-
-.toggle-btn{
-
-  width:42px;
-
-  height:42px;
-
-  border:none;
-
-  background:#FFF1E7;
-
-  color:#F97316;
-
-  border-radius:12px;
-
-  cursor:pointer;
-
-  transition:.3s;
-}
-
-.toggle-btn:hover{
-
-  background:#F97316;
-
-  color:white;
-
-}
-
-/* ===========================
-   USER CARD
-=========================== */
-
-.user-card{
-
-  margin-top:28px;
-
-  background:white;
-
-  border:1px solid #F3E2D3;
-
-  border-radius:18px;
-
-  padding:18px;
-
-  display:flex;
-
-  align-items:center;
-
-  gap:15px;
-
-  box-shadow:0 10px 25px rgba(0,0,0,.05);
-
-}
-
-.user-avatar{
-
-  width:55px;
-
-  height:55px;
-
-  border-radius:50%;
-
-  background:#FFF1E7;
-
-  display:flex;
-
-  justify-content:center;
-
-  align-items:center;
-
-  font-size:34px;
-
-  color:#F97316;
-
-}
-
-.user-info h3{
-
-  margin:0;
-
-  color:#3B2F2F;
-
-  font-size:17px;
-
-}
-
-.user-info span{
-
-  font-size:13px;
-
-  color:#8B6D5C;
-
-}
-
-/* ===========================
-   MENU TITLE
-=========================== */
-
-.menu-title{
-
-  margin:28px 0 14px;
-
-  font-size:12px;
-
-  text-transform:uppercase;
-
-  letter-spacing:1px;
-
-  color:#B08968;
-
-  font-weight:600;
-
-}
-
-/* ===========================
+.logo p{
+    margin-top:5px;
+    font-size:13px;
+    color:#777;
+} 
+/* ==========================================
    NAVIGATION
-=========================== */
+========================================== */
 
-.sidebar-nav{
+nav{
+    flex:1;
+    display:flex;
+    flex-direction:column;
+    gap:10px;
+}
 
-  display:flex;
+.menu{
 
-  flex-direction:column;
+    display:flex;
+    align-items:center;
+    gap:14px;
 
-  gap:10px;
+    padding:15px 18px;
+
+    border-radius:14px;
+
+    text-decoration:none;
+
+    color:#555;
+
+    font-size:15px;
+
+    font-weight:600;
+
+    transition:.3s;
 
 }
 
-.nav-link{
+.menu svg{
 
-  text-decoration:none;
-
-}
-
-.nav-item{
-
-  display:flex;
-
-  align-items:center;
-
-  gap:15px;
-
-  padding:15px 18px;
-
-  border-radius:14px;
-
-  color:#5B4636;
-
-  font-weight:500;
-
-  transition:.3s;
+    font-size:20px;
 
 }
 
-.nav-item svg{
+.menu:hover{
 
-  font-size:18px;
+    background:#fff4e8;
 
-  color:#F97316;
+    color:#ff8c00;
 
-}
-
-.nav-item:hover{
-
-  background:#FFF1E7;
-
-  transform:translateX(4px);
+    transform:translateX(5px);
 
 }
 
-.nav-link.active .nav-item{
+.menu.active{
 
-  background:#F97316;
+    background:linear-gradient(135deg,#ff8c00,#ffad33);
 
-  color:white;
+    color:#fff;
 
-  box-shadow:0 10px 25px rgba(249,115,22,.28);
-
-}
-
-.nav-link.active svg{
-
-  color:white;
+    box-shadow:0 10px 20px rgba(255,140,0,.22);
 
 }
 
-/* ===========================
-   ALERTS
-=========================== */
+/* ==========================================
+   LOGOUT
+========================================== */
 
-.sidebar-alerts{
+.logout-btn{
+    margin-top:25px;
+    flex-shrink:0;
 
-  margin-top:35px;
+    width:100%;
 
-  background:white;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:10px;
 
-  border:1px solid #F3E2D3;
+    padding:14px;
 
-  border-radius:18px;
+    border:none;
+    border-radius:12px;
 
-  padding:18px;
+    background:#ff8c00;
+    color:#fff;
+
+    cursor:pointer;
+
+    font-size:15px;
+    font-weight:600;
+}
+
+.logout-btn:hover{
+
+    background:#ffe8e8;
+
+    color:#d32f2f;
 
 }
 
-.sidebar-alerts h3{
+/* ==========================================
+   OVERLAY
+========================================== */
 
-  display:flex;
+.sidebar-overlay{
 
-  align-items:center;
+    position:fixed;
 
-  gap:10px;
+    inset:0;
 
-  color:#8B4513;
+    background:rgba(0,0,0,.45);
 
-  margin-bottom:18px;
-
-  font-size:16px;
-
-}
-
-.alert-card{
-
-  background:#FFF7F2;
-
-  border-left:4px solid #F97316;
-
-  border-radius:12px;
-
-  padding:12px;
-
-  display:flex;
-
-  flex-direction:column;
-
-  margin-bottom:10px;
-
-  transition:.3s;
+    z-index:1190;
 
 }
 
-.alert-card:last-child{
+/* ==========================================
+   MAIN CONTENT
+========================================== */
 
-  margin-bottom:0;
+.student-main{
 
-}
+    margin-left:250px;
 
-.alert-card:hover{
-
-  background:#FFEBDD;
-
-}
-
-.alert-card strong{
-
-  color:#3B2F2F;
-
-  font-size:14px;
+    min-height:100vh;
 
 }
 
-.alert-card small{
+/* ==========================================
+   TABLET
+========================================== */
 
-  color:#8B6D5C;
+@media(max-width:900px){
 
-  margin-top:4px;
+.sidebar{
+
+    width:260px;
+
+    transform:translateX(-100%);
+
+    box-shadow:10px 0 35px rgba(0,0,0,.18);
 
 }
 
-/* ===========================
-   FOOTER
-=========================== */
+.sidebar.open{
 
-.sidebar-footer{
+    transform:translateX(0);
 
-  border-top:1px solid #F3E2D3;
+}
 
-  padding-top:20px;
+.student-main{
+
+    margin-left:0;
+
+}
+
+}
+
+/* ==========================================
+   MOBILE
+========================================== */
+
+@media(max-width:600px){
+
+.sidebar{
+
+    width:250px;
+
+    padding:22px 16px;
+
+}
+
+.logo{
+
+    margin-bottom:30px;
+
+}
+
+.logo h2{
+
+    font-size:24px;
+
+}
+
+.logo p{
+
+    font-size:13px;
+
+}
+
+.menu{
+
+    padding:14px 16px;
+
+    font-size:14px;
+
+}
+
+.menu svg{
+
+    font-size:18px;
 
 }
 
 .logout-btn{
 
-  width:100%;
-
-  display:flex;
-
-  justify-content:center;
-
-  align-items:center;
-
-  gap:10px;
-
-  padding:14px;
-
-  background:#FFF1E7;
-
-  color:#E53935;
-
-  border:none;
-
-  border-radius:14px;
-
-  cursor:pointer;
-
-  font-weight:600;
-
-  transition:.3s;
+    padding:14px;
 
 }
 
-.logout-btn:hover{
+}
 
-  background:#FFE1D2;
+@media(max-width:768px){
 
-  transform:translateY(-2px);
+.sidebar{
+
+    transform:translateX(-100%);
 
 }
 
-/* ===========================
-   COLLAPSED
-=========================== */
+.sidebar.open{
 
-.sidebar.collapsed .sidebar-brand,
-
-.sidebar.collapsed .menu-title,
-
-.sidebar.collapsed .user-card,
-
-.sidebar.collapsed .sidebar-alerts,
-
-.sidebar.collapsed .logout-btn span,
-
-.sidebar.collapsed .nav-item span{
-
-  display:none;
+    transform:translateX(0);
 
 }
-
-.sidebar.collapsed .nav-item{
-
-  justify-content:center;
-
-  padding:16px;
-
-}
-
-.sidebar.collapsed .logout-btn{
-
-  justify-content:center;
-
-}
-
-/* ===========================
-   SCROLLBAR
-=========================== */
-
-.sidebar::-webkit-scrollbar{
-
-  width:6px;
-
-}
-
-.sidebar::-webkit-scrollbar-thumb{
-
-  background:#E6C8AF;
-
-  border-radius:20px;
 
 }

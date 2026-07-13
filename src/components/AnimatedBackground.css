@@ -1,0 +1,352 @@
+/* ===========================================
+   MAIN BACKGROUND
+=========================================== */
+
+.animated-bg{
+
+    position:fixed;
+
+    inset:0;
+
+    overflow:hidden;
+
+    pointer-events:none;
+
+    z-index: 0;
+
+    background:#ffffff;
+
+}
+
+/* ===========================================
+   MESH GRADIENT
+=========================================== */
+
+.mesh-gradient{
+
+    position:absolute;
+
+    inset:0;
+
+    background:
+
+        radial-gradient(circle at 15% 25%,
+        rgba(255,140,0,.12),
+        transparent 30%),
+
+        radial-gradient(circle at 80% 20%,
+        rgba(255,185,80,.10),
+        transparent 28%),
+
+        radial-gradient(circle at 65% 75%,
+        rgba(255,120,0,.08),
+        transparent 32%),
+
+        radial-gradient(circle at 35% 80%,
+        rgba(255,170,0,.08),
+        transparent 35%);
+
+    animation:meshMove 18s ease-in-out infinite;
+
+}
+
+/* ===========================================
+   GLOW BLOBS
+=========================================== */
+
+.glow{
+
+    position:absolute;
+
+    border-radius:50%;
+
+    filter:blur(130px);
+
+    opacity:.22;
+
+    animation:blobFloat 20s ease-in-out infinite;
+
+}
+
+.glow-1{
+
+    width:420px;
+
+    height:420px;
+
+    top:-120px;
+
+    left:-120px;
+
+    background:#ff7a00;
+
+}
+
+.glow-2{
+
+    width:360px;
+
+    height:360px;
+
+    right:-80px;
+
+    top:35%;
+
+    background:#ffb347;
+
+    animation-delay:5s;
+
+}
+
+.glow-3{
+
+    width:320px;
+
+    height:320px;
+
+    left:45%;
+
+    bottom:-100px;
+
+    background:#ffd39b;
+
+    animation-delay:10s;
+
+}
+
+/* ===========================================
+   PARTICLE CONTAINER
+=========================================== */
+
+.particles{
+
+    position:absolute;
+
+    inset:0;
+
+}
+
+/* ===========================================
+   FLOATING PARTICLES
+=========================================== */
+
+.particle{
+
+    position:absolute;
+
+    left:var(--x);
+
+    bottom:-60px;
+
+    width:var(--size);
+
+    height:var(--size);
+
+    border-radius:50%;
+
+    background:linear-gradient(
+        135deg,
+        #ffb347,
+        #ff7a00
+    );
+
+    opacity:.22;
+
+    box-shadow:
+        0 0 8px rgba(255,122,0,.35),
+        0 0 18px rgba(255,122,0,.18);
+
+    animation:particleFloat var(--duration) linear infinite;
+
+    animation-delay:var(--delay);
+
+}
+
+/* ===========================================
+   NOISE TEXTURE
+=========================================== */
+
+.noise-layer{
+
+    position:absolute;
+
+    inset:0;
+
+    opacity:.025;
+
+    background-image:
+    radial-gradient(#000 1px, transparent 1px);
+
+    background-size:18px 18px;
+
+    mix-blend-mode:multiply;
+
+}
+
+/* ===========================================
+   PARTICLE ANIMATION
+=========================================== */
+
+@keyframes particleFloat{
+
+    0%{
+
+        transform:
+        translateY(0)
+        translateX(0)
+        scale(.5);
+
+        opacity:0;
+
+    }
+
+    15%{
+
+        opacity:.18;
+
+    }
+
+    50%{
+
+        transform:
+        translateY(-45vh)
+        translateX(25px)
+        scale(1);
+
+    }
+
+    100%{
+
+        transform:
+        translateY(-120vh)
+        translateX(-20px)
+        scale(.7);
+
+        opacity:0;
+
+    }
+
+}
+
+/* ===========================================
+   MESH ANIMATION
+=========================================== */
+
+@keyframes meshMove{
+
+    0%{
+
+        transform:translate(0,0);
+
+    }
+
+    50%{
+
+        transform:
+        translate(-35px,-25px)
+        scale(1.05);
+
+    }
+
+    100%{
+
+        transform:translate(0,0);
+
+    }
+
+}
+
+/* ===========================================
+   BLOB ANIMATION
+=========================================== */
+
+@keyframes blobFloat{
+
+    0%{
+
+        transform:
+        translate(0,0)
+        scale(1);
+
+    }
+
+    25%{
+
+        transform:
+        translate(45px,-30px)
+        scale(1.08);
+
+    }
+
+    50%{
+
+        transform:
+        translate(-20px,40px)
+        scale(.95);
+
+    }
+
+    75%{
+
+        transform:
+        translate(30px,15px)
+        scale(1.05);
+
+    }
+
+    100%{
+
+        transform:
+        translate(0,0)
+        scale(1);
+
+    }
+
+}
+
+/* ===========================================
+   PERFORMANCE
+=========================================== */
+
+.mesh-gradient,
+.glow,
+.particle{
+
+    will-change:transform;
+
+}
+
+/* ===========================================
+   MOBILE
+=========================================== */
+
+@media(max-width:768px){
+
+    .glow-1{
+
+        width:220px;
+        height:220px;
+
+    }
+
+    .glow-2{
+
+        width:180px;
+        height:180px;
+
+    }
+
+    .glow-3{
+
+        width:180px;
+        height:180px;
+
+    }
+
+    .particle{
+
+        opacity:.12;
+
+    }
+
+}

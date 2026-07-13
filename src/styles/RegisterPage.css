@@ -1,13 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Lora:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap');
 
 .register-page {
-  --orange: #f2600c;
-  --orange-dark: #d9530a;
-  --ink: #18171c;
-  --ink-soft: #46434c;
-  --muted: #6f6c75;
-  --line: #e9e5e0;
-  --bg-soft: #faf9f7;
   --footer-bg: #efeeec;
 
   width: 100%;
@@ -16,7 +9,7 @@
   flex-direction: column;
   font-family: "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
   color: var(--ink);
-  background: #fff;
+  background: var(--card);
 }
 
 .register-page h1,
@@ -76,22 +69,23 @@
 .reg-hero {
   flex: 1;
   width: 100%;
-  background: var(--bg-soft);
+  background: var(--soft-bg);
   padding: 90px max(32px, calc((100vw - 1180px) / 2)) 110px;
 }
 
 .reg-hero-inner {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   justify-content: space-between;
-  gap: 60px;
+  gap: 80px;
   max-width: 1180px;
   margin: 0 auto;
 }
 
 .reg-copy {
   flex: 1;
-  max-width: 460px;
+  max-width: 500px;
+  padding-top: 60px;
 }
 
 .reg-copy h1 {
@@ -154,6 +148,17 @@
   color: var(--muted);
   font-size: 0.92rem;
   margin-bottom: 26px;
+}
+
+.demo-mode-badge {
+  background: #fdf3e2;
+  color: #9a6300;
+  font-size: 0.78rem;
+  font-weight: 600;
+  border-radius: 8px;
+  padding: 8px 12px;
+  margin: -10px 0 22px;
+  text-align: center;
 }
 
 .reg-card form {
@@ -335,7 +340,7 @@
 
 .register-page .oauth-row {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: 1fr;
   gap: 14px;
   margin-bottom: 24px;
 }
@@ -348,22 +353,27 @@
   background: #fff;
   border: 1px solid var(--line);
   border-radius: 10px;
-  padding: 12px;
+  padding: 13px;
   font-family: inherit;
   font-weight: 600;
-  font-size: 0.9rem;
+  font-size: 0.94rem;
   color: var(--ink);
   cursor: pointer;
   transition: background 0.2s ease, border-color 0.2s ease;
 }
 
-.register-page .oauth-row button:hover {
+.register-page .oauth-row button:hover:not(:disabled) {
   background: #faf9f8;
   border-color: #d8d5d1;
 }
 
+.register-page .oauth-row button:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
 .register-page .oauth-row svg {
-  font-size: 1.05rem;
+  font-size: 1.1rem;
 }
 
 .register-page .switch-text {
@@ -471,3 +481,9 @@
     flex-direction: column;
   }
 }
+
+.register-page{
+    position: relative;
+    z-index: 1;
+}
+

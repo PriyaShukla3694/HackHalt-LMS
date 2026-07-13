@@ -1,259 +1,493 @@
-/* ==========================
+/* =======================================
    TOPBAR
-========================== */
+======================================= */
 
 .topbar{
+    height:72px;
+    background:#fff;
+    border-bottom:1px solid #ececec;
+
     display:flex;
-    justify-content:space-between;
     align-items:center;
-    margin-bottom:35px;
-    gap:25px;
+    justify-content:space-between;
+
+    padding:0 28px;
+
+    position:sticky;
+    top:0;
+    z-index:100;
+}
+
+/* =======================================
+   LEFT
+======================================= */
+
+.topbar-left{
+    display:flex;
+    align-items:center;
+    gap:16px;
+}
+
+.mobile-menu-btn{
+    display:none;
+
+    width:42px;
+    height:42px;
+
+    border:none;
+    outline:none;
+
+    background:transparent;
+
+    color:#ff8c00;
+
+    cursor:pointer;
+
+    font-size:20px;
+}
+
+.title-section h1{
+    margin:0;
+    font-size:30px;
+    color:#222;
+    font-weight:700;
+}
+
+.title-section p{
+    margin-top:4px;
+    color:#777;
+    font-size:14px;
+}
+
+.mobile-logo{
+    display:none;
+    color:#ff8c00;
+    font-size:22px;
+    font-weight:700;
+}
+
+/* =======================================
+   RIGHT
+======================================= */
+
+.topbar-right{
+    display:flex;
+    align-items:center;
+    gap:18px;
+}
+
+/* =======================================
+   SEARCH
+======================================= */
+
+.search-box{
+    width:260px;
+
+    display:flex;
+    align-items:center;
+    gap:10px;
+
+    padding:11px 16px;
+
+    border-radius:12px;
+
+    background:#f6f6f6;
+
+    transition:.3s;
+}
+
+.search-box svg{
+    color:#999;
+    font-size:15px;
+}
+
+.search-box input{
+    width:100%;
+
+    border:none;
+    outline:none;
+
+    background:transparent;
+
+    font-size:14px;
+}
+
+.search-box:focus-within{
+    background:#fff;
+    box-shadow:0 0 0 3px rgba(255,140,0,.12);
+}
+
+/* =======================================
+   PORTAL BUTTON
+======================================= */
+
+.portal-btn{
+    border:none;
+    outline:none;
+
+    display:flex;
+    align-items:center;
+    gap:8px;
+
+    background:#ff8c00;
+    color:#fff;
+
+    padding:11px 18px;
+
+    border-radius:10px;
+
+    cursor:pointer;
+
+    font-weight:600;
+
+    transition:.3s;
+}
+
+.portal-btn:hover{
+    background:#f57c00;
+}
+
+.portal-btn svg{
+    font-size:15px;
+}
+
+/* =======================================
+   USER
+======================================= */
+
+.user-info{
+    position:relative;
+}
+
+.user-box{
+    display:flex;
+    align-items:center;
+    gap:12px;
+
+    cursor:pointer;
+
+    padding:4px;
+
+    border-radius:10px;
+
+    transition:.25s;
+}
+
+.user-box:hover{
+    background:#fafafa;
+}
+
+.user-box img{
+    width:44px;
+    height:44px;
+
+    border-radius:50%;
+
+    object-fit:cover;
+
+    border:2px solid #ff8c00;
+}
+
+.user-details{
+    display:flex;
+    flex-direction:column;
+}
+
+.user-details h4{
+    margin:0;
+    color:#222;
+    font-size:15px;
+}
+
+.user-details p{
+    margin-top:3px;
+    color:#777;
+    font-size:12px;
+}
+
+/* =======================================
+   PROFILE DROPDOWN
+======================================= */
+
+.profile-dropdown{
+
+    position:absolute;
+
+    top:58px;
+
+    right:0;
+
+    width:180px;
+
+    background:#fff;
+
+    border-radius:12px;
+
+    box-shadow:0 15px 35px rgba(0,0,0,.12);
+
+    border:1px solid #eee;
+
+    overflow:hidden;
+
+    animation:dropdown .25s ease;
+
+    z-index:999;
+
+}
+
+@keyframes dropdown{
+
+from{
+opacity:0;
+transform:translateY(-8px);
+}
+
+to{
+opacity:1;
+transform:translateY(0);
+}
+
+}
+
+.profile-name{
+
+    padding:15px 18px;
+
+    font-weight:600;
+
+    color:#333;
+
+    border-bottom:1px solid #eee;
+
+}
+
+.logout-item{
+
+    width:100%;
+
+    padding:14px 18px;
+
+    border:none;
+
+    background:#fff;
+
+    text-align:left;
+
+    cursor:pointer;
+
+    color:#e53935;
+
+    font-size:14px;
+
+    transition:.25s;
+
+}
+
+.logout-item:hover{
+
+    background:#fff5f5;
+
+}
+
+/* =======================================
+   TABLET
+======================================= */
+
+@media(max-width:1100px){
+
+.topbar{
+
+padding:0 20px;
+
+}
+
+.title-section h1{
+
+font-size:25px;
+
+}
+
+.search-box{
+
+width:220px;
+
+}
+
+.topbar-right{
+
+gap:14px;
+
+}
+
+}
+
+/* =======================================
+   MOBILE
+======================================= */
+
+@media(max-width:900px){
+
+.topbar{
+
+height:64px;
+
+padding:0 14px;
+
 }
 
 .topbar-left{
     flex:1;
-}
-
-/* SEARCH */
-
-.search-box{
-
-    width:460px;
-    height:60px;
-
     display:flex;
     align-items:center;
-    gap:14px;
-
-    padding:0 22px;
-
-    background:#FFFFFF;
-
-    border:1px solid #F1DDCB;
-
-    border-radius:18px;
-
-    box-shadow:0 8px 20px rgba(0,0,0,.06);
-
-    transition:.3s;
+    gap:10px;
+    min-width:0;
 }
 
-.search-box:hover{
-
-    border-color:#F97316;
+.title-section{
+    display:none;
 }
 
-.search-box svg{
+.mobile-logo{
+    display:block;
+    font-size:16px;
+    font-weight:700;
+    color:#ff8c00;
+    white-space:nowrap;
+}
+.mobile-menu-btn{
 
-    color:#F97316;
+display:flex;
 
-    font-size:18px;
+align-items:center;
+
+justify-content:center;
+
+}
+
+.title-section{
+
+display:none;
+
+}
+
+.topbar-right{
+    display:flex;
+    align-items:center;
+    justify-content:flex-end;
+    gap:8px;
+    flex-shrink:0;
+}
+
+/* Search */
+
+.search-box{
+    width:40px;
+    min-width:40px;
+    height:40px;
+    padding:0;
+    justify-content:center;
+    border-radius:50%;
 }
 
 .search-box input{
 
-    width:100%;
+display:none;
 
-    border:none;
-
-    outline:none;
-
-    background:none;
-
-    color:#3B2F2F;
-
-    font-size:15px;
 }
 
-.search-box input::placeholder{
+/* Portal */
 
-    color:#9B8A7A;
+.portal-btn{
+    width:40px;
+    min-width:40px;
+    height:40px;
+    padding:0;
+    justify-content:center;
+    border-radius:50%;
 }
 
-/* RIGHT */
+.portal-text{
+
+display:none;
+
+}
+
+/* User */
+
+.user-details{
+
+display:none;
+
+}
+
+.user-box{
+
+padding:0;
+
+}
+
+.user-box img{
+
+width:40px;
+
+height:40px;
+
+}
+
+/* Dropdown */
+
+.profile-dropdown{
+
+width:170px;
+
+top:52px;
+
+right:-6px;
+
+}
+
+}
+
+/* =======================================
+   SMALL MOBILE
+======================================= */
+
+@media(max-width:480px){
+
+.topbar{
+
+padding:0 10px;
+
+}
 
 .topbar-right{
 
-    display:flex;
-
-    align-items:center;
-
-    gap:18px;
-}
-
-/* WELCOME */
-
-.welcome-btn{
-
-    padding:14px 22px;
-
-    border:none;
-
-    border-radius:14px;
-
-    background:#F97316;
-
-    color:white;
-
-    font-weight:600;
-
-    cursor:pointer;
-
-    transition:.3s;
-}
-
-.welcome-btn:hover{
-
-    background:#EA580C;
-
-    transform:translateY(-2px);
-
-    box-shadow:0 12px 25px rgba(249,115,22,.25);
-}
-
-/* DATE */
-
-.date-box{
-
-    background:#FFF1E7;
-
-    color:#8B5E3C;
-
-    padding:14px 20px;
-
-    border-radius:14px;
-
-    font-weight:600;
-
-    border:1px solid #F3D8C2;
-}
-
-/* USER CARD */
-
-.user-profile{
-
-    display:flex;
-
-    align-items:center;
-
-    gap:15px;
-
-    background:#FFFFFF;
-
-    border:1px solid #F1DDCB;
-
-    padding:12px 18px;
-
-    border-radius:18px;
-
-    box-shadow:0 8px 20px rgba(0,0,0,.06);
-
-    min-width:240px;
-}
-
-.avatar{
-
-    width:55px;
-
-    height:55px;
-
-    border-radius:50%;
-
-    background:#F97316;
-
-    display:flex;
-
-    justify-content:center;
-
-    align-items:center;
-
-    color:white;
-
-    font-weight:700;
-
-    font-size:20px;
-
-    overflow:hidden;
-}
-
-.avatar img{
-
-    width:100%;
-
-    height:100%;
-
-    object-fit:cover;
-}
-
-.user-info h4{
-
-    margin:0;
-
-    font-size:16px;
-
-    color:#3B2F2F;
-}
-
-.user-info p{
-
-    margin-top:4px;
-
-    color:#8B6D5C;
-
-    font-size:13px;
-
-    text-transform:capitalize;
-}
-
-/* RESPONSIVE */
-
-@media(max-width:1000px){
-
-    .topbar{
-
-        flex-direction:column;
-
-        align-items:stretch;
-    }
-
-    .search-box{
-
-        width:100%;
-    }
-
-    .topbar-right{
-
-        width:100%;
-
-        justify-content:space-between;
-
-        flex-wrap:wrap;
-    }
+gap:8px;
 
 }
 
-@media(max-width:600px){
+.mobile-menu-btn,
+.portal-btn,
+.search-box{
 
-    .topbar-right{
+width:38px;
 
-        flex-direction:column;
+height:38px;
 
-        align-items:stretch;
-    }
+}
 
-    .user-profile{
+.user-box img{
 
-        min-width:100%;
-    }
+width:36px;
 
-    .welcome-btn{
+height:36px;
 
-        width:100%;
-    }
+}
 
-    .date-box{
+.profile-dropdown{
 
-        text-align:center;
-    }
+width:160px;
+
+}
 
 }
