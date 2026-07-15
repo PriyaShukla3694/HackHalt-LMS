@@ -17,21 +17,21 @@ function VideoLearning() {
   const [activeModuleIndex, setActiveModuleIndex] = useState(0);
   const [markingProgress, setMarkingProgress] = useState(false);
 
-  const fetchProgress = () => {
-    authFetch(`/courses/${id}/progress`)
-      .then((res) => {
-        if (!res.ok) throw new Error("Could not retrieve progress");
-        return res.json();
-      })
-      .then((data) => {
-        if (data && data.data) {
-          setCompletedModuleIds(data.data);
-        }
-      })
-      .catch((err) => console.error("Error loading progress:", err));
-  };
-
   useEffect(() => {
+    const fetchProgress = () => {
+      authFetch(`/courses/${id}/progress`)
+        .then((res) => {
+          if (!res.ok) throw new Error("Could not retrieve progress");
+          return res.json();
+        })
+        .then((data) => {
+          if (data && data.data) {
+            setCompletedModuleIds(data.data);
+          }
+        })
+        .catch((err) => console.error("Error loading progress:", err));
+    };
+
     if (id) {
       fetchProgress();
     }
@@ -183,7 +183,7 @@ function VideoLearning() {
       <div className="main-content">
         <Topbar />
 
-        <div className="video-layout">
+        <div className="video-layout" id="main-content" tabIndex="-1">
           {/* VIDEO SECTION */}
           <div className="video-main">
             {currentModule ? (

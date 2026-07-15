@@ -98,7 +98,7 @@ function AdminDashboard() {
           onMenuClick={() => setSidebarOpen(true)}
         />
 
-        <div className="admin-content">
+        <div className="admin-content" id="main-content" tabIndex="-1">
 
           {/* HERO */}
 

@@ -141,7 +141,7 @@ function AdminSettings() {
           onMenuClick={() => setSidebarOpen(true)}
         />
 
-        <div className="admin-content">
+        <div className="admin-content" id="main-content" tabIndex="-1">
           <div className="page-header">
             <div>
               <h1>Admin Settings</h1>
@@ -157,11 +157,12 @@ function AdminSettings() {
             <h2>Administrator Profile</h2>
             <div className="settings-grid">
               <div className="input-group">
-                <label>
+                <label htmlFor="admin-name">
                   <FiUser />
                   Full Name
                 </label>
                 <input
+                  id="admin-name"
                   type="text"
                   name="name"
                   value={settings.name}
@@ -175,11 +176,12 @@ function AdminSettings() {
               </div>
 
               <div className="input-group">
-                <label>
+                <label htmlFor="admin-email">
                   <FiMail />
                   Email
                 </label>
                 <input
+                  id="admin-email"
                   type="email"
                   name="email"
                   value={settings.email}
@@ -193,11 +195,12 @@ function AdminSettings() {
               </div>
 
               <div className="input-group">
-                <label>
+                <label htmlFor="admin-phone">
                   <FiPhone />
                   Phone Number
                 </label>
                 <input
+                  id="admin-phone"
                   type="text"
                   name="phone"
                   value={settings.phone}
@@ -211,11 +214,12 @@ function AdminSettings() {
               </div>
 
               <div className="input-group">
-                <label>
+                <label htmlFor="admin-organization">
                   <FiGlobe />
                   Organization
                 </label>
                 <input
+                  id="admin-organization"
                   type="text"
                   name="organization"
                   value={settings.organization}
@@ -229,11 +233,12 @@ function AdminSettings() {
               </div>
 
               <div className="input-group">
-                <label>
+                <label htmlFor="admin-website">
                   <FiGlobe />
                   Website
                 </label>
                 <input
+                  id="admin-website"
                   type="text"
                   name="website"
                   value={settings.website}
@@ -247,11 +252,12 @@ function AdminSettings() {
               </div>
 
               <div className="input-group">
-                <label>
+                <label htmlFor="admin-password">
                   <FiLock />
                   Change Password
                 </label>
                 <input
+                  id="admin-password"
                   type="password"
                   name="password"
                   placeholder="Enter new password"
@@ -273,8 +279,9 @@ function AdminSettings() {
                 Security Settings
               </h3>
               <div className="toggle-item">
-                <label>🛡 Enable Two Factor Authentication</label>
+                <label htmlFor="admin-twoFactor">🛡 Enable Two Factor Authentication</label>
                 <input
+                  id="admin-twoFactor"
                   type="checkbox"
                   name="twoFactor"
                   checked={settings.twoFactor}
@@ -282,8 +289,9 @@ function AdminSettings() {
                 />
               </div>
               <div className="toggle-item">
-                <label>👤 Allow New User Registration</label>
+                <label htmlFor="admin-allowRegistration">👤 Allow New User Registration</label>
                 <input
+                  id="admin-allowRegistration"
                   type="checkbox"
                   name="allowRegistration"
                   checked={settings.allowRegistration}
@@ -291,8 +299,9 @@ function AdminSettings() {
                 />
               </div>
               <div className="toggle-item">
-                <label>⚙ Maintenance Mode</label>
+                <label htmlFor="admin-maintenanceMode">⚙ Maintenance Mode</label>
                 <input
+                  id="admin-maintenanceMode"
                   type="checkbox"
                   name="maintenanceMode"
                   checked={settings.maintenanceMode}
@@ -305,8 +314,9 @@ function AdminSettings() {
             <div className="settings-section">
               <h3>📢 Notification Settings</h3>
               <div className="toggle-item">
-                <label>📧 Email Notifications</label>
+                <label htmlFor="admin-emailNotification">📧 Email Notifications</label>
                 <input
+                  id="admin-emailNotification"
                   type="checkbox"
                   name="emailNotification"
                   checked={settings.emailNotification}
@@ -314,8 +324,9 @@ function AdminSettings() {
                 />
               </div>
               <div className="toggle-item">
-                <label>📱 SMS Notifications</label>
+                <label htmlFor="admin-smsNotification">📱 SMS Notifications</label>
                 <input
+                  id="admin-smsNotification"
                   type="checkbox"
                   name="smsNotification"
                   checked={settings.smsNotification}

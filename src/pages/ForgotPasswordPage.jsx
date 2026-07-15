@@ -54,7 +54,9 @@ function ForgotPasswordPage() {
         <p>Enter your registered email</p>
 
         <form onSubmit={handleSubmit}>
+          <label htmlFor="forgot-email" className="sr-only">Email Address</label>
           <input
+            id="forgot-email"
             type="email"
             placeholder="name@company.com"
             value={email}

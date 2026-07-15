@@ -1,6 +1,6 @@
 :root {
   /* Brand orange */
-  --orange: #F97316;        /* primary brand color */
+  --orange: #E25C00;        /* primary brand color */
   --orange-dark: #C2570B;   /* hover/active states, darker accents */
   --orange-light: #FFB347;  /* highlights, soft backgrounds */
   --orange-tint: #FFF4E8;   /* very light background washes, badges */
@@ -8,7 +8,7 @@
   /* Neutrals / ink */
   --ink: #18171C;           /* primary text / dark backgrounds */
   --ink-soft: #2F2F2F;      /* secondary dark surfaces */
-  --muted: #6B7280;         /* secondary/gray text */
+  --muted: #4B5563;         /* secondary/gray text */
   --line: #E5E7EB;          /* borders, dividers */
   --card: #FFFFFF;          /* card backgrounds */
   --soft-bg: #F7F8FC;       /* page background, light mode */

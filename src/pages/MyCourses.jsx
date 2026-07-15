@@ -1,20 +1,20 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { FiArrowRight, FiBookOpen } from "react-icons/fi";
+import { FiBookOpen } from "react-icons/fi";
 import CourseCard from "../components/CourseCard";
 import EmptyState from "../components/EmptyState";
 import Sidebar from "../components/Sidebar";
 import Topbar from "../components/Topbar";
-import cyberSecurity from "../assets/Cyber_Security.jpeg";
-import ethicalHacking from "../assets/Ethical_Hacking.jpeg";
-import pythonAI from "../assets/Python.jpeg";
+import cyberSecurity from "../assets/Cyber_Security.webp";
+import ethicalHacking from "../assets/Ethical_Hacking.webp";
+import pythonAI from "../assets/Python.webp";
 import "../styles/MyCourses.css";
 
 function MyCourses() {
   const navigate = useNavigate();
   const [showPopup, setShowPopup] = useState(false);
-  const [search, setSearch] = useState("");
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [search] = useState("");
 
   const courses = [
     {
@@ -58,7 +58,7 @@ function MyCourses() {
           onMenuClick={() => setSidebarOpen(true)}
         />
 
-        <div className="courses-content">
+        <div className="courses-content" id="main-content" tabIndex="-1">
           <div className="courses-header">
             <div>
               <h1>My Courses 📚</h1>

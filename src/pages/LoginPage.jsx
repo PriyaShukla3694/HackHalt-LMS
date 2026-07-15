@@ -125,15 +125,16 @@ function LoginPage() {
         body: JSON.stringify({ email, password, role }),
       });
 
-      const data = await res.json();
+      const envelope = await res.json();
 
-      if (!res.ok) {
-        throw new Error(data.error || data.message || "Login failed");
+      if (!res.ok || !envelope.success) {
+        throw new Error(envelope.message || envelope.error || "Login failed");
       }
 
-      login(data.token, data.refreshToken, data.user);
+      const responseData = envelope.data || envelope;
+      login(responseData.token, responseData.refreshToken, responseData.user);
       showToast("Logged in successfully!", "success");
-      redirectForRole(navigate, data.user.role.toLowerCase());
+      redirectForRole(navigate, responseData.user.role.toLowerCase());
     } catch (err) {
       showToast(err.message, "error");
       setLoading(false);
@@ -141,11 +142,11 @@ function LoginPage() {
   };
 
   const handleGoogleLogin = () => {
-    setError("");
+    setErrors({});
     setNotice("");
 
     if (!formData.role) {
-      setError("Please select a role before continuing with Google.");
+      setErrors({ role: "Please select a role before continuing with Google." });
       return;
     }
 
@@ -166,8 +167,6 @@ function LoginPage() {
       redirectForRole(navigate, formData.role);
     }, 600);
   };
-
-  const goHash = (id) => navigate(`/#${id}`);
 
   return (
     <div className="login-page">

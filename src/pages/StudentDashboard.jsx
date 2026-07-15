@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import {
@@ -17,9 +17,9 @@ import ContinueCard from "../components/ContinueCard";
 import Button from "../components/Button";
 import PlatformTour from "../components/PlatformTour";
 
-import cyberSecurity from "../assets/Cyber_Security.jpeg";
-import ethicalHacking from "../assets/Ethical_Hacking.jpeg";
-import pythonAI from "../assets/Python.jpeg";
+import cyberSecurity from "../assets/Cyber_Security.webp";
+import ethicalHacking from "../assets/Ethical_Hacking.webp";
+import pythonAI from "../assets/Python.webp";
 
 import "../styles/StudentDashboard.css";
 
@@ -27,14 +27,9 @@ function StudentDashboard() {
   const navigate = useNavigate();
 
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  const [showTour, setShowTour] = useState(false);
-
-  useEffect(() => {
-    const tourCompleted = localStorage.getItem("lms_tour_completed");
-    if (!tourCompleted) {
-      setShowTour(true);
-    }
-  }, []);
+  const [showTour, setShowTour] = useState(() => {
+    return !localStorage.getItem("lms_tour_completed");
+  });
 
   const courses = [
     {
@@ -76,7 +71,7 @@ function StudentDashboard() {
           onMenuClick={() => setSidebarOpen(true)}
         />
 
-        <div className="student-content">
+        <div className="student-content" id="main-content" tabIndex="-1">
 
           {/* ================= HERO ================= */}
 

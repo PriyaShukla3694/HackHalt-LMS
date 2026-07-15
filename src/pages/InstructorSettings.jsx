@@ -130,7 +130,7 @@ function InstructorSettings() {
           onMenuClick={() => setSidebarOpen(true)}
         />
 
-        <div className="settings-content">
+        <div className="settings-content" id="main-content" tabIndex="-1">
           <div className="settings-header">
             <h1>Instructor Settings</h1>
             <p>Update your profile information and account settings.</p>
@@ -145,11 +145,12 @@ function InstructorSettings() {
 
             <div className="settings-grid">
               <div className="input-group">
-                <label>
+                <label htmlFor="inst-fullName">
                   <FiUser />
                   Full Name
                 </label>
                 <input
+                  id="inst-fullName"
                   type="text"
                   name="fullName"
                   placeholder="Enter your full name"
@@ -164,11 +165,12 @@ function InstructorSettings() {
               </div>
 
               <div className="input-group">
-                <label>
+                <label htmlFor="inst-email">
                   <FiMail />
                   Email Address
                 </label>
                 <input
+                  id="inst-email"
                   type="email"
                   name="email"
                   placeholder="Enter your email address"
@@ -183,11 +185,12 @@ function InstructorSettings() {
               </div>
 
               <div className="input-group">
-                <label>
+                <label htmlFor="inst-phone">
                   <FiPhone />
                   Phone Number
                 </label>
                 <input
+                  id="inst-phone"
                   type="tel"
                   name="phone"
                   placeholder="Enter your phone number"
@@ -202,11 +205,12 @@ function InstructorSettings() {
               </div>
 
               <div className="input-group">
-                <label>
+                <label htmlFor="inst-specialization">
                   <FiBook />
                   Specialization
                 </label>
                 <input
+                  id="inst-specialization"
                   type="text"
                   name="specialization"
                   placeholder="e.g. Cyber Security"
@@ -222,8 +226,9 @@ function InstructorSettings() {
             </div>
 
             <div className="textarea-group">
-              <label>About Yourself</label>
+              <label htmlFor="inst-bio">About Yourself</label>
               <textarea
+                id="inst-bio"
                 rows="5"
                 name="bio"
                 placeholder="Write a short bio..."
@@ -235,8 +240,9 @@ function InstructorSettings() {
             <div className="settings-options">
               <h3>Notification Settings</h3>
               <div className="toggle-item">
-                <label>Email Notifications</label>
+                <label htmlFor="inst-emailNotification">Email Notifications</label>
                 <input
+                  id="inst-emailNotification"
                   type="checkbox"
                   name="emailNotification"
                   checked={settings.emailNotification}
@@ -249,12 +255,13 @@ function InstructorSettings() {
               <h3>Change Password</h3>
               <div className="settings-grid">
                 <div className="input-group">
-                  <label>
+                  <label htmlFor="inst-currentPassword">
                     <FiLock />
                     Current Password
                   </label>
                   <div className="password-input">
                     <input
+                      id="inst-currentPassword"
                       type={showPassword.current ? "text" : "password"}
                       name="currentPassword"
                       placeholder="Enter current password"
@@ -270,6 +277,7 @@ function InstructorSettings() {
                           current: !prev.current,
                         }))
                       }
+                      aria-label="Toggle current password visibility"
                     >
                       {showPassword.current ? <FiEyeOff /> : <FiEye />}
                     </button>
@@ -277,12 +285,13 @@ function InstructorSettings() {
                 </div>
 
                 <div className="input-group">
-                  <label>
+                  <label htmlFor="inst-newPassword">
                     <FiLock />
                     New Password
                   </label>
                   <div className="password-input">
                     <input
+                      id="inst-newPassword"
                       type={showPassword.new ? "text" : "password"}
                       name="newPassword"
                       placeholder="Enter new password"
@@ -298,6 +307,7 @@ function InstructorSettings() {
                           new: !prev.new,
                         }))
                       }
+                      aria-label="Toggle new password visibility"
                     >
                       {showPassword.new ? <FiEyeOff /> : <FiEye />}
                     </button>
@@ -310,12 +320,13 @@ function InstructorSettings() {
                 </div>
 
                 <div className="input-group">
-                  <label>
+                  <label htmlFor="inst-confirmPassword">
                     <FiLock />
                     Confirm Password
                   </label>
                   <div className="password-input">
                     <input
+                      id="inst-confirmPassword"
                       type={showPassword.confirm ? "text" : "password"}
                       name="confirmPassword"
                       placeholder="Confirm new password"
@@ -331,6 +342,7 @@ function InstructorSettings() {
                           confirm: !prev.confirm,
                         }))
                       }
+                      aria-label="Toggle confirm password visibility"
                     >
                       {showPassword.confirm ? <FiEyeOff /> : <FiEye />}
                     </button>

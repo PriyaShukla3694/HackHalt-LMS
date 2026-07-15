@@ -54,7 +54,7 @@ const [sidebarOpen, setSidebarOpen] = useState(false);
     onMenuClick={() => setSidebarOpen(true)}
 />
 
-        <div className="progress-content">
+        <div className="progress-content" id="main-content" tabIndex="-1">
 
           {/* Stats */}
 

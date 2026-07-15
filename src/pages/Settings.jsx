@@ -110,7 +110,7 @@ function Settings() {
           onMenuClick={() => setSidebarOpen(true)}
         />
 
-        <div className="settings-content">
+        <div className="settings-content" id="main-content" tabIndex="-1">
           <div className="settings-card">
             <div className="profile-header">
               <div className="profile-avatar">{profile.name.charAt(0)}</div>
@@ -123,8 +123,9 @@ function Settings() {
             <h3 className="section-heading">Personal Information</h3>
             <div className="form-grid">
               <div className="input-group">
-                <label>Full Name</label>
+                <label htmlFor="settings-name">Full Name</label>
                 <input
+                  id="settings-name"
                   type="text"
                   name="name"
                   value={profile.name}
@@ -138,8 +139,9 @@ function Settings() {
               </div>
 
               <div className="input-group">
-                <label>Email</label>
+                <label htmlFor="settings-email">Email</label>
                 <input
+                  id="settings-email"
                   type="email"
                   name="email"
                   value={profile.email}
@@ -153,8 +155,9 @@ function Settings() {
               </div>
 
               <div className="input-group">
-                <label>Phone</label>
+                <label htmlFor="settings-phone">Phone</label>
                 <input
+                  id="settings-phone"
                   type="text"
                   name="phone"
                   value={profile.phone}
@@ -168,8 +171,9 @@ function Settings() {
               </div>
 
               <div className="input-group">
-                <label>College</label>
+                <label htmlFor="settings-college">College</label>
                 <input
+                  id="settings-college"
                   type="text"
                   name="college"
                   value={profile.college}
@@ -186,8 +190,9 @@ function Settings() {
             <h3 className="section-heading">Academic Details</h3>
             <div className="form-grid">
               <div className="input-group">
-                <label>Course</label>
+                <label htmlFor="settings-course">Course</label>
                 <input
+                  id="settings-course"
                   type="text"
                   name="course"
                   value={profile.course}
@@ -201,8 +206,9 @@ function Settings() {
               </div>
 
               <div className="input-group">
-                <label>Academic Year</label>
+                <label htmlFor="settings-year">Academic Year</label>
                 <input
+                  id="settings-year"
                   type="text"
                   name="year"
                   value={profile.year}
@@ -219,8 +225,9 @@ function Settings() {
             <h3 className="section-heading">Security</h3>
             <div className="form-grid">
               <div className="input-group">
-                <label>New Password</label>
+                <label htmlFor="settings-password">New Password</label>
                 <input
+                  id="settings-password"
                   type="password"
                   name="password"
                   placeholder="Enter new password"
@@ -235,8 +242,9 @@ function Settings() {
               </div>
 
               <div className="input-group">
-                <label>Confirm Password</label>
+                <label htmlFor="settings-confirmPassword">Confirm Password</label>
                 <input
+                  id="settings-confirmPassword"
                   type="password"
                   name="confirmPassword"
                   placeholder="Confirm password"
@@ -258,8 +266,9 @@ function Settings() {
                 <p>Receive updates about courses and announcements.</p>
               </div>
 
-              <label className="switch">
+              <label className="switch" htmlFor="settings-notifications">
                 <input
+                  id="settings-notifications"
                   type="checkbox"
                   name="notifications"
                   checked={profile.notifications}

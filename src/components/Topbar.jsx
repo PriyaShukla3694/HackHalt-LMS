@@ -74,56 +74,50 @@ function Topbar({
   };
 
   return (
-
     <header className="topbar">
+      <a href="#main-content" className="skip-to-content">
+        Skip to main content
+      </a>
 
       {/* LEFT */}
-
       <div className="topbar-left">
+        {onMenuClick && (
+          <button
+            className="mobile-menu-btn"
+            onClick={onMenuClick}
+            aria-label="Open navigation menu"
+          >
+            <FaBars />
+          </button>
+        )}
 
-  {onMenuClick && (
-    <button
-      className="mobile-menu-btn"
-      onClick={onMenuClick}
-    >
-      <FaBars />
-    </button>
-  )}
+        {/* Mobile Logo */}
+        <h2 className="mobile-logo">
+          INTEXIA
+        </h2>
 
-  {/* Mobile Logo */}
-  <h2 className="mobile-logo">
-    INTEXIA
-  </h2>
-
-  {/* Desktop Title */}
-  <div className="title-section">
-
-    <h1>{title}</h1>
-
-    <p>{subtitle}</p>
-
-  </div>
-
-</div>
-          
+        {/* Desktop Title */}
+        <div className="title-section">
+          <h1>{title}</h1>
+          <p>{subtitle}</p>
+        </div>
+      </div>
 
       {/* RIGHT */}
-
       <div className="topbar-right">
-
         <div className="search-box">
-
+          <label htmlFor="topbar-search" className="sr-only">Search</label>
           <FaSearch className="search-icon" />
-
           <input
+            id="topbar-search"
             type="text"
             placeholder="Search..."
           />
-
         </div>
         <button
           className="portal-btn"
           onClick={() => navigate("/")}
+          aria-label="Portal Homepage"
         >
           <FaHome />
           <span className="portal-text">Portal</span>
@@ -133,18 +127,28 @@ function Topbar({
           className="user-info"
           ref={profileRef}
         >
-
           <div
             className="user-box"
             onClick={() => setShowProfile((prev) => !prev)}
+            role="button"
+            aria-haspopup="true"
+            aria-expanded={showProfile}
+            tabIndex={0}
+            onKeyDown={(e) => {
+              if (e.key === "Enter" || e.key === " ") {
+                setShowProfile((prev) => !prev);
+              }
+            }}
           >
-
-<img
-  src={`https://ui-avatars.com/api/?name=${encodeURIComponent(
-    user?.name || "User"
-  )}&background=ff8c00&color=fff`}
-  alt={user?.name || "User"}
-/>
+            <img
+              src={`https://ui-avatars.com/api/?name=${encodeURIComponent(
+                user?.name || "User"
+              )}&background=ff8c00&color=fff`}
+              alt={user?.name || "User"}
+              width={44}
+              height={44}
+              loading="eager"
+            />
 
             <div className="user-details">
 

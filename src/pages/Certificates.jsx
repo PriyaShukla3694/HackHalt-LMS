@@ -97,75 +97,77 @@ function Certificates() {
       <div className="main-content">
         <Topbar />
 
-        <div className="certificates-header">
-          <div>
-            <span className="certificate-tag">
-              ACHIEVEMENTS & RECOGNITION
-            </span>
-            <h1 className="page-title">
-              My Certificates
-            </h1>
-            <p className="page-subtitle">
-              Showcase your achievements and completed courses.
-            </p>
+        <div className="certificates-content" id="main-content" tabIndex="-1">
+          <div className="certificates-header">
+            <div>
+              <span className="certificate-tag">
+                ACHIEVEMENTS & RECOGNITION
+              </span>
+              <h1 className="page-title">
+                My Certificates
+              </h1>
+              <p className="page-subtitle">
+                Showcase your achievements and completed courses.
+              </p>
+            </div>
+
+            <div
+              className="certificate-count"
+              style={{
+                background: `radial-gradient(circle, #121826 58%, transparent 59%), conic-gradient(#00F5FF 0deg ${angle}deg, #2A2A35 ${angle}deg 360deg)`
+              }}
+            >
+              <h2>{earnedCount.toString().padStart(2, "0")}</h2>
+              <span>Certificates Earned</span>
+            </div>
           </div>
 
-          <div
-            className="certificate-count"
-            style={{
-              background: `radial-gradient(circle, #121826 58%, transparent 59%), conic-gradient(#00F5FF 0deg ${angle}deg, #2A2A35 ${angle}deg 360deg)`
-            }}
-          >
-            <h2>{earnedCount.toString().padStart(2, "0")}</h2>
-            <span>Certificates Earned</span>
-          </div>
-        </div>
-
-        {loading ? (
-          <div className="certificate-grid">
-            <Skeleton variant="card" />
-            <Skeleton variant="card" />
-            <Skeleton variant="card" />
-          </div>
-        ) : error ? (
-          <div style={{ color: "#f87171", textAlign: "center", padding: "40px" }}>
-            <h3>{error}</h3>
-          </div>
-        ) : certificates.length === 0 ? (
-          <EmptyState
-            icon={FiAward}
-            title="No certificates earned yet"
-            description="Complete all modules in an enrolled course to receive a verified certificate of completion."
-            ctaText="View Enrolled Courses"
-            onCtaClick={() => navigate("/my-courses")}
-          />
-        ) : (
-          <div className="certificate-grid">
-            {certificates.map((cert) => (
-              <div className="certificate-card" key={cert.id}>
-                <div className="certificate-badge">
-                  🏆
+          {loading ? (
+            <div className="certificate-grid">
+              <Skeleton variant="card" />
+              <Skeleton variant="card" />
+              <Skeleton variant="card" />
+            </div>
+          ) : error ? (
+            <div style={{ color: "#f87171", textAlign: "center", padding: "40px" }}>
+              <h3>{error}</h3>
+            </div>
+          ) : certificates.length === 0 ? (
+            <EmptyState
+              icon={FiAward}
+              title="No certificates earned yet"
+              description="Complete all modules in an enrolled course to receive a verified certificate of completion."
+              ctaText="View Enrolled Courses"
+              onCtaClick={() => navigate("/my-courses")}
+            />
+          ) : (
+            <div className="certificate-grid">
+              {certificates.map((cert) => (
+                <div className="certificate-card" key={cert.id}>
+                  <div className="certificate-badge">
+                    🏆
+                  </div>
+                  <h2>{cert.course ? cert.course.title : "Cyber Course"}</h2>
+                  <p>
+                    Successfully completed the course modules and assessments.
+                  </p>
+                  <span className="issue-date">
+                    Issued: {new Date(cert.issuedAt).toLocaleDateString("en-US", {
+                      year: "numeric",
+                      month: "long",
+                      day: "numeric"
+                    })}
+                  </span>
+                  <button onClick={() => handleDownload(cert)}>
+                    Download Certificate
+                  </button>
                 </div>
-                <h2>{cert.course ? cert.course.title : "Cyber Course"}</h2>
-                <p>
-                  Successfully completed the course modules and assessments.
-                </p>
-                <span className="issue-date">
-                  Issued: {new Date(cert.issuedAt).toLocaleDateString("en-US", {
-                    year: "numeric",
-                    month: "long",
-                    day: "numeric"
-                  })}
-                </span>
-                <button onClick={() => handleDownload(cert)}>
-                  Download Certificate
-                </button>
-              </div>
-            ))}
-          </div>
-        )}
+              ))}
+            </div>
+          )}
 
-        <Footer />
+          <Footer />
+        </div>
       </div>
     </div>
   );

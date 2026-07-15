@@ -6,7 +6,6 @@ import {
   FiBookOpen,
   FiTrendingUp,
   FiAward,
-  FiActivity,
   FiServer,
 } from "react-icons/fi";
 
@@ -96,7 +95,7 @@ function PlatformAnalytics() {
           onMenuClick={() => setSidebarOpen(true)}
         />
 
-        <div className="admin-content">
+        <div className="admin-content" id="main-content" tabIndex="-1">
 
           {/* PAGE HEADER */}
 

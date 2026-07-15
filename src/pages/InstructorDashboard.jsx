@@ -16,9 +16,9 @@ import {
 import InstructorSidebar from "../components/InstructorSidebar";
 import Topbar from "../components/Topbar";
 
-import cyberSecurity from "../assets/Cyber_Security.jpeg";
-import ethicalHacking from "../assets/Ethical_Hacking.jpeg";
-import pythonProgramming from "../assets/Python.jpeg";
+import cyberSecurity from "../assets/Cyber_Security.webp";
+import ethicalHacking from "../assets/Ethical_Hacking.webp";
+import pythonProgramming from "../assets/Python.webp";
 
 import "../styles/InstructorDashboard.css";
 
@@ -68,7 +68,7 @@ function InstructorDashboard() {
           onMenuClick={() => setSidebarOpen(true)}
         />
 
-        <div className="instructor-content">
+        <div className="instructor-content" id="main-content" tabIndex="-1">
 
           {/* HERO */}
 
@@ -163,6 +163,9 @@ function InstructorDashboard() {
                 <img
                   src={course.image}
                   alt={course.title}
+                  width={360}
+                  height={200}
+                  loading="lazy"
                 />
 
                 <div className="course-info">

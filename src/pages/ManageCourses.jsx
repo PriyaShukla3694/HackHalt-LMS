@@ -15,9 +15,9 @@ import EmptyState from "../components/EmptyState";
 import InstructorSidebar from "../components/InstructorSidebar";
 import Topbar from "../components/Topbar";
 
-import cyberSecurity from "../assets/Cyber_Security.jpeg";
-import ethicalHacking from "../assets/Ethical_Hacking.jpeg";
-import pythonProgramming from "../assets/Python.jpeg";
+import cyberSecurity from "../assets/Cyber_Security.webp";
+import ethicalHacking from "../assets/Ethical_Hacking.webp";
+import pythonProgramming from "../assets/Python.webp";
 
 import "../styles/ManageCourses.css";
 
@@ -194,7 +194,7 @@ function ManageCourses() {
           onMenuClick={() => setSidebarOpen(true)}
         />
 
-        <div className="manage-content">
+        <div className="manage-content" id="main-content" tabIndex="-1">
 
           {/* HEADER */}
 
@@ -224,10 +224,10 @@ function ManageCourses() {
           {/* SEARCH */}
 
           <div className="search-bar">
-
+            <label htmlFor="search-course-input" className="sr-only">Search course</label>
             <FiSearch />
-
             <input
+              id="search-course-input"
               type="text"
               placeholder="Search course..."
               value={search}
@@ -235,7 +235,6 @@ function ManageCourses() {
                 setSearch(e.target.value)
               }
             />
-
           </div>
 
           {/* COURSE GRID */}
@@ -251,15 +250,18 @@ function ManageCourses() {
           ) : (
             <div className="course-list">
               {filteredCourses.map((course) => (
-                <div
-                  className="manage-card"
-                  key={course.id}
-                >
-                  <img
-                    src={course.image}
-                    alt={course.title}
-                  />
-                  <div className="manage-info">
+                  <div
+                    className="manage-card"
+                    key={course.id}
+                  >
+                    <img
+                      src={course.image}
+                      alt={course.title}
+                      width={360}
+                      height={200}
+                      loading="lazy"
+                    />
+                    <div className="manage-info">
                     <h2>{course.title}</h2>
                     <p>
                       {course.students} Students Enrolled
@@ -317,17 +319,21 @@ function ManageCourses() {
             onClick={(e) => e.stopPropagation()}
           >
 
-            <button
-              className="close-btn"
-              onClick={() => setShowPopup(false)}
-            >
-              <FiX />
-            </button>
+              <button
+                className="close-btn"
+                onClick={() => setShowPopup(false)}
+                aria-label="Close"
+              >
+                <FiX />
+              </button>
 
-            <img
-              src={selectedCourse.image}
-              alt={selectedCourse.title}
-            />
+              <img
+                src={selectedCourse.image}
+                alt={selectedCourse.title}
+                width={360}
+                height={200}
+                loading="lazy"
+              />
 
             <h2>{selectedCourse.title}</h2>
 
@@ -377,38 +383,43 @@ function ManageCourses() {
             onClick={(e) => e.stopPropagation()}
           >
 
-            <button
-              className="close-btn"
-              onClick={() => setShowAddPopup(false)}
-            >
-              <FiX />
-            </button>
+              <button
+                className="close-btn"
+                onClick={() => setShowAddPopup(false)}
+                aria-label="Close"
+              >
+                <FiX />
+              </button>
 
-            <h2>Add Course</h2>
+              <h2>Add Course</h2>
 
-            <input
-              type="text"
-              placeholder="Course Name"
-              value={newCourse.title}
-              onChange={(e) =>
-                setNewCourse({
-                  ...newCourse,
-                  title: e.target.value,
-                })
-              }
-            />
+              <label htmlFor="add-course-title" className="sr-only">Course Name</label>
+              <input
+                id="add-course-title"
+                type="text"
+                placeholder="Course Name"
+                value={newCourse.title}
+                onChange={(e) =>
+                  setNewCourse({
+                    ...newCourse,
+                    title: e.target.value,
+                  })
+                }
+              />
 
-            <input
-              type="number"
-              placeholder="Students"
-              value={newCourse.students}
-              onChange={(e) =>
-                setNewCourse({
-                  ...newCourse,
-                  students: e.target.value,
-                })
-              }
-            />
+              <label htmlFor="add-course-students" className="sr-only">Students</label>
+              <input
+                id="add-course-students"
+                type="number"
+                placeholder="Students"
+                value={newCourse.students}
+                onChange={(e) =>
+                  setNewCourse({
+                    ...newCourse,
+                    students: e.target.value,
+                  })
+                }
+              />
 
             <button
               className="popup-action"
@@ -442,36 +453,41 @@ function ManageCourses() {
             onClick={(e) => e.stopPropagation()}
           >
 
-            <button
-              className="close-btn"
-              onClick={() => setShowEditPopup(false)}
-            >
-              <FiX />
-            </button>
+              <button
+                className="close-btn"
+                onClick={() => setShowEditPopup(false)}
+                aria-label="Close"
+              >
+                <FiX />
+              </button>
 
-            <h2>Edit Course</h2>
+              <h2>Edit Course</h2>
 
-            <input
-              type="text"
-              value={editCourse.title}
-              onChange={(e) =>
-                setEditCourse({
-                  ...editCourse,
-                  title: e.target.value,
-                })
-              }
-            />
+              <label htmlFor="edit-course-title" className="sr-only">Course Name</label>
+              <input
+                id="edit-course-title"
+                type="text"
+                value={editCourse.title}
+                onChange={(e) =>
+                  setEditCourse({
+                    ...editCourse,
+                    title: e.target.value,
+                  })
+                }
+              />
 
-            <input
-              type="number"
-              value={editCourse.students}
-              onChange={(e) =>
-                setEditCourse({
-                  ...editCourse,
-                  students: Number(e.target.value),
-                })
-              }
-            />
+              <label htmlFor="edit-course-students" className="sr-only">Students</label>
+              <input
+                id="edit-course-students"
+                type="number"
+                value={editCourse.students}
+                onChange={(e) =>
+                  setEditCourse({
+                    ...editCourse,
+                    students: Number(e.target.value),
+                  })
+                }
+              />
 
             <button
               className="popup-action"

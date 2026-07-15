@@ -16,7 +16,9 @@ export const authFetch = async (path, options = {}) => {
           const cloned = res.clone();
           const data = await cloned.json();
           if (data && data.message) errMsg = data.message;
-        } catch (_) {}
+        } catch (err) {
+          console.warn("Failed to parse JSON response for error message", err);
+        }
         toastEmitter.emit(errMsg, "error");
       }
       return res;
@@ -47,19 +49,21 @@ export const authFetch = async (path, options = {}) => {
           });
 
           if (refreshRes.ok) {
-            const data = await refreshRes.json();
-            localStorage.setItem("lms_token", data.token);
-            localStorage.setItem("lms_refresh_token", data.refreshToken);
+            const envelope = await refreshRes.json();
+            if (envelope && envelope.success && envelope.data) {
+              localStorage.setItem("lms_token", envelope.data.token);
+              localStorage.setItem("lms_refresh_token", envelope.data.refreshToken);
 
-            // Retry the original request with the new access token
-            res = await fetch(`${BASE}${path}`, {
-              ...options,
-              headers: {
-                "Content-Type": "application/json",
-                Authorization: `Bearer ${data.token}`,
-                ...options.headers,
-              },
-            });
+              // Retry the original request with the new access token
+              res = await fetch(`${BASE}${path}`, {
+                ...options,
+                headers: {
+                  "Content-Type": "application/json",
+                  Authorization: `Bearer ${envelope.data.token}`,
+                  ...options.headers,
+                },
+              });
+            }
           }
         } catch (err) {
           console.error("Token refresh failed:", err);
@@ -76,17 +80,59 @@ export const authFetch = async (path, options = {}) => {
       }
     }
 
-    if (!res.ok) {
-      let errMsg = "Something went wrong";
+    let data = null;
+    let isSuccess = res.ok;
+    let errMsg = "";
+
+    const contentType = res.headers.get("content-type");
+    const isJson = contentType && contentType.includes("application/json");
+
+    if (isJson || MOCK_MODE) {
       try {
         const cloned = res.clone();
-        const data = await cloned.json();
-        if (data && data.message) errMsg = data.message;
-      } catch (_) {}
+        data = await cloned.json();
+        if (data && typeof data === "object") {
+          if ("success" in data) {
+            isSuccess = res.ok && data.success;
+            if (!isSuccess) {
+              errMsg = data.message || "Something went wrong";
+            }
+          } else {
+            isSuccess = res.ok;
+          }
+        }
+      } catch (err) {
+        console.warn("Failed to parse JSON response during envelope extraction", err);
+        isSuccess = res.ok;
+      }
+    }
+
+    if (!isSuccess) {
+      if (!errMsg) {
+        errMsg = "Something went wrong";
+        try {
+          const cloned = res.clone();
+          const rawData = await cloned.json();
+          if (rawData && rawData.message) errMsg = rawData.message;
+        } catch (err) {
+          console.warn("Failed to parse raw JSON error response", err);
+        }
+      }
       toastEmitter.emit(errMsg, "error");
     }
 
-    return res;
+    const unwrappedData = (data && typeof data === "object" && "success" in data) ? data.data : data;
+
+    return {
+      ok: isSuccess,
+      status: isSuccess ? res.status : (res.status === 200 ? 400 : res.status),
+      statusText: res.statusText,
+      headers: res.headers,
+      json: async () => unwrappedData,
+      clone() {
+        return this;
+      }
+    };
   } catch (err) {
     console.error("Network or execution error in authFetch:", err);
     toastEmitter.emit(err.message || "Something went wrong", "error");

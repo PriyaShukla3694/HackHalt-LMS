@@ -23,9 +23,9 @@ import { FaLeaf } from "react-icons/fa";
 import AuthNavbar from "../components/AuthNavbar";
 import "../styles/WelcomePage.css";
 
-import cyberSecurity from "../assets/Cyber_Security.jpeg";
-import ethicalHacking from "../assets/Ethical_Hacking.jpeg";
-import pythonAI from "../assets/Python.jpeg";
+import cyberSecurity from "../assets/Cyber_Security.webp";
+import ethicalHacking from "../assets/Ethical_Hacking.webp";
+import pythonAI from "../assets/Python.webp";
 
 const TRUSTED_LOGOS = [
   { name: "SkyNet", icon: FiCloud },
@@ -280,7 +280,13 @@ function WelcomePage() {
               transition={{ duration: 0.5, delay: i * 0.1 }}
             >
               <div className="course-card-public-image">
-                <img src={course.image} alt={course.title} />
+                <img
+                  src={course.image}
+                  alt={course.title}
+                  width={380}
+                  height={240}
+                  loading="lazy"
+                />
                 <span className="course-card-public-badge">{course.level}</span>
               </div>
               <div className="course-card-public-body">

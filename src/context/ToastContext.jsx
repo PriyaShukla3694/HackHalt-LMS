@@ -72,10 +72,16 @@ const ToastItem = ({ toast, onRemove }) => {
       animate={{ opacity: 1, y: 0, scale: 1 }}
       exit={{ opacity: 0, scale: 0.85, transition: { duration: 0.2 } }}
       layout
+      role="alert"
+      aria-live="polite"
     >
       <span className="toast-icon">{iconMap[toast.type] || "ℹ️"}</span>
       <span className="toast-message">{toast.message}</span>
-      <button className="toast-close" onClick={() => onRemove(toast.id)}>
+      <button
+        className="toast-close"
+        onClick={() => onRemove(toast.id)}
+        aria-label="Close notification"
+      >
         &times;
       </button>
     </motion.div>

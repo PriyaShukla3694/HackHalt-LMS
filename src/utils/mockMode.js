@@ -238,7 +238,11 @@ export function handleMockRequest(path, options) {
 
   // 1. GET /courses
   if (path === "/courses" && method === "GET") {
-    return new Response(JSON.stringify(mockCourses), {
+    return new Response(JSON.stringify({
+      success: true,
+      data: mockCourses,
+      message: "Courses retrieved successfully"
+    }), {
       status: 200,
       headers: { "Content-Type": "application/json" }
     });
@@ -248,7 +252,11 @@ export function handleMockRequest(path, options) {
   if (path === "/courses/enrolled" && method === "GET") {
     const enrolledIds = getMockEnrolled();
     const enrolled = mockCourses.filter(c => enrolledIds.includes(c.id));
-    return new Response(JSON.stringify(enrolled), {
+    return new Response(JSON.stringify({
+      success: true,
+      data: enrolled,
+      message: "Enrolled courses retrieved successfully"
+    }), {
       status: 200,
       headers: { "Content-Type": "application/json" }
     });
@@ -257,7 +265,11 @@ export function handleMockRequest(path, options) {
   // 3. GET /courses/certificates
   if (path === "/courses/certificates" && method === "GET") {
     const certs = getMockCertificates();
-    return new Response(JSON.stringify(certs), {
+    return new Response(JSON.stringify({
+      success: true,
+      data: certs,
+      message: "Certificates retrieved successfully"
+    }), {
       status: 200,
       headers: { "Content-Type": "application/json" }
     });
@@ -269,12 +281,21 @@ export function handleMockRequest(path, options) {
     const id = parseInt(courseMatch[1]);
     const course = mockCourses.find(c => c.id === id);
     if (course) {
-      return new Response(JSON.stringify(course), {
+      return new Response(JSON.stringify({
+        success: true,
+        data: course,
+        message: "Course details retrieved successfully"
+      }), {
         status: 200,
         headers: { "Content-Type": "application/json" }
       });
     } else {
-      return new Response(JSON.stringify({ error: "Course not found" }), {
+      return new Response(JSON.stringify({
+        success: false,
+        data: null,
+        message: "Course not found",
+        code: "COURSE_NOT_FOUND"
+      }), {
         status: 404,
         headers: { "Content-Type": "application/json" }
       });
@@ -287,7 +308,11 @@ export function handleMockRequest(path, options) {
     const id = parseInt(progressMatch[1]);
     if (method === "GET") {
       const prog = getCourseProgress(id);
-      return new Response(JSON.stringify(prog), {
+      return new Response(JSON.stringify({
+        success: true,
+        data: prog,
+        message: "Progress retrieved successfully"
+      }), {
         status: 200,
         headers: { "Content-Type": "application/json" }
       });
@@ -295,7 +320,11 @@ export function handleMockRequest(path, options) {
       const body = JSON.parse(options.body || "{}");
       const { moduleId, completed } = body;
       const updatedProg = toggleModuleComplete(id, moduleId, completed);
-      return new Response(JSON.stringify(updatedProg), {
+      return new Response(JSON.stringify({
+        success: true,
+        data: updatedProg,
+        message: "Progress updated successfully"
+      }), {
         status: 200,
         headers: { "Content-Type": "application/json" }
       });
@@ -307,14 +336,23 @@ export function handleMockRequest(path, options) {
   if (enrollMatch && method === "POST") {
     const id = parseInt(enrollMatch[1]);
     const result = enrollInCourse(id);
-    return new Response(JSON.stringify(result), {
+    return new Response(JSON.stringify({
+      success: true,
+      data: result,
+      message: "Enrolled in course successfully"
+    }), {
       status: 200,
       headers: { "Content-Type": "application/json" }
     });
   }
 
   // Default fallback for unhandled mock endpoints
-  return new Response(JSON.stringify({ error: "Mock endpoint not found" }), {
+  return new Response(JSON.stringify({
+    success: false,
+    data: null,
+    message: "Mock endpoint not found",
+    code: "ENDPOINT_NOT_FOUND"
+  }), {
     status: 404,
     headers: { "Content-Type": "application/json" }
   });

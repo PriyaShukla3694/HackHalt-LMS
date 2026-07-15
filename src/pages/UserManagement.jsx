@@ -267,7 +267,7 @@ function UserManagement() {
           onMenuClick={() => setSidebarOpen(true)}
         />
 
-        <div className="admin-content">
+        <div className="admin-content" id="main-content" tabIndex="-1">
 
           <div className="page-header">
 
@@ -317,10 +317,10 @@ function UserManagement() {
           {/* SEARCH */}
 
           <div className="search-box">
-
+            <label htmlFor="search-users-input" className="sr-only">Search users</label>
             <FiSearch />
-
             <input
+              id="search-users-input"
               type="text"
               placeholder="Search users..."
               value={search}
@@ -328,7 +328,6 @@ function UserManagement() {
                 setSearch(e.target.value)
               }
             />
-
           </div>
 
           {/* TABLE */}
@@ -438,7 +437,9 @@ function UserManagement() {
 
                 </h2>
 
+                <label htmlFor="user-form-name" className="sr-only">Full Name</label>
                 <input
+                  id="user-form-name"
                   type="text"
                   name="name"
                   placeholder="Full Name"
@@ -446,7 +447,9 @@ function UserManagement() {
                   onChange={handleChange}
                 />
 
+                <label htmlFor="user-form-email" className="sr-only">Email Address</label>
                 <input
+                  id="user-form-email"
                   type="email"
                   name="email"
                   placeholder="Email Address"
@@ -454,7 +457,9 @@ function UserManagement() {
                   onChange={handleChange}
                 />
 
+                <label htmlFor="user-form-phone" className="sr-only">Phone Number</label>
                 <input
+                  id="user-form-phone"
                   type="text"
                   name="phone"
                   placeholder="Phone Number"
@@ -462,30 +467,27 @@ function UserManagement() {
                   onChange={handleChange}
                 />
 
+                <label htmlFor="user-form-role" className="sr-only">Role</label>
                 <select
+                  id="user-form-role"
                   name="role"
                   value={form.role}
                   onChange={handleChange}
                 >
-
                   <option>Student</option>
-
                   <option>Instructor</option>
-
                   <option>Admin</option>
-
                 </select>
 
+                <label htmlFor="user-form-status" className="sr-only">Status</label>
                 <select
+                  id="user-form-status"
                   name="status"
                   value={form.status}
                   onChange={handleChange}
                 >
-
                   <option>Active</option>
-
                   <option>Inactive</option>
-
                 </select>
 
                 <div className="popup-buttons">
@@ -531,6 +533,7 @@ function UserManagement() {
                 <button
                   className="close-btn"
                   onClick={() => setShowDetails(false)}
+                  aria-label="Close"
                 >
                   <FiX />
                 </button>

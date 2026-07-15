@@ -7,7 +7,6 @@ import Button from "../components/Button";
 import {
   FiEye,
   FiEyeOff,
-  FiArrowRight,
   FiCheckCircle,
   FiChevronDown,
 } from "react-icons/fi";
@@ -168,15 +167,16 @@ function RegisterPage() {
         }),
       });
 
-      const data = await res.json();
+      const envelope = await res.json();
 
-      if (!res.ok) {
-        throw new Error(data.error || data.message || "Registration failed");
+      if (!res.ok || !envelope.success) {
+        throw new Error(envelope.message || envelope.error || "Registration failed");
       }
 
-      login(data.token, data.refreshToken, data.user);
+      const responseData = envelope.data || envelope;
+      login(responseData.token, responseData.refreshToken, responseData.user);
       showToast("Account created successfully!", "success");
-      const userRole = data.user.role.toLowerCase();
+      const userRole = responseData.user.role.toLowerCase();
 
       switch (userRole) {
         case "admin":

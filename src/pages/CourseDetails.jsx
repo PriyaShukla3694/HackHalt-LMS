@@ -9,10 +9,10 @@ import { authFetch } from "../utils/api";
 import Skeleton from "../components/Skeleton";
 import { useToast } from "../context/ToastContext";
 
-import cyberSecurity from "../assets/Cyber_Security.jpeg";
-import ethicalHacking from "../assets/Ethical_Hacking.jpeg";
-import pythonAI from "../assets/Python.jpeg";
-import trishul from "../assets/trishul.png";
+import cyberSecurity from "../assets/Cyber_Security.webp";
+import ethicalHacking from "../assets/Ethical_Hacking.webp";
+import pythonAI from "../assets/Python.webp";
+import trishul from "../assets/trishul.webp";
 
 const getCourseImage = (id) => {
   const parsedId = id?.toString();
@@ -136,7 +136,7 @@ function CourseDetails() {
         <Sidebar />
         <div className="course-details-content">
           <Topbar />
-          <div style={{ padding: "40px", textAlign: "center", color: "var(--text-primary)" }}>
+          <div style={{ padding: "40px", textAlign: "center", color: "var(--text-primary)" }} id="main-content" tabIndex="-1">
             <h2>Course Not Found</h2>
             <p>{error || "The requested course could not be found."}</p>
             <button
@@ -171,63 +171,70 @@ function CourseDetails() {
       <div className="course-details-content">
         <Topbar />
 
-        {/* HERO */}
-        <div className="course-hero">
-          <div className="course-left">
-            <span className="course-tag">
-              {course.tag}
-            </span>
+        <div className="course-details-main" id="main-content" tabIndex="-1">
+          {/* HERO */}
+          <div className="course-hero">
+            <div className="course-left">
+              <span className="course-tag">
+                {course.tag}
+              </span>
 
-            <h1>
-              {course.title}
-            </h1>
+              <h1>
+                {course.title}
+              </h1>
 
-            <p>
-              {course.description}
-            </p>
+              <p>
+                {course.description}
+              </p>
 
-            <div className="course-stats">
-              <div>
-                <h3>{course.totalLessons}</h3>
-                <span>Lessons</span>
+              <div className="course-stats">
+                <div>
+                  <h3>{course.totalLessons}</h3>
+                  <span>Lessons</span>
+                </div>
+
+                <div>
+                  <h3>{course.duration}</h3>
+                  <span>Duration</span>
+                </div>
+
+                <div>
+                  <h3>{enrolled ? `${completionPct}%` : "—"}</h3>
+                  <span>Completed</span>
+                </div>
+
               </div>
 
-              <div>
-                <h3>{course.duration}</h3>
-                <span>Duration</span>
-              </div>
-
-              <div>
-                <h3>{enrolled ? `${completionPct}%` : "—"}</h3>
-                <span>Completed</span>
-              </div>
+              {enrolled ? (
+                <button
+                  className="start-learning-btn"
+                  onClick={() => navigate(`/course/${course.id}/learning`)}
+                >
+                  {progress?.completedLessons > 0 ? "Continue Learning →" : "Start Learning →"}
+                </button>
+              ) : (
+                <button
+                  className="start-learning-btn"
+                  onClick={handleEnroll}
+                  disabled={enrolling}
+                >
+                  {enrolling ? "Enrolling..." : "Enroll in Course →"}
+                </button>
+              )}
 
             </div>
 
-            {enrolled ? (
-              <button
-                className="start-learning-btn"
-                onClick={() => navigate(`/course/${course.id}/learning`)}
-              >
-                {progress?.completedLessons > 0 ? "Continue Learning →" : "Start Learning →"}
-              </button>
-            ) : (
-              <button
-                className="start-learning-btn"
-                onClick={handleEnroll}
-                disabled={enrolling}
-              >
-                {enrolling ? "Enrolling..." : "Enroll in Course →"}
-              </button>
-            )}
+            <div className="course-right">
+              <img
+                src={getCourseImage(course.id)}
+                alt={course.title}
+                width={480}
+                height={300}
+                loading="eager"
+              />
+            </div>
 
           </div>
-
-          <div className="course-right">
-            <img src={getCourseImage(course.id)} alt={course.title} />
-          </div>
-
-        </div>
 
         {/* COURSE PROGRESS */}
         <div className="progress-section">
@@ -321,8 +328,8 @@ function CourseDetails() {
 
         <Footer />
 
+        </div>
       </div>
-
     </div>
   );
 }

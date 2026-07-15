@@ -15,7 +15,7 @@ function CourseCard({
 }) {
   return (
     <div className="course-card">
-      <img src={image} alt={title} />
+      <img src={image} alt={title} width={360} height={200} loading="lazy" />
       
       {isDashboard ? (
         <div className="course-content">

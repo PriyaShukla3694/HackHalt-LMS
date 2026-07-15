@@ -1,13 +1,16 @@
 import "./AnimatedBackground.css";
 
+const STATIC_PARTICLES = [...Array(40)].map((_, index) => ({
+  id: index,
+  x: `${Math.random() * 100}%`,
+  size: `${3 + Math.random() * 8}px`,
+  delay: `${Math.random() * 10}s`,
+  duration: `${15 + Math.random() * 15}s`,
+}));
+
 function AnimatedBackground() {
-
-  const particles = [...Array(40)];
-
   return (
-
     <div className="animated-bg">
-
       {/* Moving Mesh */}
       <div className="mesh-gradient"></div>
 
@@ -18,31 +21,24 @@ function AnimatedBackground() {
 
       {/* Floating Particles */}
       <div className="particles">
-
-        {particles.map((_, index) => (
-
+        {STATIC_PARTICLES.map((p) => (
           <span
-            key={index}
+            key={p.id}
             className="particle"
             style={{
-              "--x": `${Math.random() * 100}%`,
-              "--size": `${3 + Math.random() * 8}px`,
-              "--delay": `${Math.random() * 10}s`,
-              "--duration": `${15 + Math.random() * 15}s`,
+              "--x": p.x,
+              "--size": p.size,
+              "--delay": p.delay,
+              "--duration": p.duration,
             }}
           />
-
         ))}
-
       </div>
 
       {/* Noise Texture */}
       <div className="noise-layer"></div>
-
     </div>
-
   );
-
 }
 
 export default AnimatedBackground;

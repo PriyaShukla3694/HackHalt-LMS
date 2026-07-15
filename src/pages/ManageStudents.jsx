@@ -221,7 +221,7 @@ function ManageStudents() {
           onMenuClick={() => setSidebarOpen(true)}
         />
 
-        <div className="students-content">
+        <div className="students-content" id="main-content" tabIndex="-1">
 
           {/* HEADER */}
 
@@ -250,13 +250,11 @@ function ManageStudents() {
 
           </div>
 
-          {/* SEARCH */}
-
           <div className="students-search">
-
+            <label htmlFor="search-student-input" className="sr-only">Search student</label>
             <FiSearch />
-
             <input
+              id="search-student-input"
               type="text"
               placeholder="Search student..."
               value={search}
@@ -264,7 +262,6 @@ function ManageStudents() {
                 setSearch(e.target.value)
               }
             />
-
           </div>
 
           {/* STUDENTS */}
@@ -345,6 +342,7 @@ function ManageStudents() {
             <button
               className="close-btn"
               onClick={() => setShowDetails(false)}
+              aria-label="Close"
             >
               <FiX />
             </button>
@@ -442,86 +440,99 @@ function ManageStudents() {
             onClick={(e) => e.stopPropagation()}
           >
 
-            <button
-              className="close-btn"
-              onClick={() => setShowAddPopup(false)}
-            >
-              <FiX />
-            </button>
+              <button
+                className="close-btn"
+                onClick={() => setShowAddPopup(false)}
+                aria-label="Close"
+              >
+                <FiX />
+              </button>
 
-            <h2>Add Student</h2>
+              <h2>Add Student</h2>
 
-            <input
-              type="text"
-              placeholder="Student Name"
-              value={newStudent.name}
-              onChange={(e)=>
-                setNewStudent({
-                  ...newStudent,
-                  name:e.target.value,
-                })
-              }
-            />
+              <label htmlFor="add-student-name" className="sr-only">Student Name</label>
+              <input
+                id="add-student-name"
+                type="text"
+                placeholder="Student Name"
+                value={newStudent.name}
+                onChange={(e)=>
+                  setNewStudent({
+                    ...newStudent,
+                    name:e.target.value,
+                  })
+                }
+              />
 
-            <input
-              type="email"
-              placeholder="Email"
-              value={newStudent.email}
-              onChange={(e)=>
-                setNewStudent({
-                  ...newStudent,
-                  email:e.target.value,
-                })
-              }
-            />
+              <label htmlFor="add-student-email" className="sr-only">Email</label>
+              <input
+                id="add-student-email"
+                type="email"
+                placeholder="Email"
+                value={newStudent.email}
+                onChange={(e)=>
+                  setNewStudent({
+                    ...newStudent,
+                    email:e.target.value,
+                  })
+                }
+              />
 
-            <input
-              type="text"
-              placeholder="Phone"
-              value={newStudent.phone}
-              onChange={(e)=>
-                setNewStudent({
-                  ...newStudent,
-                  phone:e.target.value,
-                })
-              }
-            />
+              <label htmlFor="add-student-phone" className="sr-only">Phone</label>
+              <input
+                id="add-student-phone"
+                type="text"
+                placeholder="Phone"
+                value={newStudent.phone}
+                onChange={(e)=>
+                  setNewStudent({
+                    ...newStudent,
+                    phone:e.target.value,
+                  })
+                }
+              />
 
-            <input
-              type="text"
-              placeholder="Course"
-              value={newStudent.course}
-              onChange={(e)=>
-                setNewStudent({
-                  ...newStudent,
-                  course:e.target.value,
-                })
-              }
-            />
+              <label htmlFor="add-student-course" className="sr-only">Course</label>
+              <input
+                id="add-student-course"
+                type="text"
+                placeholder="Course"
+                value={newStudent.course}
+                onChange={(e)=>
+                  setNewStudent({
+                    ...newStudent,
+                    course:e.target.value,
+                  })
+                }
+              />
 
-            <input
-              type="text"
-              placeholder="Progress"
-              value={newStudent.progress}
-              onChange={(e)=>
-                setNewStudent({
-                  ...newStudent,
-                  progress:e.target.value,
-                })
-              }
-            />
+              <label htmlFor="add-student-progress" className="sr-only">Progress</label>
+              <input
+                id="add-student-progress"
+                type="text"
+                placeholder="Progress"
+                value={newStudent.progress}
+                onChange={(e)=>
+                  setNewStudent({
+                    ...newStudent,
+                    progress:e.target.value,
+                  })
+                }
+              />
 
-            <input
-              type="text"
-              placeholder="Status"
-              value={newStudent.status}
-              onChange={(e)=>
-                setNewStudent({
-                  ...newStudent,
-                  status:e.target.value,
-                })
-              }
-            />
+              <label htmlFor="add-student-status" className="sr-only">Status</label>
+              <input
+                id="add-student-status"
+                type="text"
+                placeholder="Status"
+                value={newStudent.status}
+                onChange={(e)=>
+                  setNewStudent({
+                    ...newStudent,
+                    status:e.target.value,
+                  })
+                }
+              />
 
             <button
               className="save-btn"
@@ -553,80 +564,93 @@ function ManageStudents() {
             onClick={(e) => e.stopPropagation()}
           >
 
-            <button
-              className="close-btn"
-              onClick={() => setShowEditPopup(false)}
-            >
-              <FiX />
-            </button>
+              <button
+                className="close-btn"
+                onClick={() => setShowEditPopup(false)}
+                aria-label="Close"
+              >
+                <FiX />
+              </button>
 
-            <h2>Edit Student</h2>
+              <h2>Edit Student</h2>
 
-            <input
-              type="text"
-              value={editStudent.name}
-              onChange={(e) =>
-                setEditStudent({
-                  ...editStudent,
-                  name: e.target.value,
-                })
-              }
-            />
+              <label htmlFor="edit-student-name" className="sr-only">Student Name</label>
+              <input
+                id="edit-student-name"
+                type="text"
+                value={editStudent.name}
+                onChange={(e) =>
+                  setEditStudent({
+                    ...editStudent,
+                    name: e.target.value,
+                  })
+                }
+              />
 
-            <input
-              type="email"
-              value={editStudent.email}
-              onChange={(e) =>
-                setEditStudent({
-                  ...editStudent,
-                  email: e.target.value,
-                })
-              }
-            />
+              <label htmlFor="edit-student-email" className="sr-only">Email</label>
+              <input
+                id="edit-student-email"
+                type="email"
+                value={editStudent.email}
+                onChange={(e) =>
+                  setEditStudent({
+                    ...editStudent,
+                    email: e.target.value,
+                  })
+                }
+              />
 
-            <input
-              type="text"
-              value={editStudent.phone}
-              onChange={(e) =>
-                setEditStudent({
-                  ...editStudent,
-                  phone: e.target.value,
-                })
-              }
-            />
+              <label htmlFor="edit-student-phone" className="sr-only">Phone</label>
+              <input
+                id="edit-student-phone"
+                type="text"
+                value={editStudent.phone}
+                onChange={(e) =>
+                  setEditStudent({
+                    ...editStudent,
+                    phone: e.target.value,
+                  })
+                }
+              />
 
-            <input
-              type="text"
-              value={editStudent.course}
-              onChange={(e) =>
-                setEditStudent({
-                  ...editStudent,
-                  course: e.target.value,
-                })
-              }
-            />
+              <label htmlFor="edit-student-course" className="sr-only">Course</label>
+              <input
+                id="edit-student-course"
+                type="text"
+                value={editStudent.course}
+                onChange={(e) =>
+                  setEditStudent({
+                    ...editStudent,
+                    course: e.target.value,
+                  })
+                }
+              />
 
-            <input
-              type="text"
-              value={editStudent.progress}
-              onChange={(e) =>
-                setEditStudent({
-                  ...editStudent,
-                  progress: e.target.value,
-                })
-              }
-            />
+              <label htmlFor="edit-student-progress" className="sr-only">Progress</label>
+              <input
+                id="edit-student-progress"
+                type="text"
+                value={editStudent.progress}
+                onChange={(e) =>
+                  setEditStudent({
+                    ...editStudent,
+                    progress: e.target.value,
+                  })
+                }
+              />
 
-            <input
-              type="text"
-              value={editStudent.status}
-              onChange={(e) =>
-                setEditStudent({
-                  ...editStudent,
-                  status: e.target.value,
-                })
-              }
-            />
+              <label htmlFor="edit-student-status" className="sr-only">Status</label>
+              <input
+                id="edit-student-status"
+                type="text"
+                value={editStudent.status}
+                onChange={(e) =>
+                  setEditStudent({
+                    ...editStudent,
+                    status: e.target.value,
+                  })
+                }
+              />
 
             <button
               className="save-btn"
