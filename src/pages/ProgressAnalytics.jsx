@@ -1,5 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
+import { motion } from "framer-motion";
 import AchievementCard from "../components/AchievementCard";
 import Button from "../components/Button";
 import {
@@ -125,11 +126,11 @@ const [sidebarOpen, setSidebarOpen] = useState(false);
 
                 <div className="progress-bar">
 
-                  <div
+                  <motion.div
                     className="progress-fill"
-                    style={{
-                      width: `${course.progress}%`,
-                    }}
+                    initial={{ width: 0 }}
+                    animate={{ width: `${course.progress}%` }}
+                    transition={{ duration: 0.8, ease: "easeOut" }}
                   />
 
                 </div>

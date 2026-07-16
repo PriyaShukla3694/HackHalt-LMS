@@ -139,6 +139,7 @@ function AdminSettings() {
           title="Admin Settings"
           subtitle="Platform Configuration"
           onMenuClick={() => setSidebarOpen(true)}
+          hideTitle={true}
         />
 
         <div className="admin-content" id="main-content" tabIndex="-1">

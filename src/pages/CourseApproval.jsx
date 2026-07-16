@@ -73,7 +73,7 @@ function CourseApproval() {
     );
   };
 
-    return (
+  return (
 
     <div className="admin-page">
 
@@ -88,6 +88,7 @@ function CourseApproval() {
           title="Course Approval"
           subtitle="Approve or reject submitted courses"
           onMenuClick={() => setSidebarOpen(true)}
+          hideTitle={true}
         />
 
         <div className="admin-content">
@@ -153,8 +154,8 @@ function CourseApproval() {
                             course.status === "Approved"
                               ? "status-active"
                               : course.status === "Rejected"
-                              ? "status-inactive"
-                              : "status-pending"
+                                ? "status-inactive"
+                                : "status-pending"
                           }
                         >
                           {course.status}
@@ -196,7 +197,7 @@ function CourseApproval() {
             </div>
           )}
 
-                    {/* COURSE DETAILS POPUP */}
+          {/* COURSE DETAILS POPUP */}
 
           {showDetails && selectedCourse && (
 
@@ -245,8 +246,8 @@ function CourseApproval() {
                       selectedCourse.status === "Approved"
                         ? "status-active"
                         : selectedCourse.status === "Rejected"
-                        ? "status-inactive"
-                        : "status-pending"
+                          ? "status-inactive"
+                          : "status-pending"
                     }
                   >
 

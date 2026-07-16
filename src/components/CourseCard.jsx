@@ -1,4 +1,5 @@
 import React from "react";
+import { motion } from "framer-motion";
 import Button from "./Button";
 import { FiArrowRight } from "react-icons/fi";
 
@@ -14,7 +15,12 @@ function CourseCard({
   onResume,
 }) {
   return (
-    <div className="course-card">
+    <motion.div
+      className="course-card"
+      whileHover={{ y: -4, scale: 1.015 }}
+      whileTap={{ scale: 0.98 }}
+      transition={{ type: "spring", stiffness: 300, damping: 20 }}
+    >
       <img src={image} alt={title} width={360} height={200} loading="lazy" />
       
       {isDashboard ? (
@@ -22,9 +28,11 @@ function CourseCard({
           <h3>{title}</h3>
           <p>{lessons}</p>
           <div className="progress-bar">
-            <div
+            <motion.div
               className="progress-fill"
-              style={{ width: `${progress}%` }}
+              initial={{ width: 0 }}
+              animate={{ width: `${progress}%` }}
+              transition={{ duration: 0.8, ease: "easeOut" }}
             />
           </div>
           <span>{progress}% Completed</span>
@@ -38,9 +46,11 @@ function CourseCard({
           <h2>{title}</h2>
           <p>{lessons} Lessons</p>
           <div className="progress">
-            <div
+            <motion.div
               className="progress-fill"
-              style={{ width: `${progress}%` }}
+              initial={{ width: 0 }}
+              animate={{ width: `${progress}%` }}
+              transition={{ duration: 0.8, ease: "easeOut" }}
             />
           </div>
           <small>{progress}% Completed</small>
@@ -55,7 +65,7 @@ function CourseCard({
           </div>
         </div>
       )}
-    </div>
+    </motion.div>
   );
 }
 

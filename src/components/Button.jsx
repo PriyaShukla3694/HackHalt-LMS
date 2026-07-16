@@ -1,4 +1,5 @@
 import React from "react";
+import { motion } from "framer-motion";
 import "./Button.css";
 
 function Button({
@@ -14,17 +15,18 @@ function Button({
   ...props
 }) {
   return (
-    <button
+    <motion.button
       type={type}
       className={`btn btn-${variant} btn-${size} ${loading ? "btn-loading" : ""} ${className}`}
       disabled={disabled || loading}
       onClick={onClick}
+      whileTap={disabled || loading ? {} : { scale: 0.98 }}
       {...props}
     >
       {loading && <span className="btn-spinner" />}
       {!loading && Icon && <Icon className="btn-icon" />}
       <span className="btn-text">{children}</span>
-    </button>
+    </motion.button>
   );
 }
 

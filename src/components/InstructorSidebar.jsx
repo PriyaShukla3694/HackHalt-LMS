@@ -1,4 +1,5 @@
 import { NavLink, useNavigate } from "react-router-dom";
+import { motion } from "framer-motion";
 import {
   FiGrid,
   FiBookOpen,
@@ -26,27 +27,27 @@ function InstructorSidebar({ isOpen, onClose }) {
     {
       title: "Dashboard",
       path: "/instructor-dashboard",
-      icon: <FiGrid />,
+      icon: <FiGrid style={{ position: "relative", zIndex: 2 }} />,
     },
     {
       title: "Manage Courses",
       path: "/manage-courses",
-      icon: <FiBookOpen />,
+      icon: <FiBookOpen style={{ position: "relative", zIndex: 2 }} />,
     },
     {
       title: "Students",
       path: "/manage-students",
-      icon: <FiUsers />,
+      icon: <FiUsers style={{ position: "relative", zIndex: 2 }} />,
     },
     {
       title: "Analytics",
       path: "/instructor-analytics",
-      icon: <FiBarChart2 />,
+      icon: <FiBarChart2 style={{ position: "relative", zIndex: 2 }} />,
     },
     {
       title: "Settings",
       path: "/instructor-settings",
-      icon: <FiSettings />,
+      icon: <FiSettings style={{ position: "relative", zIndex: 2 }} />,
     },
   ];
 
@@ -94,11 +95,19 @@ function InstructorSidebar({ isOpen, onClose }) {
                 }
                 onClick={onClose}
               >
-
-                {item.icon}
-
-                <span>{item.title}</span>
-
+                {({ isActive }) => (
+                  <>
+                    {isActive && (
+                      <motion.div
+                        layoutId="active-pill"
+                        className="active-pill"
+                        transition={{ type: "spring", stiffness: 380, damping: 30 }}
+                      />
+                    )}
+                    {item.icon}
+                    <span style={{ position: "relative", zIndex: 2 }}>{item.title}</span>
+                  </>
+                )}
               </NavLink>
 
             ))}

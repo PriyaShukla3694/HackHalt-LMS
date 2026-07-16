@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { motion } from "framer-motion";
 import { FiBookOpen } from "react-icons/fi";
 import CourseCard from "../components/CourseCard";
 import EmptyState from "../components/EmptyState";
@@ -56,6 +57,7 @@ function MyCourses() {
           title="My Courses"
           subtitle="Continue learning and improve your skills."
           onMenuClick={() => setSidebarOpen(true)}
+          hideTitle={true}
         />
 
         <div className="courses-content" id="main-content" tabIndex="-1">
@@ -75,21 +77,36 @@ function MyCourses() {
               onCtaClick={() => navigate("/student-dashboard")}
             />
           ) : (
-            <div className="course-grid">
+            <motion.div
+              className="course-grid"
+              variants={{
+                initial: {},
+                animate: { transition: { staggerChildren: 0.06 } }
+              }}
+              initial="initial"
+              animate="animate"
+            >
               {filteredCourses.map((course) => (
-                <CourseCard
+                <motion.div
                   key={course.id}
-                  title={course.title}
-                  image={course.image}
-                  lessons={course.lessons}
-                  progress={course.progress}
-                  level={course.level}
-                  isDashboard={false}
-                  onResume={() => setShowPopup(true)}
-                  onDetails={() => navigate(`/course/${course.id}`)}
-                />
+                  variants={{
+                    initial: { opacity: 0, y: 10 },
+                    animate: { opacity: 1, y: 0 }
+                  }}
+                >
+                  <CourseCard
+                    title={course.title}
+                    image={course.image}
+                    lessons={course.lessons}
+                    progress={course.progress}
+                    level={course.level}
+                    isDashboard={false}
+                    onResume={() => setShowPopup(true)}
+                    onDetails={() => navigate(`/course/${course.id}`)}
+                  />
+                </motion.div>
               ))}
-            </div>
+            </motion.div>
           )}
 
           {showPopup && (

@@ -95,6 +95,7 @@ onClose={()=>setSidebarOpen(false)}
 <Topbar
 title="Instructor Analytics"
 onMenuClick={()=>setSidebarOpen(true)}
+hideTitle={true}
 />
 
 <div className="analytics-content">

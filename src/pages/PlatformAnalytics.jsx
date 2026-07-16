@@ -93,6 +93,7 @@ function PlatformAnalytics() {
           title="Platform Analytics"
           subtitle="Track platform performance and engagement"
           onMenuClick={() => setSidebarOpen(true)}
+          hideTitle={true}
         />
 
         <div className="admin-content" id="main-content" tabIndex="-1">

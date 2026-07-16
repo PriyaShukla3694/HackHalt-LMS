@@ -19,6 +19,8 @@ function Topbar({
 
   onMenuClick,
 
+  hideTitle = false,
+
 }) {
 
   const navigate = useNavigate();
@@ -97,10 +99,12 @@ function Topbar({
         </h2>
 
         {/* Desktop Title */}
-        <div className="title-section">
-          <h1>{title}</h1>
-          <p>{subtitle}</p>
-        </div>
+        {!hideTitle && (
+          <div className="title-section">
+            <h1>{title}</h1>
+            <p>{subtitle}</p>
+          </div>
+        )}
       </div>
 
       {/* RIGHT */}

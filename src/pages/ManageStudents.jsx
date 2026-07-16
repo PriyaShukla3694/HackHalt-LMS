@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { motion } from "framer-motion";
 
 import {
   FiSearch,
@@ -219,6 +220,7 @@ function ManageStudents() {
           title="Manage Students"
           subtitle="View and manage all enrolled students"
           onMenuClick={() => setSidebarOpen(true)}
+          hideTitle={true}
         />
 
         <div className="students-content" id="main-content" tabIndex="-1">
@@ -275,11 +277,26 @@ function ManageStudents() {
               onCtaClick={() => setShowAddPopup(true)}
             />
           ) : (
-            <div className="student-grid">
+            <motion.div
+              className="student-grid"
+              variants={{
+                initial: {},
+                animate: { transition: { staggerChildren: 0.06 } }
+              }}
+              initial="initial"
+              animate="animate"
+            >
               {filteredStudents.map((student) => (
-                <div
+                <motion.div
                   className="student-card"
                   key={student.id}
+                  variants={{
+                    initial: { opacity: 0, y: 10 },
+                    animate: { opacity: 1, y: 0 }
+                  }}
+                  whileHover={{ y: -4, scale: 1.015 }}
+                  whileTap={{ scale: 0.98 }}
+                  transition={{ type: "spring", stiffness: 300, damping: 20 }}
                 >
                   <div className="student-avatar">
                     {student.name.charAt(0)}
@@ -315,9 +332,9 @@ function ManageStudents() {
                       Delete
                     </button>
                   </div>
-                </div>
+                </motion.div>
               ))}
-            </div>
+            </motion.div>
           )}
         </div>
 

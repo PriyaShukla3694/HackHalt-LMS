@@ -1,3 +1,4 @@
+import { motion } from "framer-motion";
 import "../styles/CourseDetails.css";
 import Sidebar from "../components/Sidebar";
 import Topbar from "../components/Topbar";
@@ -249,10 +250,12 @@ function CourseDetails() {
                 </div>
 
                 <div className="progress-bar">
-                  <div
+                  <motion.div
                     className="progress-fill"
-                    style={{ width: `${completionPct}%` }}
-                  ></div>
+                    initial={{ width: 0 }}
+                    animate={{ width: `${completionPct}%` }}
+                    transition={{ duration: 0.8, ease: "easeOut" }}
+                  />
                 </div>
               </>
             ) : (

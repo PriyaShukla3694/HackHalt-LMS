@@ -1,4 +1,5 @@
 import { NavLink, useNavigate } from "react-router-dom";
+import { motion } from "framer-motion";
 import {
   FiGrid,
   FiBookOpen,
@@ -39,8 +40,19 @@ function Sidebar({ isOpen, onClose }) {
               isActive ? "menu active" : "menu"
             }
           >
-            <FiGrid />
-            <span>Dashboard</span>
+            {({ isActive }) => (
+              <>
+                {isActive && (
+                  <motion.div
+                    layoutId="active-pill"
+                    className="active-pill"
+                    transition={{ type: "spring", stiffness: 380, damping: 30 }}
+                  />
+                )}
+                <FiGrid style={{ position: "relative", zIndex: 2 }} />
+                <span style={{ position: "relative", zIndex: 2 }}>Dashboard</span>
+              </>
+            )}
           </NavLink>
 
           <NavLink
@@ -50,8 +62,19 @@ function Sidebar({ isOpen, onClose }) {
               isActive ? "menu active" : "menu"
             }
           >
-            <FiBookOpen />
-            <span>My Courses</span>
+            {({ isActive }) => (
+              <>
+                {isActive && (
+                  <motion.div
+                    layoutId="active-pill"
+                    className="active-pill"
+                    transition={{ type: "spring", stiffness: 380, damping: 30 }}
+                  />
+                )}
+                <FiBookOpen style={{ position: "relative", zIndex: 2 }} />
+                <span style={{ position: "relative", zIndex: 2 }}>My Courses</span>
+              </>
+            )}
           </NavLink>
 
           <NavLink
@@ -61,8 +84,19 @@ function Sidebar({ isOpen, onClose }) {
               isActive ? "menu active" : "menu"
             }
           >
-            <FiTrendingUp />
-            <span>Progress</span>
+            {({ isActive }) => (
+              <>
+                {isActive && (
+                  <motion.div
+                    layoutId="active-pill"
+                    className="active-pill"
+                    transition={{ type: "spring", stiffness: 380, damping: 30 }}
+                  />
+                )}
+                <FiTrendingUp style={{ position: "relative", zIndex: 2 }} />
+                <span style={{ position: "relative", zIndex: 2 }}>Progress</span>
+              </>
+            )}
           </NavLink>
 
           <NavLink
@@ -72,8 +106,19 @@ function Sidebar({ isOpen, onClose }) {
               isActive ? "menu active" : "menu"
             }
           >
-            <FiSettings />
-            <span>Settings</span>
+            {({ isActive }) => (
+              <>
+                {isActive && (
+                  <motion.div
+                    layoutId="active-pill"
+                    className="active-pill"
+                    transition={{ type: "spring", stiffness: 380, damping: 30 }}
+                  />
+                )}
+                <FiSettings style={{ position: "relative", zIndex: 2 }} />
+                <span style={{ position: "relative", zIndex: 2 }}>Settings</span>
+              </>
+            )}
           </NavLink>
 
         </nav>

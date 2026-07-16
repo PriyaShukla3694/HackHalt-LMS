@@ -1,4 +1,6 @@
-import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import { lazy, Suspense } from "react";
+import { BrowserRouter, Routes, Route, Navigate, useLocation } from "react-router-dom";
+import { AnimatePresence } from "framer-motion";
 
 import WelcomePage from "./pages/WelcomePage";
 import LoginPage from "./pages/LoginPage";
@@ -6,65 +8,103 @@ import RegisterPage from "./pages/RegisterPage";
 import ForgotPasswordPage from "./pages/ForgotPasswordPage";
 
 /* STUDENT */
-import StudentDashboard from "./pages/StudentDashboard";
-import MyCourses from "./pages/MyCourses";
-import CourseDetails from "./pages/CourseDetails";
-import VideoLearning from "./pages/VideoLearning";
-import ProgressAnalytics from "./pages/ProgressAnalytics";
-import Certificates from "./pages/Certificates";
-import Settings from "./pages/Settings";
+const StudentDashboard = lazy(() => import("./pages/StudentDashboard"));
+const MyCourses = lazy(() => import("./pages/MyCourses"));
+const CourseDetails = lazy(() => import("./pages/CourseDetails"));
+const VideoLearning = lazy(() => import("./pages/VideoLearning"));
+const ProgressAnalytics = lazy(() => import("./pages/ProgressAnalytics"));
+const Certificates = lazy(() => import("./pages/Certificates"));
+const Settings = lazy(() => import("./pages/Settings"));
 
 /* INSTRUCTOR */
-import InstructorDashboard from "./pages/InstructorDashboard";
-import ManageCourses from "./pages/ManageCourses";
-import ManageStudents from "./pages/ManageStudents";
-import InstructorAnalytics from "./pages/InstructorAnalytics";
-import InstructorSettings from "./pages/InstructorSettings";
+const InstructorDashboard = lazy(() => import("./pages/InstructorDashboard"));
+const ManageCourses = lazy(() => import("./pages/ManageCourses"));
+const ManageStudents = lazy(() => import("./pages/ManageStudents"));
+const InstructorAnalytics = lazy(() => import("./pages/InstructorAnalytics"));
+const InstructorSettings = lazy(() => import("./pages/InstructorSettings"));
 
 /* ADMIN */
-import AdminDashboard from "./pages/AdminDashboard";
-import UserManagement from "./pages/UserManagement";
-import CourseApproval from "./pages/CourseApproval";
-import PlatformAnalytics from "./pages/PlatformAnalytics";
-import AdminSettings from "./pages/AdminSettings";
+const AdminDashboard = lazy(() => import("./pages/AdminDashboard"));
+const UserManagement = lazy(() => import("./pages/UserManagement"));
+const CourseApproval = lazy(() => import("./pages/CourseApproval"));
+const PlatformAnalytics = lazy(() => import("./pages/PlatformAnalytics"));
+const AdminSettings = lazy(() => import("./pages/AdminSettings"));
+
+const NotFoundPage = lazy(() => import("./pages/NotFoundPage"));
 
 /* AUTH */
 import ProtectedRoute from "./routes/ProtectedRoute";
 
-
 import AnimatedBackground from "./components/AnimatedBackground";
-function App() {
-  return (
-    <BrowserRouter>
-      <Routes>
+import PageTransition from "./components/PageTransition";
+import ErrorBoundary from "./components/ErrorBoundary";
+import "./App.css";
 
+// Premium centered loading fallback using theme styles
+function PageLoader() {
+  return (
+    <div className="page-spinner-container">
+      <div className="page-spinner" />
+    </div>
+  );
+}
+
+function AnimatedRoutes() {
+  const location = useLocation();
+
+  return (
+    <AnimatePresence mode="wait">
+      <Routes location={location} key={location.pathname}>
         {/* ========================= */}
         {/* PUBLIC ROUTES */}
         {/* ========================= */}
 
         <Route
           path="/"
-          element={<WelcomePage />}
+          element={
+            <>
+              <AnimatedBackground />
+              <PageTransition>
+                <WelcomePage />
+              </PageTransition>
+            </>
+          }
         />
 
         <Route
-  path="/login"
-  element={
-    <>
-      <AnimatedBackground />
-      <LoginPage />
-    </>
-  }
-/>
+          path="/login"
+          element={
+            <>
+              <AnimatedBackground />
+              <PageTransition>
+                <LoginPage />
+              </PageTransition>
+            </>
+          }
+        />
 
         <Route
           path="/register"
-          element={<RegisterPage />}
+          element={
+            <>
+              <AnimatedBackground />
+              <PageTransition>
+                <RegisterPage />
+              </PageTransition>
+            </>
+          }
         />
 
         <Route
           path="/forgot-password"
-          element={<ForgotPasswordPage />}
+          element={
+            <>
+              <AnimatedBackground />
+              <PageTransition>
+                <ForgotPasswordPage />
+              </PageTransition>
+            </>
+          }
         />
 
         {/* ========================= */}
@@ -74,63 +114,91 @@ function App() {
         <Route
           path="/student-dashboard"
           element={
-            <ProtectedRoute role="student">
-              <StudentDashboard />
-            </ProtectedRoute>
+            <Suspense fallback={<PageLoader />}>
+              <ProtectedRoute role="student">
+                <PageTransition>
+                  <StudentDashboard />
+                </PageTransition>
+              </ProtectedRoute>
+            </Suspense>
           }
         />
 
         <Route
           path="/my-courses"
           element={
-            <ProtectedRoute role="student">
-              <MyCourses />
-            </ProtectedRoute>
+            <Suspense fallback={<PageLoader />}>
+              <ProtectedRoute role="student">
+                <PageTransition>
+                  <MyCourses />
+                </PageTransition>
+              </ProtectedRoute>
+            </Suspense>
           }
         />
 
         <Route
           path="/course/:id"
           element={
-            <ProtectedRoute role="student">
-              <CourseDetails />
-            </ProtectedRoute>
+            <Suspense fallback={<PageLoader />}>
+              <ProtectedRoute role="student">
+                <PageTransition>
+                  <CourseDetails />
+                </PageTransition>
+              </ProtectedRoute>
+            </Suspense>
           }
         />
 
         <Route
           path="/course/:id/learning"
           element={
-            <ProtectedRoute role="student">
-              <VideoLearning />
-            </ProtectedRoute>
+            <Suspense fallback={<PageLoader />}>
+              <ProtectedRoute role="student">
+                <PageTransition>
+                  <VideoLearning />
+                </PageTransition>
+              </ProtectedRoute>
+            </Suspense>
           }
         />
 
         <Route
           path="/progress"
           element={
-            <ProtectedRoute role="student">
-              <ProgressAnalytics />
-            </ProtectedRoute>
+            <Suspense fallback={<PageLoader />}>
+              <ProtectedRoute role="student">
+                <PageTransition>
+                  <ProgressAnalytics />
+                </PageTransition>
+              </ProtectedRoute>
+            </Suspense>
           }
         />
 
         <Route
           path="/certificates"
           element={
-            <ProtectedRoute role="student">
-              <Certificates />
-            </ProtectedRoute>
+            <Suspense fallback={<PageLoader />}>
+              <ProtectedRoute role="student">
+                <PageTransition>
+                  <Certificates />
+                </PageTransition>
+              </ProtectedRoute>
+            </Suspense>
           }
         />
 
         <Route
           path="/settings"
           element={
-            <ProtectedRoute role="student">
-              <Settings />
-            </ProtectedRoute>
+            <Suspense fallback={<PageLoader />}>
+              <ProtectedRoute role="student">
+                <PageTransition>
+                  <Settings />
+                </PageTransition>
+              </ProtectedRoute>
+            </Suspense>
           }
         />
 
@@ -141,45 +209,65 @@ function App() {
         <Route
           path="/instructor-dashboard"
           element={
-            <ProtectedRoute role="instructor">
-              <InstructorDashboard />
-            </ProtectedRoute>
+            <Suspense fallback={<PageLoader />}>
+              <ProtectedRoute role="instructor">
+                <PageTransition>
+                  <InstructorDashboard />
+                </PageTransition>
+              </ProtectedRoute>
+            </Suspense>
           }
         />
 
         <Route
           path="/manage-courses"
           element={
-            <ProtectedRoute role="instructor">
-              <ManageCourses />
-            </ProtectedRoute>
+            <Suspense fallback={<PageLoader />}>
+              <ProtectedRoute role="instructor">
+                <PageTransition>
+                  <ManageCourses />
+                </PageTransition>
+              </ProtectedRoute>
+            </Suspense>
           }
         />
 
         <Route
           path="/manage-students"
           element={
-            <ProtectedRoute role="instructor">
-              <ManageStudents />
-            </ProtectedRoute>
+            <Suspense fallback={<PageLoader />}>
+              <ProtectedRoute role="instructor">
+                <PageTransition>
+                  <ManageStudents />
+                </PageTransition>
+              </ProtectedRoute>
+            </Suspense>
           }
         />
 
         <Route
           path="/instructor-analytics"
           element={
-            <ProtectedRoute role="instructor">
-              <InstructorAnalytics />
-            </ProtectedRoute>
+            <Suspense fallback={<PageLoader />}>
+              <ProtectedRoute role="instructor">
+                <PageTransition>
+                  <InstructorAnalytics />
+                </PageTransition>
+              </ProtectedRoute>
+            </Suspense>
           }
         />
 
         <Route
           path="/instructor-settings"
           element={
-            <ProtectedRoute role="instructor">
-              <InstructorSettings />
-            </ProtectedRoute>
+            <Suspense fallback={<PageLoader />}>
+              <ProtectedRoute role="instructor">
+                <PageTransition>
+                  <InstructorSettings />
+                </PageTransition>
+              </ProtectedRoute>
+            </Suspense>
           }
         />
 
@@ -190,45 +278,65 @@ function App() {
         <Route
           path="/admin-dashboard"
           element={
-            <ProtectedRoute role="admin">
-              <AdminDashboard />
-            </ProtectedRoute>
+            <Suspense fallback={<PageLoader />}>
+              <ProtectedRoute role="admin">
+                <PageTransition>
+                  <AdminDashboard />
+                </PageTransition>
+              </ProtectedRoute>
+            </Suspense>
           }
         />
 
         <Route
           path="/user-management"
           element={
-            <ProtectedRoute role="admin">
-              <UserManagement />
-            </ProtectedRoute>
+            <Suspense fallback={<PageLoader />}>
+              <ProtectedRoute role="admin">
+                <PageTransition>
+                  <UserManagement />
+                </PageTransition>
+              </ProtectedRoute>
+            </Suspense>
           }
         />
 
         <Route
           path="/course-approval"
           element={
-            <ProtectedRoute role="admin">
-              <CourseApproval />
-            </ProtectedRoute>
+            <Suspense fallback={<PageLoader />}>
+              <ProtectedRoute role="admin">
+                <PageTransition>
+                  <CourseApproval />
+                </PageTransition>
+              </ProtectedRoute>
+            </Suspense>
           }
         />
 
         <Route
           path="/platform-analytics"
           element={
-            <ProtectedRoute role="admin">
-              <PlatformAnalytics />
-            </ProtectedRoute>
+            <Suspense fallback={<PageLoader />}>
+              <ProtectedRoute role="admin">
+                <PageTransition>
+                  <PlatformAnalytics />
+                </PageTransition>
+              </ProtectedRoute>
+            </Suspense>
           }
         />
 
         <Route
           path="/admin-settings"
           element={
-            <ProtectedRoute role="admin">
-              <AdminSettings />
-            </ProtectedRoute>
+            <Suspense fallback={<PageLoader />}>
+              <ProtectedRoute role="admin">
+                <PageTransition>
+                  <AdminSettings />
+                </PageTransition>
+              </ProtectedRoute>
+            </Suspense>
           }
         />
 
@@ -238,11 +346,24 @@ function App() {
 
         <Route
           path="*"
-          element={<Navigate to="/" replace />}
+          element={
+            <Suspense fallback={<PageLoader />}>
+              <NotFoundPage />
+            </Suspense>
+          }
         />
-
       </Routes>
-    </BrowserRouter>
+    </AnimatePresence>
+  );
+}
+
+function App() {
+  return (
+    <ErrorBoundary>
+      <BrowserRouter>
+        <AnimatedRoutes />
+      </BrowserRouter>
+    </ErrorBoundary>
   );
 }
 

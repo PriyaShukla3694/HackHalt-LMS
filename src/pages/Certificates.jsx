@@ -95,7 +95,7 @@ function Certificates() {
       <Sidebar />
 
       <div className="main-content">
-        <Topbar />
+        <Topbar hideTitle={true} />
 
         <div className="certificates-content" id="main-content" tabIndex="-1">
           <div className="certificates-header">

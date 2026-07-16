@@ -128,6 +128,7 @@ function InstructorSettings() {
         <Topbar
           title="Instructor Settings"
           onMenuClick={() => setSidebarOpen(true)}
+          hideTitle={true}
         />
 
         <div className="settings-content" id="main-content" tabIndex="-1">

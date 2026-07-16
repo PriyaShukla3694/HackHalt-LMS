@@ -1,41 +1,51 @@
+import { useEffect } from "react";
+import { useReducedMotion } from "framer-motion";
 import "./AnimatedBackground.css";
 
-const STATIC_PARTICLES = [...Array(40)].map((_, index) => ({
-  id: index,
-  x: `${Math.random() * 100}%`,
-  size: `${3 + Math.random() * 8}px`,
-  delay: `${Math.random() * 10}s`,
-  duration: `${15 + Math.random() * 15}s`,
-}));
-
 function AnimatedBackground() {
+  const shouldReduceMotion = useReducedMotion();
+
+  useEffect(() => {
+    if (shouldReduceMotion) return;
+
+    const handleMove = (e) => {
+      document.documentElement.style.setProperty("--mx", `${e.clientX}px`);
+      document.documentElement.style.setProperty("--my", `${e.clientY}px`);
+    };
+
+    window.addEventListener("pointermove", handleMove);
+    return () => window.removeEventListener("pointermove", handleMove);
+  }, [shouldReduceMotion]);
+
+  if (shouldReduceMotion) {
+    return (
+      <div className="animated-bg reduced-motion">
+        <div className="mesh-gradient-static"></div>
+        <div className="grid-overlay-static"></div>
+        <div className="noise-layer"></div>
+      </div>
+    );
+  }
+
   return (
     <div className="animated-bg">
-      {/* Moving Mesh */}
-      <div className="mesh-gradient"></div>
+      {/* 1. Base color is defined by page CSS */}
+      
+      {/* 2. Grid overlay (masked, faded at edges) */}
+      <div className="grid-overlay"></div>
 
-      {/* Glow Blobs */}
-      <div className="glow glow-1"></div>
-      <div className="glow glow-2"></div>
-      <div className="glow glow-3"></div>
+      {/* 3. Orbs (3, staggered timing, one cool accent color) */}
+      <div className="orb orb-1"></div>
+      <div className="orb orb-2"></div>
+      <div className="orb orb-3"></div>
 
-      {/* Floating Particles */}
-      <div className="particles">
-        {STATIC_PARTICLES.map((p) => (
-          <span
-            key={p.id}
-            className="particle"
-            style={{
-              "--x": p.x,
-              "--size": p.size,
-              "--delay": p.delay,
-              "--duration": p.duration,
-            }}
-          />
-        ))}
-      </div>
+      {/* 4. Hero focal glow (static position, behind headline) */}
+      <div className="hero-glow"></div>
 
-      {/* Noise Texture */}
+      {/* 5. Mouse spotlight (subtle, tracks cursor) */}
+      <div className="spotlight"></div>
+
+      {/* 6. Noise texture (film-grain feel) */}
       <div className="noise-layer"></div>
     </div>
   );

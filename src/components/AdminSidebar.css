@@ -100,6 +100,8 @@
     font-weight:600;
 
     transition:.25s;
+
+    position: relative;
 }
 
 .admin-link svg{
@@ -113,9 +115,24 @@
 }
 
 .admin-link.active{
-    background:linear-gradient(135deg,#ff8c00,#ff9f2f);
-    color:#fff;
-    box-shadow:0 10px 20px rgba(255,140,0,.25);
+    background: transparent;
+    color:#fff !important;
+    box-shadow: none;
+}
+
+.admin-link.active:hover {
+    background: transparent;
+    color: #fff !important;
+    transform: none;
+}
+
+.active-pill {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg,#ff8c00,#ff9f2f);
+    border-radius: 14px;
+    z-index: 1;
+    box-shadow: 0 10px 20px rgba(255,140,0,.25);
 }
 
 /* =======================================

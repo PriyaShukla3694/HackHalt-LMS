@@ -81,6 +81,8 @@ nav{
 
     transition:.3s;
 
+    position: relative;
+
 }
 
 .menu svg{
@@ -101,12 +103,27 @@ nav{
 
 .menu.active{
 
-    background:linear-gradient(135deg,#ff8c00,#ffad33);
+    background: transparent;
 
-    color:#fff;
+    color:#fff !important;
 
-    box-shadow:0 10px 20px rgba(255,140,0,.22);
+    box-shadow: none;
 
+}
+
+.menu.active:hover {
+    background: transparent;
+    color: #fff !important;
+    transform: none;
+}
+
+.active-pill {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg,#ff8c00,#ffad33);
+    border-radius: 14px;
+    z-index: 1;
+    box-shadow: 0 10px 20px rgba(255,140,0,.22);
 }
 
 /* ==========================================

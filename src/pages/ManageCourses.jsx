@@ -192,6 +192,7 @@ function ManageCourses() {
           title="Manage Courses"
           subtitle="Create, edit and manage your courses"
           onMenuClick={() => setSidebarOpen(true)}
+          hideTitle={true}
         />
 
         <div className="manage-content" id="main-content" tabIndex="-1">

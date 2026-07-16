@@ -1,5 +1,6 @@
 import "./AdminSidebar.css";
 import { NavLink, useNavigate } from "react-router-dom";
+import { motion } from "framer-motion";
 
 import {
   FaTachometerAlt,
@@ -66,8 +67,19 @@ function AdminSidebar({ isOpen, onClose }) {
               className="admin-link"
               onClick={onClose}
             >
-              <FaTachometerAlt />
-              <span>Dashboard</span>
+              {({ isActive }) => (
+                <>
+                  {isActive && (
+                    <motion.div
+                      layoutId="active-pill"
+                      className="active-pill"
+                      transition={{ type: "spring", stiffness: 380, damping: 30 }}
+                    />
+                  )}
+                  <FaTachometerAlt style={{ position: "relative", zIndex: 2 }} />
+                  <span style={{ position: "relative", zIndex: 2 }}>Dashboard</span>
+                </>
+              )}
             </NavLink>
 
             <NavLink
@@ -75,8 +87,19 @@ function AdminSidebar({ isOpen, onClose }) {
               className="admin-link"
               onClick={onClose}
             >
-              <FaUsers />
-              <span>User Management</span>
+              {({ isActive }) => (
+                <>
+                  {isActive && (
+                    <motion.div
+                      layoutId="active-pill"
+                      className="active-pill"
+                      transition={{ type: "spring", stiffness: 380, damping: 30 }}
+                    />
+                  )}
+                  <FaUsers style={{ position: "relative", zIndex: 2 }} />
+                  <span style={{ position: "relative", zIndex: 2 }}>User Management</span>
+                </>
+              )}
             </NavLink>
 
             <NavLink
@@ -84,8 +107,19 @@ function AdminSidebar({ isOpen, onClose }) {
               className="admin-link"
               onClick={onClose}
             >
-              <FaBook />
-              <span>Course Approval</span>
+              {({ isActive }) => (
+                <>
+                  {isActive && (
+                    <motion.div
+                      layoutId="active-pill"
+                      className="active-pill"
+                      transition={{ type: "spring", stiffness: 380, damping: 30 }}
+                    />
+                  )}
+                  <FaBook style={{ position: "relative", zIndex: 2 }} />
+                  <span style={{ position: "relative", zIndex: 2 }}>Course Approval</span>
+                </>
+              )}
             </NavLink>
 
             <NavLink
@@ -93,8 +127,19 @@ function AdminSidebar({ isOpen, onClose }) {
               className="admin-link"
               onClick={onClose}
             >
-              <FaChartLine />
-              <span>Platform Analytics</span>
+              {({ isActive }) => (
+                <>
+                  {isActive && (
+                    <motion.div
+                      layoutId="active-pill"
+                      className="active-pill"
+                      transition={{ type: "spring", stiffness: 380, damping: 30 }}
+                    />
+                  )}
+                  <FaChartLine style={{ position: "relative", zIndex: 2 }} />
+                  <span style={{ position: "relative", zIndex: 2 }}>Platform Analytics</span>
+                </>
+              )}
             </NavLink>
 
             <NavLink
@@ -102,8 +147,19 @@ function AdminSidebar({ isOpen, onClose }) {
               className="admin-link"
               onClick={onClose}
             >
-              <FaCog />
-              <span>Settings</span>
+              {({ isActive }) => (
+                <>
+                  {isActive && (
+                    <motion.div
+                      layoutId="active-pill"
+                      className="active-pill"
+                      transition={{ type: "spring", stiffness: 380, damping: 30 }}
+                    />
+                  )}
+                  <FaCog style={{ position: "relative", zIndex: 2 }} />
+                  <span style={{ position: "relative", zIndex: 2 }}>Settings</span>
+                </>
+              )}
             </NavLink>
 
           </nav>

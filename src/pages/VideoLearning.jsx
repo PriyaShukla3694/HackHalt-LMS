@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
+import { motion } from "framer-motion";
 import "../styles/VideoLearning.css";
 import Sidebar from "../components/Sidebar";
 import Topbar from "../components/Topbar";
@@ -218,7 +219,12 @@ function VideoLearning() {
                     </div>
 
                     <div className="progress-bar">
-                      <div className="progress-fill" style={{ width: `${completionPct}%` }}></div>
+                      <motion.div
+                        className="progress-fill"
+                        initial={{ width: 0 }}
+                        animate={{ width: `${completionPct}%` }}
+                        transition={{ duration: 0.8, ease: "easeOut" }}
+                      />
                     </div>
                   </div>
 

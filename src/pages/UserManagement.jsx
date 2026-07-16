@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { motion } from "framer-motion";
 
 import {
   FiPlus,
@@ -265,6 +266,7 @@ function UserManagement() {
           title="User Management"
           subtitle="Manage students, instructors and administrators"
           onMenuClick={() => setSidebarOpen(true)}
+          hideTitle={true}
         />
 
         <div className="admin-content" id="main-content" tabIndex="-1">
@@ -363,9 +365,22 @@ function UserManagement() {
                     <th>Actions</th>
                   </tr>
                 </thead>
-                <tbody>
+                <motion.tbody
+                  variants={{
+                    initial: {},
+                    animate: { transition: { staggerChildren: 0.05 } }
+                  }}
+                  initial="initial"
+                  animate="animate"
+                >
                   {filteredUsers.map((user, index) => (
-                    <tr key={index}>
+                    <motion.tr
+                      key={index}
+                      variants={{
+                        initial: { opacity: 0, y: 8 },
+                        animate: { opacity: 1, y: 0 }
+                      }}
+                    >
                       <td>{user.name}</td>
                       <td>{user.email}</td>
                       <td>{user.role}</td>
@@ -406,9 +421,9 @@ function UserManagement() {
                           </button>
                         </div>
                       </td>
-                    </tr>
+                    </motion.tr>
                   ))}
-                </tbody>
+                </motion.tbody>
               </table>
             </div>
           )}
