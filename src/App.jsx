@@ -15,6 +15,7 @@ const VideoLearning = lazy(() => import("./pages/VideoLearning"));
 const ProgressAnalytics = lazy(() => import("./pages/ProgressAnalytics"));
 const Certificates = lazy(() => import("./pages/Certificates"));
 const Leaderboard = lazy(() => import("./pages/Leaderboard"));
+const Settings = lazy(() => import("./pages/Settings"));
 
 /* INSTRUCTOR */
 const InstructorDashboard = lazy(() => import("./pages/InstructorDashboard"));
@@ -212,6 +213,19 @@ function AnimatedRoutes() {
               <ProtectedRoute role="student">
                 <PageTransition>
                   <Certificates />
+                </PageTransition>
+              </ProtectedRoute>
+            </Suspense>
+          }
+        />
+
+        <Route
+          path="/leaderboard"
+          element={
+            <Suspense fallback={<PageLoader />}>
+              <ProtectedRoute role="student">
+                <PageTransition>
+                  <Leaderboard />
                 </PageTransition>
               </ProtectedRoute>
             </Suspense>
