@@ -139,3 +139,14 @@ export const authFetch = async (path, options = {}) => {
     throw err;
   }
 };
+
+export const verifyCertificate = async (certId) => {
+  if (MOCK_MODE) {
+    await new Promise((resolve) => setTimeout(resolve, 300));
+    return handleMockRequest(`/certificates/verify/${certId}`, { method: "GET" });
+  }
+
+  const rawBase = import.meta.env.VITE_API_URL || "http://localhost:5000/api";
+  const BASE = rawBase.endsWith("/api") ? rawBase : `${rawBase}/api`;
+  return fetch(`${BASE}/certificates/verify/${certId}`);
+};

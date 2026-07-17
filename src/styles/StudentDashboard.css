@@ -657,3 +657,92 @@ width:100%;
 }
 
 }
+
+/* ================= DASHBOARD SKILL TREE ================= */
+
+.dashboard-skill-tree-section {
+  margin-top: 35px;
+}
+
+.dashboard-skill-tree-card {
+  background: white;
+  border-radius: 18px;
+  padding: 30px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06);
+}
+
+.mini-nodes-row {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.mini-node-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex: 1;
+  min-width: 150px;
+  padding: 10px;
+  border-radius: 10px;
+  background: #fdfdfd;
+  border: 1px solid #f0f0f0;
+  transition: all 0.25s ease;
+}
+
+.mini-node-item.completed {
+  background: rgba(16, 185, 129, 0.04);
+  border-color: rgba(16, 185, 129, 0.15);
+}
+
+.mini-node-item.in-progress {
+  background: rgba(255, 140, 0, 0.04);
+  border-color: rgba(255, 140, 0, 0.2);
+  box-shadow: 0 0 10px rgba(255, 140, 0, 0.08);
+}
+
+.mini-node-item.locked {
+  opacity: 0.65;
+  background: #fafafa;
+  border-color: #e5e5e5;
+}
+
+.mini-node-item:hover {
+  transform: translateY(-2px);
+}
+
+.mini-node-item.locked:hover {
+  transform: none;
+}
+
+.mini-status-icon {
+  font-size: 20px;
+}
+
+.mini-node-meta {
+  display: flex;
+  flex-direction: column;
+}
+
+.mini-node-name {
+  font-size: 13.5px;
+  color: #333;
+}
+
+.mini-node-item.locked .mini-node-name {
+  color: #999;
+}
+
+.mini-node-pct {
+  font-size: 11.5px;
+  color: #777;
+}
+
+.mini-arrow {
+  color: #bbb;
+  font-size: 16px;
+  margin-left: auto;
+}

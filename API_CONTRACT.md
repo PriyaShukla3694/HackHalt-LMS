@@ -303,6 +303,11 @@ All API endpoints must return a standardized response envelope.
     "data": [
       {
         "id": "cert-uuid-or-id",
+        "certId": "HH-CERT-A1B2C3D4",
+        "verifyUrl": "/verify/HH-CERT-A1B2C3D4",
+        "studentName": "Demo User",
+        "courseTitle": "Cyber Security",
+        "instructorName": "Dr. Sarah Jenkins, Chief Security Officer",
         "course": {
           "id": 1,
           "title": "Cyber Security"
@@ -319,3 +324,35 @@ All API endpoints must return a standardized response envelope.
 * **Path**: `/courses/certificates/:id/download`
 * **Authentication Required**: Yes (Bearer Token)
 * **Response**: Binary PDF content stream (`application/pdf`)
+
+### 13. Verify Certificate
+* **Method**: `GET`
+* **Path**: `/certificates/verify/:certId`
+* **Authentication Required**: No (Public)
+* **Success Response (200 OK)**:
+  ```json
+  {
+    "success": true,
+    "data": {
+      "valid": true,
+      "studentName": "Demo User",
+      "courseTitle": "Cyber Security",
+      "instructorName": "Dr. Sarah Jenkins, Chief Security Officer",
+      "issuedAt": "2026-07-14T23:55:00.000Z"
+    },
+    "message": "Certificate verified successfully"
+  }
+  ```
+* **Error Response (404 Not Found)**:
+  ```json
+  {
+    "success": false,
+    "data": {
+      "valid": false,
+      "message": "Certificate not found"
+    },
+    "message": "Certificate verification failed",
+    "code": "CERTIFICATE_NOT_FOUND"
+  }
+  ```
+

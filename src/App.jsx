@@ -14,7 +14,7 @@ const CourseDetails = lazy(() => import("./pages/CourseDetails"));
 const VideoLearning = lazy(() => import("./pages/VideoLearning"));
 const ProgressAnalytics = lazy(() => import("./pages/ProgressAnalytics"));
 const Certificates = lazy(() => import("./pages/Certificates"));
-const Settings = lazy(() => import("./pages/Settings"));
+const Leaderboard = lazy(() => import("./pages/Leaderboard"));
 
 /* INSTRUCTOR */
 const InstructorDashboard = lazy(() => import("./pages/InstructorDashboard"));
@@ -31,6 +31,8 @@ const PlatformAnalytics = lazy(() => import("./pages/PlatformAnalytics"));
 const AdminSettings = lazy(() => import("./pages/AdminSettings"));
 
 const NotFoundPage = lazy(() => import("./pages/NotFoundPage"));
+const VerifyCertificate = lazy(() => import("./pages/VerifyCertificate"));
+const LabDetails = lazy(() => import("./pages/LabDetails"));
 
 /* AUTH */
 import ProtectedRoute from "./routes/ProtectedRoute";
@@ -107,6 +109,20 @@ function AnimatedRoutes() {
           }
         />
 
+        <Route
+          path="/verify/:certId"
+          element={
+            <Suspense fallback={<PageLoader />}>
+              <>
+                <AnimatedBackground />
+                <PageTransition>
+                  <VerifyCertificate />
+                </PageTransition>
+              </>
+            </Suspense>
+          }
+        />
+
         {/* ========================= */}
         {/* STUDENT ROUTES */}
         {/* ========================= */}
@@ -157,6 +173,19 @@ function AnimatedRoutes() {
               <ProtectedRoute role="student">
                 <PageTransition>
                   <VideoLearning />
+                </PageTransition>
+              </ProtectedRoute>
+            </Suspense>
+          }
+        />
+
+        <Route
+          path="/course/:id/lab/:labId"
+          element={
+            <Suspense fallback={<PageLoader />}>
+              <ProtectedRoute role="student">
+                <PageTransition>
+                  <LabDetails />
                 </PageTransition>
               </ProtectedRoute>
             </Suspense>

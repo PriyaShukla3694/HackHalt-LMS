@@ -2,6 +2,18 @@ import { createContext, useContext, useState } from "react";
 
 const AuthContext = createContext();
 
+// Streak tracking helpers
+function getTodayDateString() {
+  const now = new Date();
+  return now.toISOString().split('T')[0]; // YYYY-MM-DD
+}
+
+function getYesterdayDateString() {
+  const yesterday = new Date();
+  yesterday.setDate(yesterday.getDate() - 1);
+  return yesterday.toISOString().split('T')[0];
+}
+
 const AUTH_KEY = "lms_token";
 const REFRESH_KEY = "lms_refresh_token";
 const USER_KEY = "user";
@@ -31,6 +43,24 @@ export const AuthProvider = ({ children }) => {
       role: (userData.role || "").toLowerCase(),
       mobile: userData.mobile || "",
     };
+
+    // Streak handling
+    const today = getTodayDateString();
+    const lastLogin = localStorage.getItem("lms_last_login_date");
+    const previousStreak = parseInt(localStorage.getItem("lms_streak_count") || "0");
+    let newStreak = 1;
+    if (lastLogin === today) {
+      // same day login, keep current streak
+      newStreak = previousStreak;
+    } else if (lastLogin === getYesterdayDateString()) {
+      // consecutive day
+      newStreak = previousStreak + 1;
+    } else {
+      // reset streak
+      newStreak = 1;
+    }
+    localStorage.setItem("lms_streak_count", newStreak);
+    localStorage.setItem("lms_last_login_date", today);
 
     localStorage.setItem(AUTH_KEY, token);
 

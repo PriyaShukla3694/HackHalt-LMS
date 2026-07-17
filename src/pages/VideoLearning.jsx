@@ -8,6 +8,8 @@ import Footer from "../components/Footer";
 import { useCourse } from "../hooks/useCourses";
 import { authFetch } from "../utils/api";
 import Skeleton from "../components/Skeleton";
+import QuizModal from "../components/QuizModal";
+import { AnimatePresence } from "framer-motion";
 
 function VideoLearning() {
   const { id } = useParams();
@@ -15,8 +17,10 @@ function VideoLearning() {
   const { course, loading, error } = useCourse(id);
 
   const [completedModuleIds, setCompletedModuleIds] = useState([]);
+  const [passedQuizIds, setPassedQuizIds] = useState([]);
   const [activeModuleIndex, setActiveModuleIndex] = useState(0);
   const [markingProgress, setMarkingProgress] = useState(false);
+  const [showQuiz, setShowQuiz] = useState(false);
 
   useEffect(() => {
     const fetchProgress = () => {
@@ -27,7 +31,15 @@ function VideoLearning() {
         })
         .then((data) => {
           if (data && data.data) {
-            setCompletedModuleIds(data.data);
+            const rawData = data.data;
+            if (Array.isArray(rawData)) {
+              setCompletedModuleIds(rawData);
+            } else if (rawData && Array.isArray(rawData.data)) {
+              setCompletedModuleIds(rawData.data);
+              if (Array.isArray(rawData.quizPassedIds)) {
+                setPassedQuizIds(rawData.quizPassedIds);
+              }
+            }
           }
         })
         .catch((err) => console.error("Error loading progress:", err));
@@ -93,12 +105,56 @@ function VideoLearning() {
   const modules = course.modules || [];
   const currentModule = modules[activeModuleIndex];
 
+  const triggerCompleteLesson = async () => {
+    setMarkingProgress(true);
+    try {
+      const res = await authFetch(`/courses/${id}/progress`, {
+        method: "POST",
+        body: JSON.stringify({
+          moduleId: currentModule.id,
+          completed: true,
+        }),
+      });
+
+      if (res.ok) {
+        const envelope = await res.json();
+        const list = envelope.data && Array.isArray(envelope.data.data) ? envelope.data.data : (Array.isArray(envelope.data) ? envelope.data : []);
+        setCompletedModuleIds(list);
+
+        // If newly completed and there is a next lesson, automatically advance after a tiny delay
+        if (activeModuleIndex < modules.length - 1) {
+          setTimeout(() => {
+            setActiveModuleIndex((prev) => prev + 1);
+          }, 300);
+        } else if (activeModuleIndex === modules.length - 1) {
+          alert(
+            "Incredible! You have finished all lessons in this course! A verified course certificate of completion has been auto-generated for you under the 'Certificates' tab."
+          );
+        }
+      } else {
+        alert("Failed to update progress on server.");
+      }
+    } catch (err) {
+      console.error(err);
+      alert("Network error updating progress.");
+    } finally {
+      setMarkingProgress(false);
+    }
+  };
+
   const handleToggleComplete = async () => {
     if (!currentModule || markingProgress) return;
-    setMarkingProgress(true);
 
     const isCurrentlyCompleted = completedModuleIds.includes(currentModule.id);
     const nextStatus = !isCurrentlyCompleted;
+
+    // Check quiz first
+    if (nextStatus && currentModule.quiz && !passedQuizIds.includes(currentModule.id)) {
+      setShowQuiz(true);
+      return;
+    }
+
+    setMarkingProgress(true);
 
     try {
       const res = await authFetch(`/courses/${id}/progress`, {
@@ -111,7 +167,8 @@ function VideoLearning() {
 
       if (res.ok) {
         const data = await res.json();
-        setCompletedModuleIds(data.data);
+        const list = data.data && Array.isArray(data.data.data) ? data.data.data : (Array.isArray(data.data) ? data.data : []);
+        setCompletedModuleIds(list);
 
         // If newly completed and there is a next lesson, automatically advance after a tiny delay
         if (nextStatus && activeModuleIndex < modules.length - 1) {
@@ -124,7 +181,8 @@ function VideoLearning() {
           );
         }
       } else {
-        alert("Failed to update progress on server.");
+        const errorData = await res.json().catch(() => ({}));
+        alert(errorData.message || "Failed to update progress on server.");
       }
     } catch (err) {
       console.error(err);
@@ -316,6 +374,22 @@ function VideoLearning() {
 
         <Footer />
       </div>
+
+      <AnimatePresence>
+        {showQuiz && currentModule && currentModule.quiz && (
+          <QuizModal
+            quiz={currentModule.quiz}
+            courseId={id}
+            moduleId={currentModule.id}
+            onClose={() => setShowQuiz(false)}
+            onSuccess={() => {
+              setPassedQuizIds((prev) => [...prev, currentModule.id]);
+              setShowQuiz(false);
+              triggerCompleteLesson();
+            }}
+          />
+        )}
+      </AnimatePresence>
     </div>
   );
 }

@@ -1,0 +1,249 @@
+.terminal-shell {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  background: var(--ink);
+  color: var(--text-primary);
+  font-family: 'Inter', sans-serif;
+}
+
+.terminal-window {
+  width: 100%;
+  background: #0f172a; /* Slate 900 */
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: var(--radius-md);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.4);
+  overflow: hidden;
+}
+
+/* Header bar */
+.terminal-header {
+  background: #1e293b; /* Slate 800 */
+  padding: 12px 18px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+}
+
+.terminal-dots {
+  display: flex;
+  gap: 6px;
+}
+
+.dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.dot-red { background: #f87171; }
+.dot-yellow { background: #fbbf24; }
+.dot-green { background: #34d399; }
+
+.terminal-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  font-weight: 500;
+  color: #94a3b8;
+  font-family: 'Courier New', Courier, monospace;
+}
+
+.term-ctrl-btn {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 4px;
+  color: #94a3b8;
+  padding: 4px 8px;
+  font-size: 11.5px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  transition: all 0.2s;
+}
+
+.term-ctrl-btn:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: #fff;
+}
+
+/* Body console area */
+.terminal-body {
+  padding: 20px;
+  height: 320px;
+  overflow-y: auto;
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 14.5px;
+  line-height: 1.6;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  box-sizing: border-box;
+}
+
+.terminal-line {
+  white-space: pre-wrap;
+  word-break: break-all;
+}
+
+/* Color schemes for terminal outputs */
+.terminal-line.system {
+  color: #64748b; /* Slate 500 */
+}
+
+.terminal-line.command {
+  color: #f8fafc; /* Slate 50 */
+}
+
+.terminal-line.output {
+  color: #38bdf8; /* Sky 400 - response text */
+}
+
+.terminal-line.error {
+  color: #f87171; /* Red 400 */
+}
+
+.terminal-line.success {
+  color: #34d399; /* Emerald 400 */
+}
+
+.terminal-line.flag {
+  color: #fbbf24; /* Amber 400 */
+  font-weight: bold;
+  background: rgba(251, 191, 36, 0.08);
+  padding: 6px 12px;
+  border-radius: 4px;
+  border: 1px dashed rgba(251, 191, 36, 0.2);
+  display: inline-block;
+  margin: 4px 0;
+}
+
+/* Form prompt */
+.terminal-prompt-form {
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
+.prompt-label {
+  color: #34d399; /* Green 400 */
+  margin-right: 8px;
+  flex-shrink: 0;
+}
+
+.terminal-input {
+  flex: 1;
+  background: transparent;
+  border: none;
+  outline: none;
+  color: #f8fafc;
+  font-family: inherit;
+  font-size: inherit;
+  caret-color: #34d399;
+}
+
+/* Active task instructions section */
+.terminal-objective-box {
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: var(--radius-md);
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+.obj-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.obj-header h4 {
+  font-size: 14px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--muted);
+  margin: 0;
+}
+
+.hint-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 11px;
+  font-weight: 600;
+  color: #fbbf24;
+  background: rgba(251, 191, 36, 0.1);
+  padding: 2px 8px;
+  border-radius: 12px;
+}
+
+.obj-text {
+  font-size: 15px;
+  color: #fff;
+  line-height: 1.5;
+  margin: 0 0 12px 0;
+}
+
+/* Hints container */
+.hint-box {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(251, 191, 36, 0.05);
+  border: 1px solid rgba(251, 191, 36, 0.15);
+  border-radius: var(--radius-sm);
+  padding: 12px;
+  font-size: 13.5px;
+  color: #fcd34d;
+}
+
+.hint-icon {
+  font-size: 16px;
+  flex-shrink: 0;
+}
+
+.hint-box code {
+  font-family: 'Courier New', Courier, monospace;
+  background: rgba(0, 0, 0, 0.3);
+  padding: 2px 6px;
+  border-radius: 4px;
+  margin-left: 4px;
+  color: #fff;
+}
+
+/* Success status bar */
+.lab-success-card {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  background: rgba(52, 211, 153, 0.05);
+  border: 1px solid rgba(52, 211, 153, 0.15);
+  border-radius: var(--radius-sm);
+  padding: 16px;
+  margin-top: 12px;
+}
+
+.success-award-icon {
+  font-size: 32px;
+  color: #34d399;
+  flex-shrink: 0;
+}
+
+.lab-success-card h5 {
+  font-size: 14.5px;
+  font-weight: 700;
+  color: #fff;
+  margin: 0 0 2px 0;
+}
+
+.lab-success-card p {
+  font-size: 12.5px;
+  color: var(--muted);
+  margin: 0;
+}

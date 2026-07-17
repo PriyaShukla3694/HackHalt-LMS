@@ -1,0 +1,244 @@
+.quiz-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(10, 14, 22, 0.85);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 24px;
+}
+
+.quiz-modal-card {
+  width: 100%;
+  max-width: 520px;
+  background: rgba(26, 32, 48, 0.95);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: var(--radius-lg);
+  box-shadow: 0 25px 50px rgba(0, 0, 0, 0.4);
+  padding: 32px;
+  position: relative;
+  box-sizing: border-box;
+}
+
+.quiz-close-btn {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  background: transparent;
+  border: none;
+  color: var(--muted);
+  font-size: 20px;
+  cursor: pointer;
+  transition: color 0.2s;
+}
+
+.quiz-close-btn:hover {
+  color: #fff;
+}
+
+/* Header */
+.quiz-header {
+  margin-bottom: 24px;
+}
+
+.quiz-badge {
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--orange);
+  background: rgba(255, 140, 0, 0.1);
+  padding: 4px 10px;
+  border-radius: 4px;
+  margin-bottom: 12px;
+}
+
+.quiz-header h3 {
+  font-size: 18px;
+  font-weight: 700;
+  color: #fff;
+  margin: 0 0 10px 0;
+}
+
+.quiz-progress-bar {
+  width: 100%;
+  height: 6px;
+  background: rgba(255, 255, 255, 0.06);
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.quiz-progress-fill {
+  height: 100%;
+  background: var(--orange);
+  transition: width 0.3s ease;
+}
+
+/* Body */
+.quiz-body {
+  margin-bottom: 28px;
+}
+
+.quiz-question-text {
+  font-size: 16px;
+  color: #fff;
+  font-weight: 550;
+  line-height: 1.5;
+  margin-bottom: 20px;
+}
+
+.quiz-options-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.quiz-option-button {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: var(--radius-md);
+  padding: 14px 18px;
+  color: var(--text-primary);
+  text-align: left;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-size: 14px;
+}
+
+.quiz-option-button:hover {
+  background: rgba(255, 255, 255, 0.06);
+  border-color: rgba(255, 255, 255, 0.15);
+}
+
+.quiz-option-button.selected {
+  background: rgba(255, 140, 0, 0.08);
+  border-color: var(--orange);
+  box-shadow: 0 0 12px rgba(255, 140, 0, 0.15);
+}
+
+.option-letter {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  background: rgba(255, 255, 255, 0.06);
+  border-radius: 50%;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--muted);
+  transition: all 0.2s;
+  flex-shrink: 0;
+}
+
+.quiz-option-button.selected .option-letter {
+  background: var(--orange);
+  color: #fff;
+}
+
+.option-text {
+  line-height: 1.4;
+}
+
+/* Footer */
+.quiz-footer {
+  display: flex;
+  justify-content: space-between;
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+  padding-top: 20px;
+}
+
+/* Result View */
+.quiz-result-view {
+  text-align: center;
+  padding: 10px 0;
+}
+
+.result-header {
+  margin-bottom: 24px;
+}
+
+.result-icon {
+  font-size: 56px;
+  margin-bottom: 16px;
+}
+
+.result-icon.success-icon {
+  color: var(--success);
+}
+
+.result-icon.fail-icon {
+  color: var(--danger);
+}
+
+.result-header h2 {
+  font-size: 24px;
+  font-weight: 700;
+  color: #fff;
+  margin: 0 0 8px 0;
+}
+
+.result-header p {
+  font-size: 14.5px;
+  color: var(--muted);
+  margin: 0;
+}
+
+.result-score-seal {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 120px;
+  height: 120px;
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  margin-bottom: 32px;
+}
+
+.passed-seal {
+  font-size: 78px;
+  color: var(--success);
+  opacity: 0.12;
+  position: absolute;
+}
+
+.failed-seal {
+  font-size: 78px;
+  color: var(--danger);
+  opacity: 0.12;
+  position: absolute;
+}
+
+.seal-text {
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.seal-text strong {
+  font-size: 28px;
+  color: #fff;
+  line-height: 1.1;
+}
+
+.seal-text span {
+  font-size: 11px;
+  text-transform: uppercase;
+  color: var(--muted);
+  letter-spacing: 0.5px;
+  margin-top: 2px;
+}
+
+.result-actions {
+  display: flex;
+  flex-direction: column;
+}

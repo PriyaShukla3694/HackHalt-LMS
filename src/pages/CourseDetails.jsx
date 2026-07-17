@@ -9,6 +9,7 @@ import { useCourse } from "../hooks/useCourses";
 import { authFetch } from "../utils/api";
 import Skeleton from "../components/Skeleton";
 import { useToast } from "../context/ToastContext";
+import SkillTreeView from "../components/SkillTreeView";
 
 import cyberSecurity from "../assets/Cyber_Security.webp";
 import ethicalHacking from "../assets/Ethical_Hacking.webp";
@@ -32,6 +33,7 @@ function CourseDetails() {
   const [enrolled, setEnrolled] = useState(false);
   const [progress, setProgress] = useState(null);
   const [enrolling, setEnrolling] = useState(false);
+  const [labs, setLabs] = useState([]);
 
   useEffect(() => {
     if (!id) return;
@@ -50,6 +52,18 @@ function CourseDetails() {
         }
       })
       .catch((err) => console.error("Error fetching progress:", err));
+
+    authFetch(`/courses/${id}/labs`)
+      .then((res) => {
+        if (res.ok) return res.json();
+        return null;
+      })
+      .then((data) => {
+        if (data && data.data) {
+          setLabs(data.data);
+        }
+      })
+      .catch((err) => console.error("Error fetching course labs:", err));
   }, [id]);
 
   const handleEnroll = async () => {
@@ -67,6 +81,12 @@ function CourseDetails() {
         if (progRes.ok) {
           const progData = await progRes.json();
           setProgress(progData);
+        }
+        // fetch labs
+        const labsRes = await authFetch(`/courses/${id}/labs`);
+        if (labsRes.ok) {
+          const labsData = await labsRes.json();
+          setLabs(labsData.data);
         }
       } else {
         alert("Failed to enroll in course.");
@@ -302,6 +322,11 @@ function CourseDetails() {
 
         </div>
 
+        {/* SKILL TREE */}
+        {enrolled && (
+          <SkillTreeView course={course} progress={progress} />
+        )}
+
         {/* MODULES */}
         <div className="module-section">
           <h2>Course Modules</h2>
@@ -316,6 +341,50 @@ function CourseDetails() {
           </div>
 
         </div>
+
+        {/* HANDS-ON LABS */}
+        {enrolled && labs && labs.length > 0 && (
+          <div className="labs-section" style={{ marginTop: "40px" }}>
+            <h2>Hands-on Practice Labs</h2>
+            <div className="labs-grid" style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: "20px", marginTop: "16px" }}>
+              {labs.map((labItem) => (
+                <div
+                  key={labItem.labId}
+                  className="lab-card"
+                  style={{
+                    background: "var(--card)",
+                    border: "1px solid var(--line)",
+                    borderRadius: "var(--radius-md)",
+                    padding: "20px",
+                    display: "flex",
+                    flexDirection: "column",
+                    justifyContent: "space-between",
+                    gap: "14px"
+                  }}
+                >
+                  <div>
+                    <h3 style={{ fontSize: "16px", fontWeight: "700", color: "#fff", margin: "0 0 6px 0" }}>{labItem.title}</h3>
+                    <p style={{ fontSize: "13px", color: "var(--muted)", margin: 0, lineHeight: "1.4" }}>
+                      {labItem.briefing.substring(0, 100)}...
+                    </p>
+                  </div>
+                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                    <span style={{ fontSize: "12px", color: labItem.completed ? "var(--success)" : "var(--orange)" }}>
+                      {labItem.completed ? "✓ Completed" : "⚡ Active Staging"}
+                    </span>
+                    <button
+                      className="resume-btn"
+                      onClick={() => navigate(`/course/${course.id}/lab/${labItem.labId}`)}
+                      style={{ padding: "8px 14px", fontSize: "13px", borderRadius: "8px" }}
+                    >
+                      {labItem.completed ? "Enter Sandbox" : "Start Lab"}
+                    </button>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
 
         {/* INSTRUCTOR */}
         <div className="instructor-card">

@@ -1,0 +1,181 @@
+.skill-tree-container {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  padding: 30px;
+  margin-bottom: 30px;
+  box-shadow: var(--shadow-sm);
+  color: var(--text-primary);
+}
+
+.skill-tree-header {
+  margin-bottom: 24px;
+}
+
+.skill-tree-header h3 {
+  font-size: 18px;
+  font-weight: 700;
+  margin: 0 0 6px 0;
+  color: #fff;
+}
+
+.skill-tree-header p {
+  font-size: 13.5px;
+  color: var(--muted);
+  margin: 0;
+}
+
+/* Base Flex Box for Mobile: Vertical path */
+.skill-tree-path {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 40px;
+  position: relative;
+  padding: 10px 0;
+}
+
+.skill-tree-node-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  width: 100%;
+  max-width: 160px;
+  text-align: center;
+}
+
+/* Circles */
+.skill-tree-node-circle {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  z-index: 2;
+  position: relative;
+  transition: all 0.3s ease;
+  box-sizing: border-box;
+}
+
+/* Circle states */
+.skill-tree-node-circle.completed {
+  background: var(--success);
+  color: #fff;
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 0 0 15px rgba(16, 185, 129, 0.35);
+  cursor: pointer;
+}
+
+.skill-tree-node-circle.in-progress {
+  background: var(--orange);
+  color: #fff;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  box-shadow: 0 0 20px rgba(255, 140, 0, 0.4);
+  cursor: pointer;
+}
+
+.skill-tree-node-circle.locked {
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--muted);
+  border: 2px dashed rgba(255, 255, 255, 0.1);
+  cursor: not-allowed;
+}
+
+.node-icon {
+  font-size: 24px;
+}
+
+.locked-icon {
+  font-size: 20px;
+}
+
+/* Pulse Animation Ring */
+.pulse-ring {
+  position: absolute;
+  inset: -6px;
+  border-radius: 50%;
+  border: 2px solid var(--orange);
+  animation: pulse-ring-glow 2s cubic-bezier(0.25, 0, 0, 1) infinite;
+  z-index: -1;
+  pointer-events: none;
+}
+
+@keyframes pulse-ring-glow {
+  0% {
+    transform: scale(0.95);
+    opacity: 0.8;
+  }
+  100% {
+    transform: scale(1.2);
+    opacity: 0;
+  }
+}
+
+/* Connectors: Vertical (Mobile Default) */
+.skill-tree-connector {
+  position: absolute;
+  width: 4px;
+  height: 48px;
+  background: rgba(255, 255, 255, 0.08);
+  top: 62px;
+  left: calc(50% - 2px);
+  z-index: 1;
+  transition: background 0.3s ease;
+}
+
+.skill-tree-connector.completed {
+  background: var(--success);
+  box-shadow: 0 0 8px rgba(16, 185, 129, 0.3);
+}
+
+/* Info styling */
+.skill-tree-node-info {
+  margin-top: 12px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.node-title {
+  font-size: 14.5px;
+  font-weight: 600;
+  color: #fff;
+  display: block;
+}
+
+.skill-tree-node-wrapper.locked .node-title {
+  color: var(--muted);
+}
+
+.node-progress-text {
+  font-size: 12px;
+  color: var(--muted);
+  margin-top: 2px;
+  display: block;
+}
+
+/* Desktop Horizontal Styling */
+@media (min-width: 768px) {
+  .skill-tree-path {
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: flex-start;
+    gap: 0;
+    padding: 20px 0;
+  }
+
+  .skill-tree-node-wrapper {
+    flex: 1;
+  }
+
+  /* Connectors: Horizontal (Desktop Override) */
+  .skill-tree-connector {
+    width: calc(100% - 64px);
+    height: 4px;
+    top: 30px;
+    left: calc(50% + 32px);
+  }
+}
